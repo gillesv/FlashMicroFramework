@@ -2,8 +2,7 @@
   Options +FollowSymlinks
   Options +Indexes
   RewriteEngine on
-  RewriteBase /Experience/Microframework/bin/
-  #RewriteBase //front/jobs/ 
+  RewriteBase /
 
   # test string is a valid files
   RewriteCond %{SCRIPT_FILENAME} !-f
