@@ -17,6 +17,15 @@ package core
 		 */		
 		protected var is_inited:Boolean = false;
 		
+		/**
+		 * Easily overridable dimensions.
+		 * 
+		 * If you want a precise or self-calculated width or height for your sprite, simply set these values and to all
+		 * concerned, your sprite will measure exactly these values. 
+		 */		
+		protected var _width:Number = -1;
+		protected var _height:Number = -1;
+		
 		public function S()
 		{
 			super();
@@ -40,7 +49,49 @@ package core
 			
 		}
 		
-		/* event handlers */
+		/**
+		 * Remove all children in this Sprite's displaylist
+		 */		
+		public function empty():void{
+			while(numChildren > 0)
+				removeChildAt(0);
+		}
+		
+		/********************/
+		/**   properties   **/
+		/********************/
+		
+		override public function get width():Number{
+			if(_width > 0)
+				return _width;
+			
+			return super.width;
+		}
+		
+		override public function set width(value:Number):void{
+			if(_width > 0)
+				_width = value;
+			else
+				super.width = value;
+		}
+		
+		override public function get height():Number{
+			if(_height > 0)
+				return _height;
+			
+			return super.height;
+		}
+		
+		override public function set height(value:Number):void{
+			if(_height > 0)
+				_height = value;
+			else
+				super.height = value;
+		}
+		
+		/********************/
+		/** event handlers **/
+		/********************/
 		
 		/**
 		 * Event handler: gets called when the sprite is added to stage.

@@ -3,6 +3,7 @@
   <includeClasses>
     <classEntry path="core.MC"/>
     <classEntry path="core.S"/>
+    <classEntry path="core.MCController"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
