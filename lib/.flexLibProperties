@@ -2,8 +2,12 @@
 <flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
     <classEntry path="core.MC"/>
-    <classEntry path="core.S"/>
     <classEntry path="core.MCController"/>
+    <classEntry path="core.S"/>
+    <classEntry path="addGlobalEventListener"/>
+    <classEntry path="removeGlobalEventListener"/>
+    <classEntry path="framework.events.GlobalEventDispatcher"/>
+    <classEntry path="framework.events.GlobalEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
