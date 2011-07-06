@@ -10,7 +10,7 @@
 	
 	<ul>
 		<li>HTML5 <a href="<?php echo($base_path); ?>/deeplink/1">deeplinking</a> with fallback</li>
-		<li>Support for Flash with intelligent fallbacks</li>
-		<li>Modern mobile-first workflow</li>
+		<li>Support for <strong>Flash</strong> with <em>intelligent fallbacks</em></li>
+		<li>Modern mobile-first workflow supported out of the box</li>
 	</ul>
 </article>

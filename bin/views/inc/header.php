@@ -20,6 +20,9 @@
 	<meta http-equiv="cleartype" content="on">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
+	
+	<?php /* Any linked webfonts should go here */ ?>
+	
 	<?php /* Using conditional comments, we hide our mediaquery enhanced CSS from all IE versions below 9... */ ?>
 	<!--[if ! lte IE 8]><!-->
 	<link rel="stylesheet" href="<?php echo($base_path); ?>/css/style.css" />
@@ -39,7 +42,14 @@
 	<?php /* additional modernizr tests & init - inlined */ ?>
 	<script>
 		// <![CDATA[
+			
+			<?php 			
+				$noFlash = isset($_GET['noflash']);
+			?>
+			
 			var baseURL = "<?php echo($base_path); ?>/";
+			var useFlash = <?php if($noFlash): ?>false<?php else: ?>true <?php endif; ?>;
+			
 			
 			// Webkit detection script
 			Modernizr.addTest('webkit', function(){
@@ -66,20 +76,27 @@
 				
 				// add swfobject from CDN, onComplete: attach appropriate swf
 				{
-					test: !Modernizr.mobilewebkit && Modernizr.flash,
-					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'],
-					complete: function(){
-						var flashvars = { 
-								startPage:  "<?php echo(implode('/', url_parts())); ?>"
-							},
-							params = { allowFullScreen: true, allowScriptAccess: "always" },
-							attributes = { id: 'FlashMain' };
-						
-						// why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
-						var version = "10.3";
-						
-						swfobject.embedSWF(baseURL + 'swf/Main.swf', 'main', "100%", "100%", version, baseURL + 'swf/expressInstall.swf', flashvars, params, attributes);
+					test: !Modernizr.mobilewebkit && Modernizr.flash && useFlash,
+					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js']
+					
+					<?php if(!$noFlash): ?>
+					
+					,complete: function(){
+						if(useFlash){
+							var flashvars = { 
+									startPage:  "<?php echo(implode('/', url_parts())); ?>"
+								},
+								params = { allowFullScreen: true, allowScriptAccess: "always" },
+								attributes = { id: 'FlashMain' };
+							
+							// why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
+							var version = "10.3";
+							
+							swfobject.embedSWF(baseURL + 'swf/Main.swf', 'main', "100%", "100%", version, baseURL + 'swf/expressInstall.swf', flashvars, params, attributes);
+						}
 					}
+					
+					<?php endif; ?>
 				},
 				
 				// add history.js by default: enables fallback to hashbangs

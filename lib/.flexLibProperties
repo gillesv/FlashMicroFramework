@@ -8,6 +8,7 @@
     <classEntry path="removeGlobalEventListener"/>
     <classEntry path="framework.events.GlobalEventDispatcher"/>
     <classEntry path="framework.events.GlobalEvent"/>
+    <classEntry path="framework.views.Main"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

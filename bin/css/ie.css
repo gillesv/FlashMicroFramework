@@ -1,0 +1,13 @@
+img,blockquote,fieldset,label,input,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,audio,video{display:block;margin:0;padding:0;border:0;vertical-align:baseline;}
+table{border-collapse:collapse;border-spacing:0;}
+input,select{vertical-align:middle;}
+html{font-size:120%;}
+body{font-size:0.9em;line-height:1.3em;font-family:Georgia, serif;}
+h1,h2,h3,h4,h5,h6{font-family:Helvetica;}
+h1{font-size:1.5em;line-height:1.2em;padding:0.5em 10px;}
+h2{font-size:1.25em;padding:0 10px;}
+p{padding:0.5em 10px 1.5em 10px;}
+a{text-decoration:none;border-bottom:1px solid;}a:hover{border-bottom:2px solid;}
+html{background:#ffffff;}
+body{color:#444444;}
+a{color:#5bb7ea;}a:hover{color:#1988c6;}
