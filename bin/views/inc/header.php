@@ -36,7 +36,7 @@
 	<?php /* All Javascript at the bottom, except modernizr */ ?>
 	<script src="<?php echo($base_path); ?>/js/lib/modernizr.custom.00953.js"></script>
 	
-	<?php /* additional modernizr tests - inlined */ ?>
+	<?php /* additional modernizr tests & init - inlined */ ?>
 	<script>
 		// <![CDATA[
 			var baseURL = "<?php echo($base_path); ?>/";
@@ -51,12 +51,35 @@
 				return Modernizr.webkit && RegExp(" Mobile/").test(navigator.userAgent);
 			});
 			
+			// Flash detection
+			Modernizr.addTest('flash', function(){
+				return navigator.mimeTypes['application/x-shockwave-flash'];
+			});
+			
 			Modernizr.load([
 				// test mobile webkit (zepto or jquery?) and load the correct javascript library + history.js adapters
 				{
 					test: Modernizr.mobilewebkit,
 					nope: ['//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js', baseURL + 'js/lib/history.adapter.jquery.js'],
 					yep: [baseURL + 'js/lib/zepto.min.js', baseURL + 'js/lib/history.adapter.zepto.js']
+				},
+				
+				// add swfobject from CDN, onComplete: attach appropriate swf
+				{
+					test: !Modernizr.mobilewebkit && Modernizr.flash,
+					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'],
+					complete: function(){
+						var flashvars = { 
+								startPage:  "<?php echo(implode('/', url_parts())); ?>"
+							},
+							params = { allowFullScreen: true, allowScriptAccess: "always" },
+							attributes = { id: 'FlashMain' };
+						
+						// why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
+						var version = "10.3";
+						
+						swfobject.embedSWF(baseURL + 'swf/Main.swf', 'main', "100%", "100%", version, baseURL + 'swf/expressInstall.swf', flashvars, params, attributes);
+					}
 				},
 				
 				// add history.js by default: enables fallback to hashbangs
