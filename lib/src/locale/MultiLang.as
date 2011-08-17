@@ -9,6 +9,7 @@ package locale
 		
 		private var _lang:String;
 		private var languages:Object = {};
+		private var selectedLanguage:Language;
 		private static var _instance:MultiLang;
 		
 		private var _dispatcher:EventDispatcher;
@@ -47,7 +48,13 @@ package locale
 				return;
 			}
 			
+			if(selectedLanguage)
+				selectedLanguage.deactivate();
+			
 			_lang = value;
+			selectedLanguage = languages[_lang] as Language;
+			
+			selectedLanguage.activate(_dispatcher);	
 		}
 		
 		/**
@@ -70,6 +77,9 @@ package locale
 		 * 
 		 */		
 		public function getStringForPath(path:String):String{
+			if(selectedLanguage)
+				return selectedLanguage.getStringForPath(path);
+			
 			return path;
 		}
 		
@@ -81,7 +91,7 @@ package locale
 		 * 
 		 */		
 		public function setStringForPath(value:String, path:String):void{
-			//
+			selectedLanguage.setStringForPath(value, path);
 		}
 		
 		/**
@@ -92,13 +102,17 @@ package locale
 		 * 
 		 */		
 		public function pathExists(path:String):Boolean{
-			return path == getStringForPath(path);
+			if(selectedLanguage)
+				return selectedLanguage.pathExists(path);
+			
+			return false;
 		}
 		
 		
 		/**
 		 * IEventDispatcher 
 		 */		
+		
 		public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void{
 			_dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
 		}
