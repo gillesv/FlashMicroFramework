@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang name="Nederlands">
+	<key id="the">
+		<content><![CDATA[de]]></content>
+		<comment><![CDATA[]]></comment>
+	</key>
+	
+	<section id="home" url="/">
+		<key id="title" tag="h1#header">
+			<content><![CDATA[Dit is een titel]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+		<key id="body" tag="p">
+			<content><![CDATA[Dit is wat body copy]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+	</section>
+	
+	<section id="about" url="/about">
+		<key id="title" tag="h2">
+			<content><![CDATA[Over deze site]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+		<key id="body" tag="p">
+			<content><![CDATA[Dit is nog wat body copy]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+	</section>
+</lang>
