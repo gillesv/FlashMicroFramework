@@ -77,12 +77,9 @@
 				// add swfobject from CDN, onComplete: attach appropriate swf
 				{
 					test: !Modernizr.mobilewebkit && Modernizr.flash && useFlash,
-					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js']
-					
-					<?php if(!$noFlash): ?>
-					
-					,complete: function(){
-						if(useFlash){
+					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'],
+					complete: function(){
+						if(swfobject){
 							var flashvars = { 
 									startPage:  "<?php echo(implode('/', url_parts())); ?>"
 								},
@@ -95,8 +92,6 @@
 							swfobject.embedSWF(baseURL + 'swf/Main.swf', 'main', "100%", "100%", version, baseURL + 'swf/expressInstall.swf', flashvars, params, attributes);
 						}
 					}
-					
-					<?php endif; ?>
 				},
 				
 				// add history.js by default: enables fallback to hashbangs

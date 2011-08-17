@@ -12,5 +12,5 @@ dispatch('/**', 'index_catchall');
  * Function is called before every route.
  */
 function before($route) {
-  before_defaults();  
+  before_defaults();
 }

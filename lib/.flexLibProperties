@@ -9,6 +9,9 @@
     <classEntry path="framework.events.GlobalEventDispatcher"/>
     <classEntry path="framework.events.GlobalEvent"/>
     <classEntry path="framework.views.Main"/>
+    <classEntry path="framework.paging.AbstractPaging"/>
+    <classEntry path="locale.MultiLang"/>
+    <classEntry path="locale.Language"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
