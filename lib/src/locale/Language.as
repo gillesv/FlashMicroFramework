@@ -8,6 +8,8 @@ package locale
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import locale.events.MultiLangEvent;
+	
 	public class Language extends EventDispatcher implements IEventDispatcher
 	{
 		public var id:String;
@@ -78,6 +80,8 @@ package locale
 						break;
 				}
 			}
+			
+			dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_LOADED));
 		}
 		
 		/**
@@ -180,7 +184,7 @@ package locale
 					}
 				}
 				
-				keys[path] = key;				
+				keys[truncatedPath] = key;				
 			}
 			
 			return key.content;

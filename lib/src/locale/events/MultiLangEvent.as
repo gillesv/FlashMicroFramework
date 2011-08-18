@@ -19,7 +19,7 @@ package locale.events
 		
 		public var lang:String;
 		
-		public function MultiLangEvent(type:String, lang:String)
+		public function MultiLangEvent(type:String, lang:String = null)
 		{
 			super(type);
 			

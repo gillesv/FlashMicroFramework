@@ -4,6 +4,8 @@ package locale
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
+	import framework.events.GlobalEvent;
+	
 	public class MultiLang implements IEventDispatcher
 	{
 		
@@ -55,7 +57,7 @@ package locale
 				_lang = value;
 				
 				selectedLanguage = languages[_lang] as Language;
-				selectedLanguage.activate(_dispatcher);		
+				selectedLanguage.activate(this);		
 			}
 		}
 		
@@ -148,6 +150,9 @@ package locale
 		}
 		
 		public function dispatchEvent(evt:Event):Boolean{
+			if(evt as GlobalEvent)
+				GlobalEvent(evt).dispatch();
+			
 			return _dispatcher.dispatchEvent(evt);
 		}
 		

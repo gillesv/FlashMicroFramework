@@ -23,15 +23,15 @@ internal class MultiLangTester {
 	}
 	
 	public function setup():void{
-		addGlobalEventListener(MultiLangEvent.LANG_LOADED, on_lang_loaded);
-		addGlobalEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
-		addGlobalEventListener(MultiLangEvent.DYNAMIC_VALUE_CHANGED, on_dynamic_value_changed);
+		MultiLang.instance.addEventListener(MultiLangEvent.LANG_LOADED, on_lang_loaded);
+		MultiLang.instance.addEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
+		MultiLang.instance.addEventListener(MultiLangEvent.DYNAMIC_VALUE_CHANGED, on_dynamic_value_changed);
 	}
 	
 	public function tearDown():void{
-		removeGlobalEventListener(MultiLangEvent.LANG_LOADED, on_lang_loaded);
-		removeGlobalEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
-		removeGlobalEventListener(MultiLangEvent.DYNAMIC_VALUE_CHANGED, on_dynamic_value_changed);
+		MultiLang.instance.removeEventListener(MultiLangEvent.LANG_LOADED, on_lang_loaded);
+		MultiLang.instance.removeEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
+		MultiLang.instance.removeEventListener(MultiLangEvent.DYNAMIC_VALUE_CHANGED, on_dynamic_value_changed);
 	}
 	
 	public function test():void{
