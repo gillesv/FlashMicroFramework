@@ -1,13 +1,20 @@
 package locale
 {
+	import core.S;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.net.FileReference;
+	import flash.utils.ByteArray;
+	import flash.xml.XMLDocument;
 	
 	import framework.events.GlobalEvent;
 	
 	public class MultiLang implements IEventDispatcher
 	{
+		
+		public var DEFAULT_XML_FILENAME_PREFIX:String = "flashCopy_";
 		
 		private var _lang:String;
 		private var languages:Object = {};
@@ -123,6 +130,52 @@ package locale
 				return selectedLanguage.toXML();
 			
 			return null;
+		}
+		
+		/**
+		 *  
+		 */		
+		public function saveXML():void{
+			try{
+				var output:XML = toXML();
+				
+				// insert CDATA
+				for each(var key:XML in output..key){
+					for each(var child:XML in key.children()){
+						if(child.children().length() > 0){
+							child.setChildren("<![CDATA[" + (child.toString()) + "]]>");
+						}
+					}
+				}
+				
+				var utfbytes:ByteArray = new ByteArray();
+				
+				// encode everything properly
+				var string:String = '<?xml version="1.0" encoding="utf-8"?>\n' + output.toXMLString();
+				string = htmlUnescape(string.split("<").join("&lt;").split(">").join("&gt;"));
+				
+				utfbytes.writeUTFBytes(string);
+				
+				//var filename:String = Language(_languages[lang]).filename;
+				//var filename:String = "translation_" + lang + ".xml";
+				var filename:String = DEFAULT_XML_FILENAME_PREFIX + selectedLanguage.id + ".xml";
+				
+				var fileref:FileReference = new FileReference();
+				fileref.addEventListener(Event.SELECT, on_save_file_select);
+				
+				fileref.save(utfbytes, filename);
+				
+				function on_save_file_select(evt:Event):void{
+					// it's saved.	
+				}
+				
+				function htmlUnescape(str:String):String{
+					return new XMLDocument(str).firstChild.nodeValue;
+				}
+			}catch(err:Error){
+				trace("MultiLang Error: couldn't export XML");
+				trace(err.message);
+			}
 		}
 		
 		private var _dynamicValues:Object = {};
