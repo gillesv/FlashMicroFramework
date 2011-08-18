@@ -152,7 +152,7 @@ package locale
 			var key:Key;
 			
 			var truncatedPath:String = (path.split("/").length > 2) ? path.split("/").slice(0, 2).join("/") : path;
-			
+						
 			if(path.indexOf("/") < 0)
 				key = keys[path] as Key;
 			else
