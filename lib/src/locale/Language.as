@@ -44,7 +44,7 @@ package locale
 			_dispatcher = dispatcher;
 						
 			if(isLoaded){
-				
+				dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
 			}else{
 				if(xmlUrl){
 					var loader:URLLoader = new URLLoader();
@@ -81,7 +81,12 @@ package locale
 				}
 			}
 			
-			dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_LOADED));
+			if(!isLoaded){
+				isLoaded = true;
+				dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_LOADED));
+			}
+			
+			dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
 		}
 		
 		/**
