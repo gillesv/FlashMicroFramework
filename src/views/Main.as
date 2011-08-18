@@ -42,15 +42,14 @@ internal class MultiLangTester {
 	private function on_lang_loaded(evt:MultiLangEvent):void{
 		trace("on_lang_loaded");
 		
-		trace(MultiLang.instance.getStringForPath("home/title/This is a title"));
+		trace(MultiLang.instance.getStringForPath("test/title/This is a title"));
+		
+		trace("toXML: ");
+		trace(MultiLang.instance.toXML().toXMLString());
 	}
 	
 	private function on_lang_changed(evt:MultiLangEvent):void{
 		trace("on_lang_changed");
-		
-		if(MultiLang.instance.lang == "NL"){
-			MultiLang.instance.lang = "FR";
-		}
 	}
 	
 	private function on_dynamic_value_changed(evt:MultiLangEvent):void{

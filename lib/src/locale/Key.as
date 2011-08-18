@@ -20,7 +20,36 @@ package locale
 		}
 		
 		public function toXML():XML{
-			return new XML();
+			var xml:XML = <key/>;
+			
+			xml.@id = this.id;
+			
+			if(tag != ""){
+				xml.@tag = tag;
+			}
+			
+			var xmlContent:XML = <content/>;
+			xmlContent.appendChild(content);
+			xml.appendChild(xmlContent);
+			
+			if(comment != ""){
+				var xmlComment:XML = <comment />;
+				xmlComment.appendChild(comment);
+				xml.appendChild(xmlComment);
+			}
+			
+			return xml;
+		}
+		
+		public function get path():String{
+			if(section == "")
+				return id;
+			
+			return section + "/" + id;
+		}
+		
+		public function toString():String{
+			return path;
 		}
 	}
 }

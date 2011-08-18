@@ -94,8 +94,9 @@ package locale
 		 * @param path The string under which the translation can be found: i.e 'home/title' or 'about/content'
 		 * 
 		 */		
-		public function setStringForPath(value:String, path:String):void{
-			selectedLanguage.setStringForPath(value, path);
+		public function setStringForPath(value:String, path:String, comment:String = ""):void{
+			if(selectedLanguage)
+				selectedLanguage.setStringForPath(value, path, comment);
 		}
 		
 		/**
@@ -110,6 +111,18 @@ package locale
 				return selectedLanguage.pathExists(path);
 			
 			return false;
+		}
+		
+		/**
+		 * Return a generated XML file of the current contingent of localized copy
+		 *  
+		 * @return formatted XML
+		 */		
+		public function toXML():XML{
+			if(selectedLanguage)
+				return selectedLanguage.toXML();
+			
+			return null;
 		}
 		
 		private var _dynamicValues:Object = {};

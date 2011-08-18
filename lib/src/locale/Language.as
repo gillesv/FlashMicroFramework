@@ -13,6 +13,12 @@ package locale
 	public class Language extends EventDispatcher implements IEventDispatcher
 	{
 		public var id:String;
+		
+		/**
+		 * Human readable name for the language 
+		 */		
+		public var name:String;
+		
 		public var isLoaded:Boolean = false;
 		
 		private var keys:Object = {};
@@ -67,6 +73,8 @@ package locale
 			keys = {};
 			sectionUrls = {};
 			
+			name = xml.@name;
+						
 			// loose keys
 			for(var i:int = 0; i < xml.children().length(); i++){
 				var node:XML = xml.children()[i];
@@ -89,6 +97,49 @@ package locale
 			dispatchEvent(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
 		}
 		
+		public function toXML():XML{
+			var xml:XML = <lang/>;
+			
+			xml.@name = this.name;
+			
+			var sectionless:Array = [];
+			var sectioned:Array = [];
+			
+			for(var s:String in keys){
+				if(s.indexOf("/") < 0){
+					sectionless.push(keys[s]);
+				}else{
+					sectioned.push(keys[s]);
+				}
+			}
+			
+			sectionless.sortOn("path");
+			sectioned.sortOn("path");
+			
+			sectioned = sectionless.concat(sectioned);
+			
+			var lastSection:String = "";
+			var section:XML = xml;
+			
+			for each(var key:Key in sectioned){
+				if(key.section != lastSection){
+					section = <section />;
+					lastSection = key.section;
+					section.@id = key.section;
+					
+					if(sectionUrls[key.section] != undefined){
+						section.@url = sectionUrls[key.section];
+					}
+					
+					xml.appendChild(section);
+				}
+				
+				section.appendChild(key.toXML());
+			}
+			
+			return xml;
+		}
+		
 		/**
 		 * Parse a single key 
 		 *  
@@ -99,6 +150,7 @@ package locale
 			var key:Key = new Key();
 			
 			key.fromXML(xml);
+			key.section = section;
 			
 			var path:String = key.id;
 			
@@ -158,16 +210,14 @@ package locale
 			
 			var truncatedPath:String = (path.split("/").length > 2) ? path.split("/").slice(0, 2).join("/") : path;
 						
-			if(path.indexOf("/") < 0)
-				key = keys[path] as Key;
-			else
-				key = keys[truncatedPath] as Key;
+			key = keys[truncatedPath] as Key;
 			
 			if(!key){
 				key = new Key();
 				
 				if(path.indexOf("/") < 0){
 					key.id = path;
+					key.content = path;
 				}else{
 					var parts:Array = path.split("/");
 					
@@ -202,8 +252,38 @@ package locale
 		 * @param path The string under which the translation can be found: i.e 'home/title' or 'about/content'
 		 * 
 		 */		
-		public function setStringForPath(value:String, path:String):void{
-			//
+		public function setStringForPath(value:String, path:String, comment:String = ""):void{
+			var key:Key;
+			
+			if(pathExists(path)){
+				key = keys[path] as Key;
+			}else{
+				key = new Key();
+					
+				if(path.indexOf("/") < 0){
+					key.id = path;
+				}else{
+					var parts:Array = path.split("/");
+					
+					for(var i:int = 0; i < parts.length; i++){
+						var part:String = parts[i];
+						
+						switch(i){
+							case 0:
+								key.section = part;
+								break;
+							case 1:
+								key.id = part;
+								break;
+						}	
+					}
+				}
+								
+				keys[path] = key;
+			}
+			
+			key.content = value;
+			key.comment = comment;
 		}
 		
 		/**
@@ -214,7 +294,7 @@ package locale
 		 * 
 		 */		
 		public function pathExists(path:String):Boolean{
-			return path == getStringForPath(path);
+			return keys[path] != null;
 		}
 		
 		/**
