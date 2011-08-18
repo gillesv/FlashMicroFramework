@@ -3,6 +3,9 @@ package locale
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
 	public class Language extends EventDispatcher implements IEventDispatcher
@@ -21,6 +24,7 @@ package locale
 			
 			if(xml as XML){
 				this.xml = xml;
+				isLoaded = true;
 			}else if(xml as String){
 				xmlUrl = new URLRequest(xml.toString());
 			}else if(xml as URLRequest){
@@ -34,6 +38,35 @@ package locale
 		
 		public function activate(dispatcher:IEventDispatcher):void{
 			_dispatcher = dispatcher;
+						
+			if(isLoaded){
+				
+			}else{
+				if(xmlUrl){
+					var loader:URLLoader = new URLLoader();
+					loader.addEventListener(Event.COMPLETE, on_xml_loaded);
+					loader.addEventListener(IOErrorEvent.IO_ERROR, on_xml_load_error);
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, on_xml_load_security_error);
+					loader.load(xmlUrl);
+					
+				}else{
+					throw new Error("No XML found for language " + id);
+				}
+			}
+		}
+		
+		private function on_xml_loaded(evt:Event):void{
+			var xml:XML = new XML(URLLoader(evt.target).data);
+			
+			//trace(xml.toXMLString());
+		}
+		
+		private function on_xml_load_error(evt:IOErrorEvent):void{
+			trace("Couldn't load XML from URL " + xmlUrl.url);
+		}
+		
+		private function on_xml_load_security_error(evt:SecurityErrorEvent):void{
+			trace("Couldn't load XML from URL " + xmlUrl.url + " - Security Error: " + evt.text);
 		}
 		
 		public function deactivate():void{

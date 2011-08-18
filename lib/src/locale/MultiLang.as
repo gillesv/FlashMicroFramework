@@ -42,19 +42,21 @@ package locale
 			return _lang;
 		}
 		public function set lang(value:String):void{
-			if(languages[value] == null){
-				throw new Error('Language ' + value + ' not found.');
+			if(_lang != value){
+				if(languages[value] == null){
+					throw new Error('Language ' + value + ' not found.');
+					
+					return;
+				}
 				
-				return;
+				if(selectedLanguage)
+					selectedLanguage.deactivate();
+				
+				_lang = value;
+				
+				selectedLanguage = languages[_lang] as Language;
+				selectedLanguage.activate(_dispatcher);		
 			}
-			
-			if(selectedLanguage)
-				selectedLanguage.deactivate();
-			
-			_lang = value;
-			selectedLanguage = languages[_lang] as Language;
-			
-			selectedLanguage.activate(_dispatcher);	
 		}
 		
 		/**
@@ -63,7 +65,7 @@ package locale
 		 * @param value 
 		 */		
 		public function addLanguage(value:Language):void{
-			languages[value.id] = languages;
+			languages[value.id] = value;
 			
 			if(!lang)
 				lang = value.id;
@@ -106,6 +108,34 @@ package locale
 				return selectedLanguage.pathExists(path);
 			
 			return false;
+		}
+		
+		private var _dynamicValues:Object = {};
+		
+		/**
+		 * Set a dynamic value to be inserted whenever it's id is referenced within square brackets ([...]) inside of text.
+		 * e.g the following text: "There have been [amount] visitors" 
+		 * If you then call MultiLang.instance.setDynamicValue("amount", 100), all labels that contain the following text will update to read "There have been 100 visitors"
+		 *  
+		 * @param id	the unique id
+		 * @param value the object that will be inserted in that id's place in rendered text
+		 * 
+		 */		
+		public function setDynamicValue(id:String, value:*):void{
+			try{
+				_dynamicValues[id] = value.toString();
+				
+				// dispatch event
+			}catch(err:Error){
+				trace("Couldn't convert value for id '" + id + "' to String");
+			}
+		}
+		
+		public function getDynamicValueForId(id:String):String{
+			if(_dynamicValues[id])
+				return _dynamicValues[id].toString();
+			
+			return "";
 		}
 		
 		
