@@ -15,6 +15,7 @@
     <classEntry path="localize"/>
     <classEntry path="globalURL"/>
     <classEntry path="locale.events.MultiLangEvent"/>
+    <classEntry path="locale.Key"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

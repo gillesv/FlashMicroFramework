@@ -11,8 +11,10 @@ package locale
 	public class Language extends EventDispatcher implements IEventDispatcher
 	{
 		public var id:String;
-		public var xml:XML;
 		public var isLoaded:Boolean = false;
+		
+		private var keys:Object = {};
+		private var sectionUrls:Object = {};
 		
 		private var _dispatcher:IEventDispatcher;
 		
@@ -23,7 +25,7 @@ package locale
 			this.id = id;
 			
 			if(xml as XML){
-				this.xml = xml;
+				parseXML(xml);
 				isLoaded = true;
 			}else if(xml as String){
 				xmlUrl = new URLRequest(xml.toString());
@@ -47,18 +49,77 @@ package locale
 					loader.addEventListener(Event.COMPLETE, on_xml_loaded);
 					loader.addEventListener(IOErrorEvent.IO_ERROR, on_xml_load_error);
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, on_xml_load_security_error);
-					loader.load(xmlUrl);
-					
+					loader.load(xmlUrl);					
 				}else{
 					throw new Error("No XML found for language " + id);
 				}
 			}
 		}
 		
+		/**
+		 * Parse the Language XML file
+		 * 
+		 * @param xml
+		 */		
+		public function parseXML(xml:XML):void{
+			keys = {};
+			sectionUrls = {};
+			
+			// loose keys
+			for(var i:int = 0; i < xml.children().length(); i++){
+				var node:XML = xml.children()[i];
+				
+				switch(node.name().toString().toLowerCase()){
+					case "key":
+							parseKey(node);
+						break;
+					case "section":
+							parseSection(node);
+						break;
+				}
+			}
+		}
+		
+		/**
+		 * Parse a single key 
+		 *  
+		 * @param xml
+		 * @param section
+		 */		
+		protected function parseKey(xml:XML, section:String = ""):void{
+			var key:Key = new Key();
+			
+			key.fromXML(xml);
+			
+			var path:String = key.id;
+			
+			if(section != "")
+				path = section + "/" + path;
+			
+			keys[path] = key;
+		}
+		
+		/**
+		 * Parse a section
+		 *  
+		 * @param xml
+		 */		
+		protected function parseSection(xml:XML):void{
+			var sectionId:String = xml.@id;
+			
+			sectionUrls[sectionId] = xml.@url;
+			
+			for each(var key:XML in xml.key){
+				parseKey(key, sectionId);
+			}
+		}
+		
+		/**
+		 * XML Loaded Event Handler
+		 */		
 		private function on_xml_loaded(evt:Event):void{
 			var xml:XML = new XML(URLLoader(evt.target).data);
-			
-			//trace(xml.toXMLString());
+			parseXML(xml);
 		}
 		
 		private function on_xml_load_error(evt:IOErrorEvent):void{
@@ -69,6 +130,9 @@ package locale
 			trace("Couldn't load XML from URL " + xmlUrl.url + " - Security Error: " + evt.text);
 		}
 		
+		/**
+		 * Stop dispatching events
+		 */		
 		public function deactivate():void{
 			_dispatcher = null;
 		}
@@ -81,7 +145,45 @@ package locale
 		 * 
 		 */		
 		public function getStringForPath(path:String):String{
-			return path;
+			var key:Key;
+			
+			var truncatedPath:String = (path.split("/").length > 2) ? path.split("/").slice(0, 2).join("/") : path;
+			
+			if(path.indexOf("/") < 0)
+				key = keys[path] as Key;
+			else
+				key = keys[truncatedPath] as Key;
+			
+			if(!key){
+				key = new Key();
+				
+				if(path.indexOf("/") < 0){
+					key.id = path;
+				}else{
+					var parts:Array = path.split("/");
+					
+					for(var i:int = 0; i < parts.length; i++){
+						var part:String = parts[i];
+						
+						switch(i){
+							case 0:
+								key.section = part;
+								break;
+							case 1:
+								key.id = part;
+								break;
+							case 2:
+								key.content = part;
+								key.comment = part;
+								break;
+						}	
+					}
+				}
+				
+				keys[path] = key;				
+			}
+			
+			return key.content;
 		}
 		
 		/**

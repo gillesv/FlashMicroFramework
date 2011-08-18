@@ -19,11 +19,10 @@
 	<section id="about" url="/about">
 		<key id="title" tag="h2">
 			<content><![CDATA[Over deze site]]></content>
-			<comment><![CDATA[]]></comment>
+			<comment><![CDATA[The title]]></comment>
 		</key>
-		<key id="body" tag="p">
+		<key id="body">
 			<content><![CDATA[Dit is nog wat body copy]]></content>
-			<comment><![CDATA[]]></comment>
 		</key>
 	</section>
 </lang>
