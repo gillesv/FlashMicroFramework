@@ -18,6 +18,7 @@ package locale.components
 			this.txt = txt;
 			this.path = path;
 			this.comment = comment;
+			this.txt.visible = false;
 			
 			this.txt.addEventListener(Event.ENTER_FRAME, first_frame);
 			this.txt.addEventListener(Event.REMOVED_FROM_STAGE, on_kill);
@@ -49,6 +50,7 @@ package locale.components
 		private function first_frame(evt:Event):void{
 			this.txt.removeEventListener(Event.ENTER_FRAME, first_frame);
 			on_lang_changed(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
+			this.txt.visible = true;
 		}
 	}
 }
