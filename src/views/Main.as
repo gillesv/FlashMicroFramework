@@ -9,6 +9,8 @@ package views
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
 			test.test();
+			
+			playUntil(totalFrames);
 		}
 	}
 }

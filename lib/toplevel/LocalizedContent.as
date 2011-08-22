@@ -14,6 +14,7 @@ package
 	{
 		private var textfields:Array = [];
 		
+		[Editable]
 		public var id:String = "";
 		
 		public function LocalizedContent()
@@ -22,6 +23,9 @@ package
 			
 			stop();
 			
+			this.visible = false;
+			
+			/*
 			mouseChildren = false;
 			buttonMode = true;
 			addEventListener(MouseEvent.CLICK, function(evt:MouseEvent):void{
@@ -30,6 +34,7 @@ package
 				else
 					MultiLang.instance.lang = "NL";
 			});
+			*/
 		}
 		
 		override public function init():void{
@@ -39,7 +44,10 @@ package
 				id = this.name;
 			
 			MultiLang.instance.addEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
+			if(MultiLang.instance.isReady)
+				on_lang_changed(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
 			
+			enterFrame(null);
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 		}
 		
@@ -49,10 +57,13 @@ package
 			MultiLang.instance.removeEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
 			
 			removeEventListener(Event.ENTER_FRAME, enterFrame);
+			removeEventListener(Event.ENTER_FRAME, show);
 		}
 		
 		private function on_lang_changed(evt:MultiLangEvent):void{
+			this.visible = false;
 			gotoAndStop(evt.lang);
+			addEventListener(Event.ENTER_FRAME, show);
 		}
 		
 		private function collectTextFields():void{
@@ -88,6 +99,11 @@ package
 				
 				_lastFrame = currentFrame;
 			}
+		}
+		
+		private function show(evt:Event = null):void{
+			this.visible = true;
+			this.removeEventListener(Event.ENTER_FRAME, show);
 		}
 		
 		public function get section():String{

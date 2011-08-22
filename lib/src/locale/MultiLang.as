@@ -178,6 +178,18 @@ package locale
 			}
 		}
 		
+		/**
+		 * 
+		 * @return 
+		 * 
+		 */		
+		public function get isReady():Boolean{
+			if(selectedLanguage)
+				return selectedLanguage.isLoaded;
+			
+			return false;
+		}
+		
 		private var _dynamicValues:Object = {};
 		
 		/**

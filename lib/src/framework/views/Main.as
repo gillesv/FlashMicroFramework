@@ -7,7 +7,6 @@ package framework.views
 		public function Main()
 		{
 			super();
-			stop();
 		}
 	}
 }

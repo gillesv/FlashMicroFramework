@@ -18,6 +18,7 @@
     <classEntry path="locale.Key"/>
     <classEntry path="LocalizedContent"/>
     <classEntry path="locale.components.LocaleLabel"/>
+    <classEntry path="locale.components.LocalLabelCollector"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
