@@ -11,7 +11,7 @@
 			<comment><![CDATA[]]></comment>
 		</key>
 		<key id="body" tag="p">
-			<content><![CDATA[Dit is wat body copy]]></content>
+			<content><![CDATA[Dit is wat body copy [dynamicvalue]]]></content>
 			<comment><![CDATA[]]></comment>
 		</key>
 	</section>

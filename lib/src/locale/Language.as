@@ -28,6 +28,8 @@ package locale
 		
 		private var xmlUrl:URLRequest;
 		
+		private const DYNAMIC_VALUES_PATTERN:RegExp = /\[[a-z0-9]*\]/gi;
+		
 		public function Language(id:String, xml:*)
 		{
 			this.id = id;
@@ -242,7 +244,31 @@ package locale
 				keys[truncatedPath] = key;				
 			}
 			
+			if(!MultiLang.instance.isEditing)
+				return renderDynamicValues(key.content);
+			
 			return key.content;
+		}
+		
+		private function renderDynamicValues(render:String):String{
+			if(render.indexOf("[") >= 0){
+				var matches:Array = render.match(DYNAMIC_VALUES_PATTERN);
+				
+				for(var i:int = 0; i < matches.length; i++){
+					var valueId:String = matches[i].split("[").join("").split("]").join("");
+					
+					var replacedValue:String = matches[i];
+					
+					if(MultiLang.instance.existsDynamicValueForId(valueId)){
+						replacedValue = MultiLang.instance.getDynamicValueForId(valueId);
+					}
+					
+					if(replacedValue)
+						render = render.split(matches[i]).join(replacedValue);
+				}	
+			}
+			
+			return render;
 		}
 		
 		/**

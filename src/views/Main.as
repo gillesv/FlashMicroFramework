@@ -1,6 +1,8 @@
 package views
 {
 	import core.*;
+	
+	import locale.MultiLang;
 
 	public dynamic class Main extends MC
 	{
@@ -10,7 +12,9 @@ package views
 			test.setup();
 			test.test();
 			
-			playUntil(totalFrames);
+			playUntil(totalFrames, function():void{
+				MultiLang.instance.setDynamicValue("dynamicvalue", "lollercopter");
+			});
 		}
 	}
 }
@@ -39,6 +43,7 @@ internal class MultiLangTester {
 	public function test():void{
 		MultiLang.instance.addLanguage(new Language("NL", globalURL + "data/flashCopy_NL.xml"));
 		MultiLang.instance.addLanguage(new Language("FR", globalURL + "data/flashCopy_FR.xml"));
+		MultiLang.instance.setDynamicValue("dynamicvalue", "lol");
 	}
 	
 	private function on_lang_loaded(evt:MultiLangEvent):void{

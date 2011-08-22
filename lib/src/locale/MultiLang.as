@@ -11,6 +11,8 @@ package locale
 	
 	import framework.events.GlobalEvent;
 	
+	import locale.events.MultiLangEvent;
+	
 	public class MultiLang implements IEventDispatcher
 	{
 		
@@ -190,6 +192,8 @@ package locale
 			return false;
 		}
 		
+		public var isEditing:Boolean = false;
+		
 		private var _dynamicValues:Object = {};
 		
 		/**
@@ -206,6 +210,7 @@ package locale
 				_dynamicValues[id] = value.toString();
 				
 				// dispatch event
+				dispatchEvent(new MultiLangEvent(MultiLangEvent.DYNAMIC_VALUE_CHANGED, lang));
 			}catch(err:Error){
 				trace("Couldn't convert value for id '" + id + "' to String");
 			}
@@ -216,6 +221,10 @@ package locale
 				return _dynamicValues[id].toString();
 			
 			return "";
+		}
+		
+		public function existsDynamicValueForId(id:String):Boolean{
+			return (getDynamicValueForId(id) != "");
 		}
 		
 		
