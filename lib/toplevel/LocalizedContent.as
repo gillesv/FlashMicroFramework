@@ -2,6 +2,7 @@ package
 {
 	import core.MC;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -13,11 +14,8 @@ package
 	
 	public class LocalizedContent extends MC
 	{
-		//private var textfields:Array = [];
 		private var collector:LocaleLabelCollector;
-		
-		[Editable]
-		public var id:String = "";
+		private var id:String;
 		
 		public function LocalizedContent()
 		{
@@ -26,25 +24,33 @@ package
 			stop();
 			
 			this.visible = false;
-			
-			/*
-			mouseChildren = false;
-			buttonMode = true;
-			addEventListener(MouseEvent.CLICK, function(evt:MouseEvent):void{
-				if(MultiLang.instance.lang == "NL")
-					MultiLang.instance.lang = "FR";
-				else
-					MultiLang.instance.lang = "NL";
-			});
-			*/
 		}
 		
 		override public function init():void{
 			super.init();
 			
-			if(id == "")
-				id = this.name;
+			if(id == null || id == ""){
+				var p:DisplayObjectContainer = this.parent;
+				
+				if(p != null){
+					try{
+						if(Object(p)["id"] != null && Object(p)["id"].toString() != ""){
+							id = Object(p)["id"].toString();
+						}else if(p.name.indexOf("instance") < 0 && p.name.toString() != "root1"){ // TODO: replace with regex for instanceNUMBER
+							id = p.name;
+						}
+					}catch(err:Error){
+						trace("couldn't get property id off of parent");
+						trace(err);
+					}
+				}
+			}
 			
+			if(id == null){
+				id = this.name;
+			}
+			
+				
 			MultiLang.instance.addEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
 			if(MultiLang.instance.isReady)
 				on_lang_changed(new MultiLangEvent(MultiLangEvent.LANG_CHANGED));
@@ -55,6 +61,9 @@ package
 		
 		override public function kill():void{
 			super.kill();
+			
+			if(collector)
+				collector.kill();
 			
 			MultiLang.instance.removeEventListener(MultiLangEvent.LANG_CHANGED, on_lang_changed);
 			
@@ -73,31 +82,7 @@ package
 				collector.kill();
 			
 			collector = new LocaleLabelCollector(this, section);
-			collector.collectLabels();
-			/*
-			var i:int = 0;
-			var label:LocaleLabel;
-			
-			for(i = 0; i < textfields.length; i++){
-				label = textfields[i] as LocaleLabel;
-				label.kill();
-			}
-			
-			textfields = [];
-			
-			for(i = 0; i < numChildren; i++){
-				if(getChildAt(i) as TextField){
-					var txt:TextField = getChildAt(i) as TextField;
-					var path:String = txt.name;
-					if(section != "")
-						path = section + "/" + path;
-					
-					label = new LocaleLabel(txt, path);
-					textfields.push(label);
-				}
-			}
-			*/
-			
+			collector.collectLabels();			
 		}
 		
 		private var _lastFrame:int;
@@ -120,6 +105,8 @@ package
 		}
 		public function set section(value:String):void{
 			this.id = value;
+			
+			collectTextFields();
 		}
 	}
 }
