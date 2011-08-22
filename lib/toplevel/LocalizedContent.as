@@ -8,11 +8,13 @@ package
 	
 	import locale.MultiLang;
 	import locale.components.LocaleLabel;
+	import locale.components.LocaleLabelCollector;
 	import locale.events.MultiLangEvent;
 	
 	public class LocalizedContent extends MC
 	{
-		private var textfields:Array = [];
+		//private var textfields:Array = [];
+		private var collector:LocaleLabelCollector;
 		
 		[Editable]
 		public var id:String = "";
@@ -67,6 +69,12 @@ package
 		}
 		
 		private function collectTextFields():void{
+			if(collector)
+				collector.kill();
+			
+			collector = new LocaleLabelCollector(this, section);
+			collector.collectLabels();
+			/*
 			var i:int = 0;
 			var label:LocaleLabel;
 			
@@ -88,6 +96,7 @@ package
 					textfields.push(label);
 				}
 			}
+			*/
 			
 		}
 		

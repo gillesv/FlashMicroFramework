@@ -5,7 +5,7 @@ package locale.components
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 
-	public class LocalLabelCollector
+	public class LocaleLabelCollector
 	{
 		public var container:DisplayObjectContainer;
 		public var section:String;
@@ -13,16 +13,20 @@ package locale.components
 		
 		public var labels:Array = [];
 		
-		public function LocalLabelCollector(container:DisplayObjectContainer, section:String = "", ignore:Array = null){
+		public function LocaleLabelCollector(container:DisplayObjectContainer, section:String = "", ignore:Array = null){
 			this.container = container;
 			this.section = section;
+			
+			if(!ignore)
+				ignore = [];
+			
 			this.ignore = ignore;
 		}
 		
 		public function collectLabels():void{
 			this.labels = [];
 			
-			var txt:TextField, child:DisplayObject, path:String;
+			var txt:TextField, child:DisplayObject, path:String = "";
 			
 			for(var i:int = 0; i < container.numChildren; i++){
 				child = container.getChildAt(i);
