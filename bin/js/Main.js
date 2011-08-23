@@ -1,5 +1,7 @@
 /* Main.js */
 
+var flash, url;
+
 /* Custom History.JS implementation */
 (function(window, undefined){	
 	
@@ -17,16 +19,28 @@
 	}
 	
 	// Bind Statechange event
-	History.Adapter.bind(window, 'statechange', function(){
+	History.Adapter.bind(window, 'statechange', stateChange);
+	
+	// Statechange function
+	function stateChange(){
 		var state = History.getState();
-		var url = state.url.split(rootUrl).join('');
+		url = state.url.split(rootUrl).join('');
 		
 		switch(url){
 			default:
-				console.log("url : " + url);
+				if(flash){
+					flash.changeState(url);
+				}
+				//console.log(flash);
+				//flash.changeState(url);
+				//$('#' + FLASH_ID)[0].changeState(url);
+				//console.log($('#' + FLASH_ID)[0]);
+				//console.log("url : " + url + " " + FLASH_ID);
 			break;
 		}
-	});
+	}
+	
+	stateChange();
 	
 	// create dynamic links
 	$('a').live('click', function(evt){
@@ -37,3 +51,18 @@
 		return false;
 	});	
 })(window);
+
+// Flash JS bridge
+function initFlashHistoryBridge(){
+	console.log("initFlashHistoryBridge");
+	
+	flash = document.getElementById(FLASH_ID);
+	
+	if(url){
+		flash.changeState(url);
+	}
+}
+
+function flashPushHistoryState(state, title){
+	History.pushState(null, title, state);
+}

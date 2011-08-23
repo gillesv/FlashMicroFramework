@@ -20,6 +20,7 @@
     <classEntry path="locale.components.LocaleLabel"/>
     <classEntry path="locale.components.LocaleLabelCollector"/>
     <classEntry path="locale.cms.MultiLangEditor"/>
+    <classEntry path="log"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

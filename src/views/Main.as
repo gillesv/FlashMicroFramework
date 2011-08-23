@@ -5,6 +5,7 @@ package views
 	import flash.display.SimpleButton;
 	import flash.display.StageAlign;
 	import flash.events.MouseEvent;
+	import flash.external.ExternalInterface;
 	
 	import locale.MultiLang;
 	import locale.cms.MultiLangEditor;
@@ -32,18 +33,39 @@ package views
 			btnLang.addEventListener(MouseEvent.CLICK, on_btn);
 			
 			addChild(new MultiLangEditor());
+			
+			// History.js experimentation
+			if(ExternalInterface.available){
+				ExternalInterface.addCallback("changeState", on_state_change);
+				ExternalInterface.call("initFlashHistoryBridge");
+			}
+			
+			log("init cache 2");
+		}
+		
+		private function on_state_change(state:String):void{
+			gotoAndStop(state);
+			//log(state);
+		}
+		
+		private function set_state(state:String):void{
+			if(ExternalInterface.available){
+				ExternalInterface.call("flashPushHistoryState", state);
+			}else{
+				on_state_change(state);
+			}
 		}
 		
 		private function on_btn(evt:MouseEvent):void{
 			switch(evt.target){
 				case btnHome:
-					gotoAndStop("HOME");
+					set_state("HOME");
 					break;
 				case btnAbout:
-					gotoAndStop("ABOUT");
+					set_state("ABOUT");
 					break;
 				case btnContact:
-					gotoAndStop("CONTACT");
+					set_state("CONTACT");
 					break;
 				case btnLang:
 					

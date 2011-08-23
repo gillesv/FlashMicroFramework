@@ -49,6 +49,7 @@
 			
 			var baseURL = "<?php echo($base_path); ?>/";
 			var useFlash = <?php if($noFlash): ?>false<?php else: ?>true <?php endif; ?>;
+			var FLASH_ID = "FlashMain";
 			
 			
 			// Webkit detection script
@@ -81,10 +82,11 @@
 					complete: function(){
 						if(swfobject){
 							var flashvars = { 
-									startPage:  "<?php echo(implode('/', url_parts())); ?>"
+									startPage:  "<?php echo(implode('/', url_parts())); ?>",
+									globalURL: "<?php echo($base_path); ?>"
 								},
 								params = { allowFullScreen: true, allowScriptAccess: "always" },
-								attributes = { id: 'FlashMain' };
+								attributes = { id: FLASH_ID };
 							
 							// why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
 							var version = "10.3";
