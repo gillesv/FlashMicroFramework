@@ -19,6 +19,7 @@
     <classEntry path="LocalizedContent"/>
     <classEntry path="locale.components.LocaleLabel"/>
     <classEntry path="locale.components.LocaleLabelCollector"/>
+    <classEntry path="locale.cms.MultiLangEditor"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

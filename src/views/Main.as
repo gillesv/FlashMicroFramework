@@ -2,19 +2,42 @@ package views
 {
 	import core.*;
 	
+	import flash.display.SimpleButton;
+	import flash.events.MouseEvent;
+	
 	import locale.MultiLang;
 
 	public dynamic class Main extends MC
 	{
+		public var btnHome:SimpleButton;
+		public var btnAbout:SimpleButton;
+		public var btnContact:SimpleButton;
+		
 		public function Main()
 		{
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
 			test.test();
 			
-			playUntil(totalFrames, function():void{
-				MultiLang.instance.setDynamicValue("dynamicvalue", "lollercopter");
-			});
+			stop();
+			
+			btnHome.addEventListener(MouseEvent.CLICK, on_btn);
+			btnAbout.addEventListener(MouseEvent.CLICK, on_btn);
+			btnContact.addEventListener(MouseEvent.CLICK, on_btn);
+		}
+		
+		private function on_btn(evt:MouseEvent):void{
+			switch(evt.target){
+				case btnHome:
+					gotoAndStop("HOME");
+					break;
+				case btnAbout:
+					gotoAndStop("ABOUT");
+					break;
+				case btnContact:
+					gotoAndStop("CONTACT");
+					break;
+			}
 		}
 	}
 }
