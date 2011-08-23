@@ -282,7 +282,7 @@ package locale
 		public function setStringForPath(value:String, path:String, comment:String = ""):void{
 			var key:Key;
 			
-			// trim value
+			// trim values
 			value = trim_ending_whitespace(value);
 			comment = trim_ending_whitespace(comment);
 			

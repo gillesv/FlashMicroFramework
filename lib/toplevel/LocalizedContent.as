@@ -17,6 +17,25 @@ package
 		private var collector:LocaleLabelCollector;
 		private var id:String;
 		
+		/**
+		 * Used as a baseclass, this adds a wealth of functionality to any movieclip confirming to the following assumptions:
+		 * 
+		 * It contains dynamic textfields that have been given unique instance-names
+		 * It is either single-frame, or contains labeled frames for every language the site supports (i.e a frame labeled "EN" or "FR")
+		 * 
+		 * When initialized, the LocalizedContent sets itself to the correct frame according to the current locale, and cleanly collects all dynamic textfields,
+		 * turning them into dynamic LocaleLabels. 
+		 * 
+		 * The content from these labels is got according to the following logic:
+		 * If the LocalizedContent's section property is set (before being added to stage) that value is the section key.
+		 * If the LocalizedContent is placed inside another displayobject that has a property "id", that 'id' is used as the section key
+		 * If the LocalizedContent's parent does not posses an 'id', it takes the name of the parent, so long as it is not the document-root or created at runtime (so that it's not some 
+		 * random gibberish like Instance625 or something)
+		 * If the parent's id is invalid, it uses the LocalizedContent's instancename (provided of course, it also isn't randomly generated)
+		 * If all else fails, it uses an empty section and searches for content in the root of the translation-file
+		 * 
+		 * The goal is to make localization & copy-writing as painless and automated as possible.
+		 */		
 		public function LocalizedContent()
 		{
 			super();
@@ -46,8 +65,10 @@ package
 				}
 			}
 			
-			if(id == null){
+			if(id == null && this.name.indexOf("instance") < 0){
 				id = this.name;
+			}else{
+				id = "";
 			}
 			
 				
