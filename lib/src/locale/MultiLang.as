@@ -19,10 +19,12 @@ package locale
 		public var DEFAULT_XML_FILENAME_PREFIX:String = "flashCopy_";
 		
 		private var _lang:String;
-		private var languages:Object = {};
-		private var selectedLanguage:Language;
+		private var _languages:Object = {};
+		private var _selectedLanguage:Language;
+		
 		private static var _instance:MultiLang;
 		
+		private var _isEditing:Boolean = false;
 		private var _dispatcher:EventDispatcher;
 		
 		/**
@@ -54,19 +56,19 @@ package locale
 		}
 		public function set lang(value:String):void{
 			if(_lang != value){
-				if(languages[value] == null){
+				if(_languages[value] == null){
 					throw new Error('Language ' + value + ' not found.');
 					
 					return;
 				}
 				
-				if(selectedLanguage)
-					selectedLanguage.deactivate();
+				if(_selectedLanguage)
+					_selectedLanguage.deactivate();
 				
 				_lang = value;
 				
-				selectedLanguage = languages[_lang] as Language;
-				selectedLanguage.activate(this);		
+				_selectedLanguage = _languages[_lang] as Language;
+				_selectedLanguage.activate(this);		
 			}
 		}
 		
@@ -76,10 +78,36 @@ package locale
 		 * @param value 
 		 */		
 		public function addLanguage(value:Language):void{
-			languages[value.id] = value;
+			_languages[value.id] = value;
 			
 			if(!lang)
 				lang = value.id;
+		}
+		
+		/**
+		 * Returns an array of all Language objects 
+		 */		
+		public function get languages():Array{
+			var arr:Array = [];
+			
+			for(var s:String in _languages){
+				arr.push(_languages[s]);
+			}
+			
+			return arr;
+		}
+		
+		/**
+		 * Returns an array of language-identifier strings (can be used to set the active language) 
+		 */		
+		public function get languageIds():Array{
+			var arr:Array = [];
+			
+			for(var s:String in _languages){
+				arr.push(s);
+			}
+			
+			return arr;
 		}
 		
 		/**
@@ -90,8 +118,8 @@ package locale
 		 * 
 		 */		
 		public function getStringForPath(path:String):String{
-			if(selectedLanguage)
-				return selectedLanguage.getStringForPath(path);
+			if(_selectedLanguage)
+				return _selectedLanguage.getStringForPath(path);
 			
 			return path;
 		}
@@ -104,8 +132,8 @@ package locale
 		 * 
 		 */		
 		public function setStringForPath(value:String, path:String, comment:String = ""):void{
-			if(selectedLanguage)
-				selectedLanguage.setStringForPath(value, path, comment);
+			if(_selectedLanguage)
+				_selectedLanguage.setStringForPath(value, path, comment);
 		}
 		
 		/**
@@ -116,8 +144,8 @@ package locale
 		 * 
 		 */		
 		public function pathExists(path:String):Boolean{
-			if(selectedLanguage)
-				return selectedLanguage.pathExists(path);
+			if(_selectedLanguage)
+				return _selectedLanguage.pathExists(path);
 			
 			return false;
 		}
@@ -128,8 +156,8 @@ package locale
 		 * @return formatted XML
 		 */		
 		public function toXML():XML{
-			if(selectedLanguage)
-				return selectedLanguage.toXML();
+			if(_selectedLanguage)
+				return _selectedLanguage.toXML();
 			
 			return null;
 		}
@@ -160,7 +188,7 @@ package locale
 				
 				//var filename:String = Language(_languages[lang]).filename;
 				//var filename:String = "translation_" + lang + ".xml";
-				var filename:String = DEFAULT_XML_FILENAME_PREFIX + selectedLanguage.id + ".xml";
+				var filename:String = DEFAULT_XML_FILENAME_PREFIX + _selectedLanguage.id + ".xml";
 				
 				var fileref:FileReference = new FileReference();
 				fileref.addEventListener(Event.SELECT, on_save_file_select);
@@ -186,13 +214,43 @@ package locale
 		 * 
 		 */		
 		public function get isReady():Boolean{
-			if(selectedLanguage)
-				return selectedLanguage.isLoaded;
+			if(_selectedLanguage)
+				return _selectedLanguage.isLoaded;
 			
 			return false;
 		}
 		
-		public var isEditing:Boolean = false;
+		/**
+		 * Is the locale-framework in edit-mode? 
+		 */		
+		public function get isEditing():Boolean{
+			return _isEditing;
+		}
+
+		public function set isEditing(value:Boolean):void{
+			_isEditing = value;
+			
+			if(value)
+				startEditing();
+			else
+				stopEditing();
+		}
+		
+		/**
+		 * Begin editing copy 
+		 */		
+		public function startEditing():void{
+			_isEditing = true;
+			dispatchEvent(new MultiLangEvent(MultiLangEvent.BEGIN_EDIT, lang));
+		}
+		
+		/**
+		 * End editing copy 
+		 */	
+		public function stopEditing():void{
+			_isEditing = false;
+			dispatchEvent(new MultiLangEvent(MultiLangEvent.END_EDIT, lang));
+		}
 		
 		private var _dynamicValues:Object = {};
 		

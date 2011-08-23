@@ -3,18 +3,23 @@ package views
 	import core.*;
 	
 	import flash.display.SimpleButton;
+	import flash.display.StageAlign;
 	import flash.events.MouseEvent;
 	
 	import locale.MultiLang;
+	import locale.cms.MultiLangEditor;
 
 	public dynamic class Main extends MC
 	{
 		public var btnHome:SimpleButton;
 		public var btnAbout:SimpleButton;
 		public var btnContact:SimpleButton;
+		public var btnLang:SimpleButton;
 		
 		public function Main()
 		{
+			stage.align = StageAlign.TOP_LEFT;
+			
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
 			test.test();
@@ -24,6 +29,9 @@ package views
 			btnHome.addEventListener(MouseEvent.CLICK, on_btn);
 			btnAbout.addEventListener(MouseEvent.CLICK, on_btn);
 			btnContact.addEventListener(MouseEvent.CLICK, on_btn);
+			btnLang.addEventListener(MouseEvent.CLICK, on_btn);
+			
+			addChild(new MultiLangEditor());
 		}
 		
 		private function on_btn(evt:MouseEvent):void{
@@ -36,6 +44,14 @@ package views
 					break;
 				case btnContact:
 					gotoAndStop("CONTACT");
+					break;
+				case btnLang:
+					
+					if(MultiLang.instance.lang == "NL")
+						MultiLang.instance.lang = "FR";
+					else
+						MultiLang.instance.lang = "NL";
+					
 					break;
 			}
 		}
