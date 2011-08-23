@@ -55,6 +55,8 @@ package locale
 			return _lang;
 		}
 		public function set lang(value:String):void{
+			isEditing = false;
+			
 			if(_lang != value){
 				if(_languages[value] == null){
 					throw new Error('Language ' + value + ' not found.');
@@ -228,8 +230,6 @@ package locale
 		}
 
 		public function set isEditing(value:Boolean):void{
-			_isEditing = value;
-			
 			if(value)
 				startEditing();
 			else
@@ -240,16 +240,20 @@ package locale
 		 * Begin editing copy 
 		 */		
 		public function startEditing():void{
-			_isEditing = true;
-			dispatchEvent(new MultiLangEvent(MultiLangEvent.BEGIN_EDIT, lang));
+			if(!_isEditing){
+				_isEditing = true;
+				dispatchEvent(new MultiLangEvent(MultiLangEvent.BEGIN_EDIT, lang));
+			}
 		}
 		
 		/**
 		 * End editing copy 
 		 */	
 		public function stopEditing():void{
-			_isEditing = false;
-			dispatchEvent(new MultiLangEvent(MultiLangEvent.END_EDIT, lang));
+			if(_isEditing){
+				_isEditing = false;
+				dispatchEvent(new MultiLangEvent(MultiLangEvent.END_EDIT, lang));
+			}
 		}
 		
 		private var _dynamicValues:Object = {};
