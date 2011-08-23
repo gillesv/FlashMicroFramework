@@ -7,6 +7,7 @@ package locale
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.ui.Keyboard;
 	
 	import locale.events.MultiLangEvent;
 	
@@ -281,6 +282,10 @@ package locale
 		public function setStringForPath(value:String, path:String, comment:String = ""):void{
 			var key:Key;
 			
+			// trim value
+			value = trim_ending_whitespace(value);
+			comment = trim_ending_whitespace(comment);
+			
 			if(pathExists(path)){
 				key = keys[path] as Key;
 			}else{
@@ -310,6 +315,13 @@ package locale
 			
 			key.content = value;
 			key.comment = comment;
+		}
+		
+		private function trim_ending_whitespace(value:String):String{
+			if(value.charCodeAt(value.length - 1) == Keyboard.ENTER)
+				value = value.substr(0, value.length - 1);
+			
+			return value;
 		}
 		
 		/**

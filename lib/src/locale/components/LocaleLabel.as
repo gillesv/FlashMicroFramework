@@ -16,6 +16,15 @@ package locale.components
 		
 		private var _last_lang:String = "";
 		
+		
+		/**
+		 * Transform any dynamic textfield into a localized label, complete with responsive behaviors and CMS-integration
+		 * 
+		 * @param txt		the textfield
+		 * @param path		the path to the localized content: e.g home/title or about/content or error/email, etc...
+		 * @param comment	optional comment to aid copywriters/translators
+		 * 
+		 */		
 		public function LocaleLabel(txt:TextField, path:String, comment:String = ""){
 			this.txt = txt;
 			this.path = path;
@@ -50,7 +59,7 @@ package locale.components
 				_last_lang = evt.lang;
 				
 				if(!MultiLang.instance.pathExists(path)){
-					MultiLang.instance.setStringForPath(txt.htmlText, path, (comment == "")? txt.text : comment);
+					MultiLang.instance.setStringForPath(txt.text, path, (comment == "")? txt.text : comment);
 				}
 				
 				txt.htmlText = MultiLang.instance.getStringForPath(path);
