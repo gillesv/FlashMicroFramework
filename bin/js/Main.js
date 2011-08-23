@@ -28,6 +28,8 @@ var flash, url;
 		
 		switch(url){
 			default:
+				console.log(flash);
+			
 				if(flash){
 					flash.changeState(url);
 				}

@@ -40,7 +40,7 @@ package views
 				ExternalInterface.call("initFlashHistoryBridge");
 			}
 			
-			log("init cache 2");
+			log("init cache 3");
 		}
 		
 		private function on_state_change(state:String):void{

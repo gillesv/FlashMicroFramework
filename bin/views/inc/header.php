@@ -64,7 +64,7 @@
 			
 			// Flash detection
 			Modernizr.addTest('flash', function(){
-				return navigator.mimeTypes['application/x-shockwave-flash'];
+				return navigator.mimeTypes['application/x-shockwave-flash'] && useFlash;
 			});
 			
 			Modernizr.load([
