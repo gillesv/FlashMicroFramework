@@ -28,16 +28,12 @@ var flash, url;
 		
 		switch(url){
 			default:
-				console.log(flash);
-			
-				if(flash){
+				if(!flash)
+					flash = document.getElementById(FLASH_ID);
+					
+				try{	
 					flash.changeState(url);
-				}
-				//console.log(flash);
-				//flash.changeState(url);
-				//$('#' + FLASH_ID)[0].changeState(url);
-				//console.log($('#' + FLASH_ID)[0]);
-				//console.log("url : " + url + " " + FLASH_ID);
+				}catch(err){}
 			break;
 		}
 	}
