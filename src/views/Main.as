@@ -4,6 +4,7 @@ package views
 	
 	import flash.display.SimpleButton;
 	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
 	
@@ -20,6 +21,7 @@ package views
 		public function Main()
 		{
 			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
