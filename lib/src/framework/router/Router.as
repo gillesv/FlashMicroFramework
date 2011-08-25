@@ -35,11 +35,15 @@ package framework.router
 				}
 			}
 			
+			var found:Boolean = false;
+			
 			for(var i:int = 0; i < patterns.length; i++){
 				pc = patterns[i] as PatternCallback;
 				match = matches(url, pc.pattern);
 				
 				if(match.isMatch){
+					found = true;
+					
 					if(match.params.length > 0)
 						pc.callback.apply(null, match.params);
 					else
@@ -47,6 +51,10 @@ package framework.router
 					
 					break;
 				}	
+			}
+			
+			if(!found){
+				log("Routing error: couldn't find route for '" + url + "'");
 			}
 			
 			// rerouting
@@ -121,7 +129,7 @@ internal class PatternMatch{
 	private function match():void{
 		var els:Array = url.split('/');
 		var patEls:Array = pattern.split('/');
-				
+		
 		// remove prefixed or trailing slashes
 		if(els[0] == '')
 			els.shift();
@@ -134,25 +142,41 @@ internal class PatternMatch{
 		
 		if(patEls[patEls.length - 1] == '')
 			patEls.pop();
-				
+		
+		if(els.length == 0)
+			els.push("");
+		
+		if(patEls.length == 0)
+			patEls.push("");
+		
+		// match url to pattern & sort/store appropriate variables/parameters
 		var valid:Boolean = true;
 		var compare:String = "";
 		var unnamed:Array = [];
 		
 		params = [];
 		
-		for(var i:int = 0; i < els.length; i++){
-			if(valid){
-				compare = patEls[Math.min(patEls.length - 1, i)];
-								
-				if(compare == "**"){
-					unnamed.push(els[i]);
-				}else if(compare == "*"){
-					unnamed.push(els[i]);
-				}else if(compare.indexOf(":") == 0){
-					params.push(els[i]);
-				}else if(compare != els[i]){
-					valid = false;
+		// check for literal
+		if(els.join("/") != patEls.join("/")){
+			if(els.length == 0){
+				valid = false;
+			}
+						
+			for(var i:int = 0; i < els.length; i++){
+				if(valid){
+					compare = patEls[Math.max(0, Math.min(patEls.length - 1, i))];
+					
+					//trace("compare: "+ compare + " els[" + i + "]: " + els[i]);
+					
+					if(compare == "**"){
+						unnamed.push(els[i]);
+					}else if(compare == "*"){
+						unnamed.push(els[i]);
+					}else if(compare.indexOf(":") == 0){
+						params.push(els[i]);
+					}else if(compare != els[i]){
+						valid = false;
+					}
 				}
 			}
 		}

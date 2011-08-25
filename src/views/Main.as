@@ -48,8 +48,6 @@ package views
 				ExternalInterface.addCallback("changeState", on_state_change);
 				ExternalInterface.call("initFlashHistoryBridge");
 			}
-			
-			log("init cache 3");
 		}
 		
 		private function on_state_change(state:String):void{
@@ -101,6 +99,7 @@ internal class RouterTester {
 	}
 	
 	public function test():void{
+		router.addRoute("/", on_home);
 		router.addRoute("/home", on_home); // string literal
 		router.addRoute("/people/:id", on_people); // named parameters
 		router.addRoute("/file/**", on_file); // wildcard parameters
@@ -122,13 +121,15 @@ internal class RouterTester {
 			trace("on letters: " + params.join(", "));
 		}
 		
-		router.route("/home");
-		router.route("/home/");
-		router.route("/people/gilles");
-		router.route("/people/gilles/");
-		router.route("/people");
-		router.route("/file/a/path/to/a/file");
-		router.route("/letter/x/to/y");
+		router.route("/");					// home
+		
+		router.route("/home");				// home
+		router.route("/home/");				// home
+		router.route("/people/gilles");		// people gilles
+		router.route("/people/gilles/");	// people gilles
+		router.route("/people");			// 404
+		router.route("/file/a/path/to/a/file");	// file
+		router.route("/letter/x/to/y");		// letter
 	}
 }
 
