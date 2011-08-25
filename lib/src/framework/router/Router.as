@@ -8,6 +8,8 @@ package framework.router
 		private var _before:Function;
 		private var _after:Function;
 		
+		private var _url:String;
+		
 		public function Router(){
 		}
 		
@@ -19,19 +21,35 @@ package framework.router
 			this._after = callback;
 		}
 		
+		public function redirect(url:String):void{
+			var tempurl:String = _url;
+			
+			route(url);
+			
+			_url = tempurl;
+		}
+		
 		/**
 		 * Take the incoming url, match it to an appropriate pattern and call the related callback
 		 *  
 		 * @param url
 		 */		
 		public function route(url:String):void{
+			if(url.charAt(0) != '/')
+				url = '/' + url;
+			
+			this._url = url;
+			
 			var pc:PatternCallback, match:PatternMatch, tempurl:String;
 						
 			// rerouting
 			if(_before != null){
 				tempurl = _before.apply(null, [url]);
 				
-				if(tempurl != url && tempurl != null){
+				if(tempurl == null)
+					return;
+				
+				if(tempurl != url){
 					route(tempurl);
 					return;
 				}
@@ -63,7 +81,10 @@ package framework.router
 			if(_after != null){
 				tempurl = _after.apply(null, [url]);
 				
-				if(tempurl != url && tempurl != null){
+				if(tempurl == null)
+					return;
+				
+				if(tempurl != url){
 					route(tempurl);
 					return;
 				}
@@ -80,6 +101,12 @@ package framework.router
 						
 			return match;
 		}
+
+		public function get URL():String
+		{
+			return _url;
+		}
+
 	}
 }
 internal class PatternCallback {

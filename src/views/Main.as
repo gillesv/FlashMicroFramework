@@ -114,7 +114,9 @@ internal class RouterTester {
 			if(match.isMatch){
 				if(match.params[0] == "NL"){
 					log('set language to: ' + match.params[0]);
-					url = match.params[1];
+					
+					router.redirect(match.params[1]);
+					return null;
 				}
 			}
 			
@@ -123,6 +125,7 @@ internal class RouterTester {
 		
 		router.after(function(url:String):String{
 			var match:PatternMatch = router.matches(url, "/post/save");
+			
 			if(match.isMatch){
 				url = "/post/saved";
 			}
@@ -158,6 +161,7 @@ internal class RouterTester {
 			trace("saved");
 		}
 		
+		/*
 		router.route("/");					// home
 		
 		router.route("/home");				// home
@@ -169,6 +173,11 @@ internal class RouterTester {
 		router.route("/letter/x/to/y");		// letter
 		router.route("NL/people/gilles");	// switch language
 		router.route("/post/save");
+		*/
+		
+		router.route("NL/people/gilles");	// switch language & go to people
+		//router.route("people/gilles");	// switch language & go to people
+		trace(router.URL);
 	}
 }
 
