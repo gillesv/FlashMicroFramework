@@ -7,8 +7,10 @@ package views
 	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
+	import flash.system.Capabilities;
 	
 	import framework.router.Router;
+	import framework.router.utils.PatternMatch;
 	
 	import locale.MultiLang;
 	import locale.cms.MultiLangEditor;
@@ -20,6 +22,8 @@ package views
 		public var btnContact:SimpleButton;
 		public var btnLang:SimpleButton;
 		
+		public var router:Router;
+		
 		
 		public function Main()
 		{
@@ -30,10 +34,28 @@ package views
 			test.setup();
 			test.test();
 			
+			router = new Router();
+			
+			router.before(function(url:String):String{
+				var match:PatternMatch = router.matches(url, "/:lang/**");
+				
+				if(match.isMatch){
+					if(MultiLang.instance.languageIds.indexOf(match.params[0]) >= 0){
+						MultiLang.instance.lang = match.params[0];
+						router.redirect(match.params[1]);
+						return null;
+					}
+				}
+				return url;
+			});
+			
+			router.addRoute("/:page", gotoAndStop);
+			
+			/*
 			var routertest:RouterTester = new RouterTester();
 			routertest.setup();
 			routertest.test();
-			
+			*/
 			stop();
 			
 			btnHome.addEventListener(MouseEvent.CLICK, on_btn);
@@ -51,15 +73,16 @@ package views
 		}
 		
 		private function on_state_change(state:String):void{
-			gotoAndStop(state);
+			router.route(state);
+			//gotoAndStop(state);
 			//log(state);
 		}
 		
 		private function set_state(state:String):void{
-			if(ExternalInterface.available){
+			if(ExternalInterface.available && Capabilities.playerType != "External"){
 				ExternalInterface.call("flashPushHistoryState", state);
 			}else{
-				on_state_change(state);
+				router.goto(state);
 			}
 		}
 		

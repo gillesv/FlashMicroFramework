@@ -13,6 +13,11 @@ package framework.router
 		public function Router(){
 		}
 		
+		public function goto(url:String):void{
+			if(_url != url)
+				route(url);
+		}
+		
 		public function before(callback:Function):void{
 			this._before = callback;
 		}
