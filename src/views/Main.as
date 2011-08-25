@@ -87,6 +87,7 @@ package views
 	}
 }
 import framework.router.Router;
+import framework.router.utils.PatternMatch;
 
 internal class RouterTester {
 	
@@ -104,6 +105,30 @@ internal class RouterTester {
 		router.addRoute("/people/:id", on_people); // named parameters
 		router.addRoute("/file/**", on_file); // wildcard parameters
 		router.addRoute("/letter/*/to/*", on_letter); // unnamed parameters
+		router.addRoute("/**", on_404);
+		router.addRoute("/post/save", on_save);
+		router.addRoute("/post/saved", on_saved);
+		
+		router.before(function(url:String):String{
+			var match:PatternMatch = router.matches(url, ":lang/**");
+			if(match.isMatch){
+				if(match.params[0] == "NL"){
+					log('set language to: ' + match.params[0]);
+					url = match.params[1];
+				}
+			}
+			
+			return url;			
+		});
+		
+		router.after(function(url:String):String{
+			var match:PatternMatch = router.matches(url, "/post/save");
+			if(match.isMatch){
+				url = "/post/saved";
+			}
+						
+			return url;
+		});
 		
 		function on_home():void{
 			trace("on home");
@@ -121,6 +146,18 @@ internal class RouterTester {
 			trace("on letters: " + params.join(", "));
 		}
 		
+		function on_404(url:String):void{
+			trace("404 for url: " + url);
+		}
+		
+		function on_save():void{
+			trace("saving...");
+		}
+		
+		function on_saved():void{
+			trace("saved");
+		}
+		
 		router.route("/");					// home
 		
 		router.route("/home");				// home
@@ -130,6 +167,8 @@ internal class RouterTester {
 		router.route("/people");			// 404
 		router.route("/file/a/path/to/a/file");	// file
 		router.route("/letter/x/to/y");		// letter
+		router.route("NL/people/gilles");	// switch language
+		router.route("/post/save");
 	}
 }
 

@@ -22,6 +22,7 @@
     <classEntry path="locale.cms.MultiLangEditor"/>
     <classEntry path="log"/>
     <classEntry path="framework.router.Router"/>
+    <classEntry path="framework.router.utils.PatternMatch"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

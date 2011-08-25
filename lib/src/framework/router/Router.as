@@ -1,5 +1,7 @@
 package framework.router
 {
+	import framework.router.utils.PatternMatch;
+
 	public class Router
 	{
 		private var patterns:Array = [];
@@ -14,7 +16,7 @@ package framework.router
 		}
 		
 		public function after(callback:Function):void{
-			this._after = _after;
+			this._after = callback;
 		}
 		
 		/**
@@ -24,7 +26,7 @@ package framework.router
 		 */		
 		public function route(url:String):void{
 			var pc:PatternCallback, match:PatternMatch, tempurl:String;
-			
+						
 			// rerouting
 			if(_before != null){
 				tempurl = _before.apply(null, [url]);
@@ -38,25 +40,25 @@ package framework.router
 			var found:Boolean = false;
 			
 			for(var i:int = 0; i < patterns.length; i++){
-				pc = patterns[i] as PatternCallback;
-				match = matches(url, pc.pattern);
-				
-				if(match.isMatch){
-					found = true;
+				if(!found){
+					pc = patterns[i] as PatternCallback;
+					match = matches(url, pc.pattern);
 					
-					if(match.params.length > 0)
-						pc.callback.apply(null, match.params);
-					else
-						pc.callback.apply();
-					
-					break;
-				}	
+					if(match.isMatch){
+						found = true;
+						
+						if(match.params.length > 0)
+							pc.callback.apply(null, match.params);
+						else
+							pc.callback.apply();
+					}	
+				}
 			}
 			
 			if(!found){
 				log("Routing error: couldn't find route for '" + url + "'");
 			}
-			
+						
 			// rerouting
 			if(_after != null){
 				tempurl = _after.apply(null, [url]);
@@ -73,7 +75,7 @@ package framework.router
 			patterns.sortOn("type", Array.NUMERIC);
 		}
 		
-		protected function matches(url:String, pattern:String):PatternMatch {
+		public function matches(url:String, pattern:String):PatternMatch {
 			var match:PatternMatch = new PatternMatch(url, pattern);
 						
 			return match;
@@ -110,91 +112,4 @@ internal class PatternCallback {
 	public function toString():String{
 		return pattern;
 	}
-}
-
-internal class PatternMatch{
-	
-	public var isMatch:Boolean = false;
-	public var params:Array = [];
-	public var url:String;
-	public var pattern:String;
-	
-	function PatternMatch(url:String, pattern:String){
-		this.url = url;
-		this.pattern = pattern;
-		
-		match();
-	}
-	
-	private function match():void{
-		var els:Array = url.split('/');
-		var patEls:Array = pattern.split('/');
-		
-		// remove prefixed or trailing slashes
-		if(els[0] == '')
-			els.shift();
-				
-		if(els[els.length - 1] == '')
-			els.pop();
-		
-		if(patEls[0] == '')
-			patEls.shift();
-		
-		if(patEls[patEls.length - 1] == '')
-			patEls.pop();
-		
-		if(els.length == 0)
-			els.push("");
-		
-		if(patEls.length == 0)
-			patEls.push("");
-		
-		// match url to pattern & sort/store appropriate variables/parameters
-		var valid:Boolean = true;
-		var compare:String = "";
-		var unnamed:Array = [];
-		
-		params = [];
-		
-		// check for literal
-		if(els.join("/") != patEls.join("/")){
-			if(els.length == 0){
-				valid = false;
-			}
-						
-			for(var i:int = 0; i < els.length; i++){
-				if(valid){
-					compare = patEls[Math.max(0, Math.min(patEls.length - 1, i))];
-					
-					//trace("compare: "+ compare + " els[" + i + "]: " + els[i]);
-					
-					if(compare == "**"){
-						unnamed.push(els[i]);
-					}else if(compare == "*"){
-						unnamed.push(els[i]);
-					}else if(compare.indexOf(":") == 0){
-						params.push(els[i]);
-					}else if(compare != els[i]){
-						valid = false;
-					}
-				}
-			}
-		}
-		
-		// incorrect amount of parameters defined
-		if(pattern.indexOf(":") >= 0 && (pattern.split(":").length - 1 > params.length)){
-			valid = false;
-		}
-				
-		if(pattern.indexOf("**") >= 0 && unnamed.length > 0){
-			params.push(unnamed.join("/"));
-		}
-		
-		if(pattern.indexOf("**") < 0 && unnamed.length > 0)
-			params.push(unnamed);
-				
-		if(valid)
-			isMatch = true;
-	}
-	
 }
