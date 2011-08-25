@@ -8,6 +8,8 @@ package views
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
 	
+	import framework.router.Router;
+	
 	import locale.MultiLang;
 	import locale.cms.MultiLangEditor;
 
@@ -17,6 +19,8 @@ package views
 		public var btnAbout:SimpleButton;
 		public var btnContact:SimpleButton;
 		public var btnLang:SimpleButton;
+		
+		public var router:Router;
 		
 		public function Main()
 		{
@@ -81,6 +85,23 @@ package views
 		}
 	}
 }
+import framework.router.Router;
+
+internal class RouterTester {
+	
+	public var router:Router;
+	
+	function RouterTester(){}
+	
+	public function setup():void{
+		router = new Router();
+	}
+	
+	public function test():void{
+		
+	}
+}
+
 import locale.Language;
 import locale.MultiLang;
 import locale.events.MultiLangEvent;

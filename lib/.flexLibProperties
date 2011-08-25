@@ -21,6 +21,7 @@
     <classEntry path="locale.components.LocaleLabelCollector"/>
     <classEntry path="locale.cms.MultiLangEditor"/>
     <classEntry path="log"/>
+    <classEntry path="framework.router.Router"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
