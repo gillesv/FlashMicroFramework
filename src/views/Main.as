@@ -20,7 +20,6 @@ package views
 		public var btnContact:SimpleButton;
 		public var btnLang:SimpleButton;
 		
-		public var router:Router;
 		
 		public function Main()
 		{
@@ -30,6 +29,10 @@ package views
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
 			test.test();
+			
+			var routertest:RouterTester = new RouterTester();
+			routertest.setup();
+			routertest.test();
 			
 			stop();
 			
@@ -98,7 +101,34 @@ internal class RouterTester {
 	}
 	
 	public function test():void{
+		router.addRoute("/home", on_home); // string literal
+		router.addRoute("/people/:id", on_people); // named parameters
+		router.addRoute("/file/**", on_file); // wildcard parameters
+		router.addRoute("/letter/*/to/*", on_letter); // unnamed parameters
 		
+		function on_home():void{
+			trace("on home");
+		}
+		
+		function on_people(id:String):void{
+			trace("on people: " + id);
+		}
+		
+		function on_file(file:String):void{
+			trace("on file: " + file);
+		}
+		
+		function on_letter(params:Array):void{
+			trace("on letters: " + params.join(", "));
+		}
+		
+		router.route("/home");
+		router.route("/home/");
+		router.route("/people/gilles");
+		router.route("/people/gilles/");
+		router.route("/people");
+		router.route("/file/a/path/to/a/file");
+		router.route("/letter/x/to/y");
 	}
 }
 

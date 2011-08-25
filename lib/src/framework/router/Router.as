@@ -45,7 +45,6 @@ package framework.router
 					else
 						pc.callback.apply();
 					
-					
 					break;
 				}	
 			}
@@ -63,11 +62,12 @@ package framework.router
 		
 		public function addRoute(pattern:String, callback:Function):void{
 			patterns.push(new PatternCallback(pattern, callback));
+			patterns.sortOn("type", Array.NUMERIC);
 		}
 		
 		protected function matches(url:String, pattern:String):PatternMatch {
 			var match:PatternMatch = new PatternMatch(url, pattern);
-			
+						
 			return match;
 		}
 	}
@@ -77,9 +77,30 @@ internal class PatternCallback {
 	public var pattern:String;
 	public var callback:Function;
 	
+	public static const LITERAL:int = 0;
+	public static const NAMED:int = 1;
+	public static const UNNAMED:int = 2;
+	public static const WILDCARD:int = 3;
+	
+	public var type:int;
+	
 	function PatternCallback(pattern:String, callback:Function){
 		this.pattern = pattern;
 		this.callback = callback;
+		
+		if(pattern.indexOf("**") > 0){
+			type = WILDCARD;
+		}else if(pattern.indexOf("*") > 0){
+			type = UNNAMED;
+		}else if(pattern.indexOf(":") > 0){
+			type = NAMED;
+		}else{
+			type = LITERAL;
+		}
+	}
+	
+	public function toString():String{
+		return pattern;
 	}
 }
 
@@ -100,11 +121,11 @@ internal class PatternMatch{
 	private function match():void{
 		var els:Array = url.split('/');
 		var patEls:Array = pattern.split('/');
-		
+				
 		// remove prefixed or trailing slashes
 		if(els[0] == '')
 			els.shift();
-		
+				
 		if(els[els.length - 1] == '')
 			els.pop();
 		
@@ -113,17 +134,43 @@ internal class PatternMatch{
 		
 		if(patEls[patEls.length - 1] == '')
 			patEls.pop();
+				
+		var valid:Boolean = true;
+		var compare:String = "";
+		var unnamed:Array = [];
 		
+		params = [];
 		
-		if(pattern.indexOf('**') > 0){ // /deeplink/**	
-			
-		}else if(pattern.indexOf('*') > 0){ // /deeplink/*
-			
-		}else if(pattern.indexOf(':') > 0){ // /deeplink/:var/:var
-			
-		}else{ // /deeplink or /deeplink/deeperlink
-			
+		for(var i:int = 0; i < els.length; i++){
+			if(valid){
+				compare = patEls[Math.min(patEls.length - 1, i)];
+								
+				if(compare == "**"){
+					unnamed.push(els[i]);
+				}else if(compare == "*"){
+					unnamed.push(els[i]);
+				}else if(compare.indexOf(":") == 0){
+					params.push(els[i]);
+				}else if(compare != els[i]){
+					valid = false;
+				}
+			}
 		}
+		
+		// incorrect amount of parameters defined
+		if(pattern.indexOf(":") >= 0 && (pattern.split(":").length - 1 > params.length)){
+			valid = false;
+		}
+				
+		if(pattern.indexOf("**") >= 0 && unnamed.length > 0){
+			params.push(unnamed.join("/"));
+		}
+		
+		if(pattern.indexOf("**") < 0 && unnamed.length > 0)
+			params.push(unnamed);
+				
+		if(valid)
+			isMatch = true;
 	}
 	
 }
