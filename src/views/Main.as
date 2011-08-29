@@ -51,7 +51,7 @@ package views
 			addChild(new MultiLangEditor());
 			
 			bridge = new HistoryJSBridge(router);
-			bridge.addEventListener(Event.INIT, function():void{
+			bridge.addEventListener(Event.CHANGE, function():void{
 				bridge.title = bridge.state.toString().substr(0, 1).toUpperCase() + bridge.state.toLowerCase().substr(1);
 			});
 			bridge.init();
@@ -60,13 +60,16 @@ package views
 		private function on_btn(evt:MouseEvent):void{
 			switch(evt.target){
 				case btnHome:
-					bridge.setState("HOME", "Home");
+					bridge.state = "HOME";
+					//bridge.setState("HOME", "Home");
 					break;
 				case btnAbout:
-					bridge.setState("ABOUT", "About");
+					bridge.state = "ABOUT";
+					//bridge.setState("ABOUT", "About");
 					break;
 				case btnContact:
-					bridge.setState("CONTACT", "Contact");
+					bridge.state = "CONTACT";
+					//bridge.setState("CONTACT", "Contact");
 					break;
 				case btnLang:
 					
