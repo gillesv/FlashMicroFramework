@@ -64,7 +64,7 @@ function initFlashHistoryBridge(){
 // Called from the SWF to change the document's current history state
 function flashPushHistoryState(state, title){
 	if(!History.enabled){
-	
+		
 	}else{
 		History.pushState(null, title, state);
 	}

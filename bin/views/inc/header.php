@@ -37,6 +37,7 @@
 	<link rel="shortcut icon" href="<?php echo($base_path); ?>/favicon.png">
 	
 	<?php /* All Javascript at the bottom, except modernizr */ ?>
+	<script src="<?php echo($base_path); ?>/js/lib/flashdetect.min.js"></script>
 	<script src="<?php echo($base_path); ?>/js/lib/modernizr.custom.00953.js"></script>
 	
 	<?php /* additional modernizr tests & init - inlined */ ?>
@@ -50,6 +51,7 @@
 			var baseURL = "<?php echo($base_path); ?>/";
 			var useFlash = <?php if($noFlash): ?>false<?php else: ?>true <?php endif; ?>;
 			var FLASH_ID = "FlashMain";
+			var version = "10.1"; // why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
 			
 			
 			// Webkit detection script
@@ -64,7 +66,7 @@
 			
 			// Flash detection
 			Modernizr.addTest('flash', function(){
-				return navigator.mimeTypes['application/x-shockwave-flash'] && useFlash;
+				return FlashDetect.installed && FlashDetect.major >= parseInt(version.split('.')[0]) && useFlash;
 			});
 			
 			Modernizr.load([
@@ -87,9 +89,6 @@
 								},
 								params = { allowFullScreen: true, allowScriptAccess: "always" },
 								attributes = { id: FLASH_ID };
-							
-							// why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
-							var version = "10.3";
 							
 							swfobject.embedSWF(baseURL + 'swf/Main.swf', 'main', "100%", "100%", version, baseURL + 'swf/expressInstall.swf', flashvars, params, attributes);
 						}
