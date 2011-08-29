@@ -66,6 +66,9 @@
 			
 			// Flash detection
 			Modernizr.addTest('flash', function(){
+				if(Modernizr.mobilewebkit)
+					return false;
+				
 				return FlashDetect.installed && FlashDetect.major >= parseInt(version.split('.')[0]) && useFlash;
 			});
 			

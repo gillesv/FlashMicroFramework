@@ -22,7 +22,7 @@ var flash, url;
 	if(!History.enabled){
 		// History.js is disabled for this browser.
 		// This is because we can optionally choose to support HTML4 browsers or not.
-		return false;
+		//return false;
 	}
 	
 	// Bind Statechange event
@@ -30,8 +30,13 @@ var flash, url;
 	
 	// Statechange function
 	function stateChange(){
-		var state = History.getState();
-		url = state.url.split(rootUrl).join('');
+		if(History.enabled){
+			var state = History.getState();
+			url = state.url.split(rootUrl).join('');
+		}else{
+			var state = document.location.hash;
+			url = state.split('#!/').join('').toString();
+		}
 		
 		switch(url){
 			default:
@@ -64,7 +69,8 @@ function initFlashHistoryBridge(){
 // Called from the SWF to change the document's current history state
 function flashPushHistoryState(state, title){
 	if(!History.enabled){
-		
+		window.location.hash = "!/" + state;
+		flash.changeState(state, document.title);
 	}else{
 		History.pushState(null, title, state);
 	}
