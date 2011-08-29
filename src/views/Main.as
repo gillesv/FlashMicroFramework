@@ -10,6 +10,7 @@ package views
 	import flash.external.ExternalInterface;
 	import flash.system.Capabilities;
 	
+	import framework.config.Config;
 	import framework.router.Router;
 	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
@@ -32,6 +33,8 @@ package views
 		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
+			Config.instance.init(stage);
 			
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();

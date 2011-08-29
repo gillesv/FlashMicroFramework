@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<default>
+	<settings>
+		<!-- global url prefix -->
+		<globalURL></globalURL>
+		
+		<!-- MultiLang languages -->
+		<languages>
+			<language id="fr-BE" url="data/translation_fr-BE.xml" />
+			<language id="nl-BE" url="data/translation_nl-BE.xml" />			
+		</languages>
+		
+		<!-- variables -->
+		<variables>
+			<var id="version" value="1.0" />
+			<var id="GAtracking" value="UA-XXXXXX" />
+		</variables>
+	</settings>
+	
+	<assets>
+		<asset id="site" url="assets/swf/Site.swf" weight="100" />
+	</assets>
+		
+	<customSettings>
+		<yourXMLHere />
+	</customSettings>
+</default>

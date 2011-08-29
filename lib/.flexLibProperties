@@ -24,6 +24,8 @@
     <classEntry path="framework.router.Router"/>
     <classEntry path="framework.router.utils.PatternMatch"/>
     <classEntry path="framework.router.bridge.HistoryJSBridge"/>
+    <classEntry path="framework.config.Config"/>
+    <classEntry path="framework.events.ConfigEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

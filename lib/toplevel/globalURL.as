@@ -1,8 +1,8 @@
 package
 {
+	import framework.config.Config;
+
 	public function get globalURL():String{
-		return "http://dev.local/Experience/Microframework/bin/";
-		
-		return "../";
+		return Config.instance.globalURL;
 	}
 }
