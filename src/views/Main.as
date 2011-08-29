@@ -5,6 +5,7 @@ package views
 	import flash.display.SimpleButton;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
 	import flash.system.Capabilities;
@@ -50,6 +51,9 @@ package views
 			addChild(new MultiLangEditor());
 			
 			bridge = new HistoryJSBridge(router);
+			bridge.addEventListener(Event.INIT, function():void{
+				bridge.title = bridge.state.toString().substr(0, 1).toUpperCase() + bridge.state.toLowerCase().substr(1);
+			});
 			bridge.init();
 		}
 		

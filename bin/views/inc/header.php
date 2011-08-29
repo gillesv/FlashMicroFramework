@@ -98,6 +98,7 @@
 				
 				// add history.js by default: enables fallback to hashbangs
 				baseURL + 'js/lib/history.js',
+				baseURL + 'js/mylibs/history.bridge.flash.js',
 				
 				// finally, your custom scripting
 				baseURL + 'js/Main.js'

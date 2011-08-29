@@ -1,5 +1,7 @@
 package framework.router.bridge
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.external.ExternalInterface;
 	import flash.system.Capabilities;
 	import flash.utils.setTimeout;
@@ -11,7 +13,7 @@ package framework.router.bridge
 	 * 
 	 * A bridge between the Router and a History.js powered deeplinking system. 
 	 */	
-	public class HistoryJSBridge
+	public class HistoryJSBridge extends EventDispatcher
 	{
 		public const INIT_DELAY:int = 200;
 		
@@ -46,6 +48,8 @@ package framework.router.bridge
 			}
 		}
 		
+		private var _firstCallback:Boolean = true;
+		
 		/**
 		 * ExternalInterface callback
 		 *  
@@ -56,10 +60,18 @@ package framework.router.bridge
 		protected function on_state_change(path:String, title:String = ''):void{
 			if(_path != path){
 				_path = path;
+				dispatchEvent(new Event(Event.CHANGE));
+				
 				router.route(path);
 				
 				if(title != '' && title != null)
-					this.title = title;
+					_title = title;
+				
+				if(_firstCallback){
+					dispatchEvent(new Event(Event.INIT));
+					
+					_firstCallback = false;
+				}
 			}
 		}
 		
