@@ -122,13 +122,21 @@ package core
 		}
 		
 		override public function gotoAndStop(frame:Object, scene:String = null):void {
-			super.gotoAndStop(frame, scene);
-			controller.isReversing = false;
+			try{
+				super.gotoAndStop(frame, scene);
+				controller.isReversing = false;
+			}catch(err:Error){
+				trace("Framelabel: '" + frame + "' not found.");
+			}
 		}
 		
 		override public function gotoAndPlay(frame:Object, scene:String = null):void {
-			super.gotoAndPlay(frame, scene);
-			controller.isReversing = false;
+			try{
+				super.gotoAndPlay(frame, scene);
+				controller.isReversing = false;
+			}catch(err:Error){
+				trace("Framelabel: '" + frame + "' not found.");
+			}
 		}		
 		
 		public function set currentFrame(value:int):void{

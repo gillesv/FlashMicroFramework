@@ -23,6 +23,7 @@
     <classEntry path="log"/>
     <classEntry path="framework.router.Router"/>
     <classEntry path="framework.router.utils.PatternMatch"/>
+    <classEntry path="framework.router.bridge.HistoryJSBridge"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

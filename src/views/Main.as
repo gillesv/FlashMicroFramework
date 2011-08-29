@@ -10,6 +10,7 @@ package views
 	import flash.system.Capabilities;
 	
 	import framework.router.Router;
+	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
 	
 	import locale.MultiLang;
@@ -23,6 +24,7 @@ package views
 		public var btnLang:SimpleButton;
 		
 		public var router:Router;
+		public var bridge:HistoryJSBridge;
 		
 		
 		public function Main()
@@ -35,27 +37,9 @@ package views
 			test.test();
 			
 			router = new Router();
-			
-			router.before(function(url:String):String{
-				var match:PatternMatch = router.matches(url, "/:lang/**");
-				
-				if(match.isMatch){
-					if(MultiLang.instance.languageIds.indexOf(match.params[0]) >= 0){
-						MultiLang.instance.lang = match.params[0];
-						router.redirect(match.params[1]);
-						return null;
-					}
-				}
-				return url;
-			});
-			
+						
 			router.addRoute("/:page", gotoAndStop);
 			
-			/*
-			var routertest:RouterTester = new RouterTester();
-			routertest.setup();
-			routertest.test();
-			*/
 			stop();
 			
 			btnHome.addEventListener(MouseEvent.CLICK, on_btn);
@@ -65,37 +49,20 @@ package views
 			
 			addChild(new MultiLangEditor());
 			
-			// History.js experimentation
-			if(ExternalInterface.available){
-				ExternalInterface.addCallback("changeState", on_state_change);
-				ExternalInterface.call("initFlashHistoryBridge");
-			}
-		}
-		
-		private function on_state_change(state:String):void{
-			router.route(state);
-			//gotoAndStop(state);
-			//log(state);
-		}
-		
-		private function set_state(state:String):void{
-			if(ExternalInterface.available && Capabilities.playerType != "External"){
-				ExternalInterface.call("flashPushHistoryState", state);
-			}else{
-				router.goto(state);
-			}
+			bridge = new HistoryJSBridge(router);
+			bridge.init();
 		}
 		
 		private function on_btn(evt:MouseEvent):void{
 			switch(evt.target){
 				case btnHome:
-					set_state("HOME");
+					bridge.state = "HOME";
 					break;
 				case btnAbout:
-					set_state("ABOUT");
+					bridge.state = "ABOUT";
 					break;
 				case btnContact:
-					set_state("CONTACT");
+					bridge.state = "CONTACT";
 					break;
 				case btnLang:
 					

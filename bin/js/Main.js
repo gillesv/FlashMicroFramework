@@ -52,8 +52,6 @@ var flash, url;
 
 // Flash JS bridge
 function initFlashHistoryBridge(){
-	console.log("initFlashHistoryBridge");
-	
 	flash = document.getElementById(FLASH_ID);
 	
 	if(url){
