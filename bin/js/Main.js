@@ -1,8 +1,15 @@
 /* Main.js */
 
+/************************************/
+/**** HISTORY.JS -> FLASH BRIDGE ****/
+/************************************/
+
 var flash, url;
 
-/* Custom History.JS implementation */
+/********/
+/* INIT */
+/********/
+
 (function(window, undefined){	
 	
 	// variables
@@ -32,33 +39,38 @@ var flash, url;
 					flash = document.getElementById(FLASH_ID);
 					
 				try{	
-					flash.changeState(url);
+					flash.changeState(url, document.title);
 				}catch(err){}
 			break;
 		}
 	}
 	
-	stateChange();
-	
-	// create dynamic links
-	$('a').live('click', function(evt){
-		History.pushState(null, $(this).text(), $(this).attr('href'));
-		
-		evt.preventDefault();
-		
-		return false;
-	});	
+	stateChange();	
 })(window);
 
-// Flash JS bridge
+/*******************************/
+/* Flash JS bridge: public API */
+/*******************************/
+
+// Called to push the first history state to the SWF
 function initFlashHistoryBridge(){
 	flash = document.getElementById(FLASH_ID);
 	
 	if(url){
-		flash.changeState(url);
+		flash.changeState(url, document.title);
 	}
 }
 
+// Called from the SWF to change the document's current history state
 function flashPushHistoryState(state, title){
-	History.pushState(null, title, state);
+	if(!History.enabled){
+	
+	}else{
+		History.pushState(null, title, state);
+	}
+}
+
+// Called from the SWF to set the Document's titel externally
+function flashSetTitle(title){
+	document.title = title;
 }

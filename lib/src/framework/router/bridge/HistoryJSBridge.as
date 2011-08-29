@@ -5,10 +5,17 @@ package framework.router.bridge
 	import flash.utils.setTimeout;
 	
 	import framework.router.Router;
-
+	
+	/** 
+	 * @author gillesv
+	 * 
+	 * A bridge between the Router and a History.js powered deeplinking system. 
+	 */	
 	public class HistoryJSBridge
 	{
 		public const INIT_DELAY:int = 200;
+		
+		private var _title:String = "HistoryJSBridge Title";
 		
 		private var _router:Router;
 		
@@ -30,29 +37,57 @@ package framework.router.bridge
 			}
 		}
 		
+		/**
+		 * Remove callbacks 
+		 */		
 		public function kill():void{
 			if(externalInterfaceIsAvailable){
 				ExternalInterface.addCallback("changeState", null);
 			}
 		}
 		
-		protected function on_state_change(path:String):void{
+		/**
+		 * ExternalInterface callback
+		 *  
+		 * @param path
+		 * @param title
+		 * 
+		 */		
+		protected function on_state_change(path:String, title:String = ''):void{
 			if(_path != path){
 				_path = path;
 				router.route(path);
+				
+				if(title != '' && title != null)
+					this.title = title;
 			}
+		}
+		
+		/**
+		 * Set the history state of the document and its title simultaneously
+		 *  
+		 * @param path
+		 * @param title
+		 */		
+		public function setState(path:String, title:String = null):void{
+			if(title != null)
+				this._title = title;
+			
+			state = path;
 		}
 		
 		protected var _path:String;
 		
+		/**
+		 * Get or set the document's history state 
+		 */		
 		public function set state(path:String):void{
 			if(externalInterfaceIsAvailable){
-				ExternalInterface.call("flashPushHistoryState", path);
+				ExternalInterface.call("flashPushHistoryState", path, title);
 			}else{
 				on_state_change(path);
 			}
 		}
-		
 		public function get state():String{
 			if(_path)
 				return _path;
@@ -67,6 +102,21 @@ package framework.router.bridge
 		public function get externalInterfaceIsAvailable():Boolean{
 			return (ExternalInterface.available && Capabilities.playerType.toLowerCase() != "external");
 		}
+		
+		/**
+		 * Get or set the document's title 
+		 */		
+		public function get title():String{
+			return _title;
+		}
+		public function set title(value:String):void{
+			_title = value;
+			
+			if(externalInterfaceIsAvailable){
+				ExternalInterface.call("flashSetTitle", _title);
+			}
+		}
+
 
 	}
 }

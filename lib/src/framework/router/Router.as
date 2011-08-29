@@ -11,6 +11,7 @@ package framework.router
 		private var _url:String;
 		
 		public function Router(){
+			
 		}
 		
 		public function goto(url:String):void{

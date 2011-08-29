@@ -56,13 +56,13 @@ package views
 		private function on_btn(evt:MouseEvent):void{
 			switch(evt.target){
 				case btnHome:
-					bridge.state = "HOME";
+					bridge.setState("HOME", "Home");
 					break;
 				case btnAbout:
-					bridge.state = "ABOUT";
+					bridge.setState("ABOUT", "About");
 					break;
 				case btnContact:
-					bridge.state = "CONTACT";
+					bridge.setState("CONTACT", "Contact");
 					break;
 				case btnLang:
 					
