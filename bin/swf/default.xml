@@ -6,8 +6,8 @@
 		
 		<!-- MultiLang languages -->
 		<languages>
-			<language id="fr-BE" url="data/translation_fr-BE.xml" />
-			<language id="nl-BE" url="data/translation_nl-BE.xml" />			
+			<language id="nl-BE" url="data/flashCopy_NL.xml" />			
+			<language id="fr-BE" url="data/flashCopy_FR.xml" />
 		</languages>
 		
 		<!-- variables -->

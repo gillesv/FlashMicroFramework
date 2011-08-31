@@ -57,7 +57,7 @@ package framework.config
 					filename += ".xml";
 				
 				url+= filename;
-								
+												
 				var loader:URLLoader = new URLLoader();
 				loader.addEventListener(Event.COMPLETE, on_xml_loaded);
 				loader.addEventListener(IOErrorEvent.IO_ERROR, on_xml_load_error);
@@ -135,7 +135,9 @@ package framework.config
 		}
 		
 		public function getLanguageURLForId(id:String):URLRequest{
-			var url:String = xml.languages.(@id == id).@url.toString();
+			var url:String = languages.language.(@id == id).@url.toString();
+			
+			trace(url);
 			
 			if(url.indexOf("http://") < 0 && url.indexOf("https://") < 0)
 				url = globalURL + url;
