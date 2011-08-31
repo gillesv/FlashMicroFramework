@@ -18,7 +18,8 @@
 	</settings>
 	
 	<assets>
-		<asset id="site" url="assets/swf/Site.swf" weight="100" />
+		<asset id="site" url="swf/Site.swf" weight="100" preload="true" />
+		<asset id="mediaplayer" url="swf/Mediaplayer.swf" weight="100" />
 	</assets>
 		
 	<customSettings>

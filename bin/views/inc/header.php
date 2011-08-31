@@ -88,7 +88,7 @@
 						if(swfobject){
 							var flashvars = { 
 									startPage:  "<?php echo(implode('/', url_parts())); ?>",
-									globalURL: "<?php echo($base_path); ?>"
+									globalURL: "<?php echo($base_path); ?>/"
 								},
 								params = { allowFullScreen: true, allowScriptAccess: "always" },
 								attributes = { id: FLASH_ID };

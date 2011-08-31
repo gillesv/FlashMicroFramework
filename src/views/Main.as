@@ -11,6 +11,7 @@ package views
 	import flash.system.Capabilities;
 	
 	import framework.config.Config;
+	import framework.events.ConfigEvent;
 	import framework.router.Router;
 	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
@@ -30,12 +31,22 @@ package views
 		
 		
 		public function Main()
-		{
+		{			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			Config.instance.init(stage);
 			
+			addGlobalEventListener(ConfigEvent.CONFIG_LOADED, function(evt:ConfigEvent):void{
+				log(Config.instance.readVar("version"));
+				log(Config.instance.globalURL);
+				log(Config.instance.assetIds.join(" & "));
+				log(Config.instance.preloadAssetIds.join(" & "));
+				log(Config.instance.getAssetURLForId("site").url);
+				log(Config.instance.languages.toXMLString());
+				log(Config.instance.languageIds.join(" & "));
+			});
+						
 			var test:MultiLangTester = new MultiLangTester();
 			test.setup();
 			test.test();

@@ -23,6 +23,9 @@ package framework.config
 		
 		private var _isLoaded:Boolean = false;
 		private var stage:Stage;
+		private var loaderInfo:LoaderInfo;
+		private var hu:HostURL;
+		private var fc:FlashCookie;
 		
 		public function Config(){}
 		
@@ -36,21 +39,22 @@ package framework.config
 		public function init(stageRef:Stage):void{
 			if(!_isLoaded){
 				this.stage = stageRef;
+				this.loaderInfo = stage.loaderInfo;
 				
 				var url:String = "";
-				
-				var loaderinfo:LoaderInfo = stage.loaderInfo;
-				
-				var hu:HostURL = new HostURL(loaderinfo);
+								
+				hu = new HostURL(loaderInfo);
 				_globalURL = hu.baseURL;
 				
-				var _swfURL:String = url = loaderinfo.url.split("/", loaderinfo.url.split("/").length - 1).join("/") + "/";
+				fc = new FlashCookie();
+				
+				url = loaderInfo.url.split("/", loaderInfo.url.split("/").length - 1).join("/") + "/";
 				
 				if(filename.indexOf(".xml") < 0)
 					filename += ".xml";
 				
 				url+= filename;
-				
+								
 				var loader:URLLoader = new URLLoader();
 				loader.addEventListener(Event.COMPLETE, on_xml_loaded);
 				loader.addEventListener(IOErrorEvent.IO_ERROR, on_xml_load_error);
@@ -83,6 +87,27 @@ package framework.config
 			return new XML(xml.assets);
 		}
 		
+		public function get assetIds():Array{
+			var arr:Array = [];
+			
+			for each(var asset:XML in assets.asset){
+				arr.push(asset.@id.toString());
+			}
+			
+			return arr;
+		}
+		
+		public function get preloadAssetIds():Array{
+			var arr:Array = [];
+			
+			for each(var asset:XML in assets.asset){
+				if(asset.@preload.toString())
+					arr.push(asset.@id.toString());
+			}
+			
+			return arr;
+		}
+		
 		public function getAssetURLForId(id:String):URLRequest{
 			var url:String = xml.assets.asset.(@id == id).@url.toString();
 			
@@ -94,6 +119,16 @@ package framework.config
 		
 		public function get languages():XML{
 			return new XML(xml.settings.languages);
+		}
+		
+		public function get languageIds():Array{
+			var arr:Array = [];
+			
+			for each(var language:XML in languages.language){
+				arr.push(language.@id.toString());
+			}
+			
+			return arr;
 		}
 		
 		public function getLanguageURLForId(id:String):URLRequest{
@@ -110,15 +145,93 @@ package framework.config
 		}
 		
 		public function readVar(id:String):String{
+			if(existsVarByType(id, SOURCE_QUERYSTRING))
+				return readVarByType(id, SOURCE_QUERYSTRING);
+			
+			if(existsVarByType(id, SOURCE_FLASHVAR))
+				return readVarByType(id, SOURCE_FLASHVAR);
+			
+			if(existsVarByType(id, SOURCE_XML))
+				return readVarByType(id, SOURCE_XML);
+			
+			if(existsVarByType(id, SOURCE_FLASH_COOKIE))
+				return readVarByType(id, SOURCE_FLASH_COOKIE);
+			
 			return null;
+		}
+		
+		public function existsVar(id:String):Boolean{
+			
+			return existsVarByType(id, SOURCE_QUERYSTRING) || 
+				existsVarByType(id, SOURCE_FLASHVAR) ||
+				existsVarByType(id, SOURCE_XML) ||
+				existsVarByType(id, SOURCE_FLASH_COOKIE);
 		}
 		
 		public function readVarByType(id:String, type:String):String{
+			switch(type){
+				case SOURCE_QUERYSTRING:
+					if(hu){
+						if(hu.exists(id))
+							return hu.read(id).toString();
+					}
+					break;
+				case SOURCE_FLASHVAR:
+					if(loaderInfo){
+						if(loaderInfo.parameters[id] != undefined)
+							return loaderInfo.parameters[id].toString();
+					}
+					break;
+				case SOURCE_XML:
+					if(xml){
+						if(xml.settings.variables['var'].(@id == id).@value.toString() != ''){
+							return xml.settings.variables['var'].(@id == id).@value.toString();
+						}
+					}
+					break;
+				case SOURCE_FLASH_COOKIE:
+					if(fc){
+						if(fc.exists(id)){
+							return fc.read(id);
+						}	
+					}
+					break;
+			}
+			
 			return null;
 		}
 		
-		public function writeFlashCookie(id:String, value:String):void{
+		public function existsVarByType(id:String, type:String):Boolean{
+			switch(type){
+				case SOURCE_QUERYSTRING:
+					if(hu){
+						return (hu.exists(id));
+					}
+					break;
+				case SOURCE_FLASHVAR:
+					if(loaderInfo){
+						return (loaderInfo.parameters[id] != undefined);
+					}
+					break;
+				case SOURCE_XML:
+					if(xml){
+						return (xml.settings.variables['var'].(@id == id).@value.toString() != '');
+					}
+					break;
+				case SOURCE_FLASH_COOKIE:
+					if(fc){
+						return (fc.exists(id));
+					}
+					break;
+			}
 			
+			return false;
+		}
+		
+		public function writeFlashCookie(id:String, value:String):void{
+			if(fc){
+				fc.write(id, value);
+			}
 		}
 		
 		public function readFlashCookie(id:String):String{
@@ -132,6 +245,10 @@ package framework.config
 				if(xml.settings.globalURL.toString() != ""){
 					return xml.settings.globalURL.toString();
 				}
+			}
+			
+			if(existsVarByType("globalURL", SOURCE_FLASHVAR)){
+				return readVarByType("globalURL", SOURCE_FLASHVAR);
 			}
 			
 			if(_globalURL)
@@ -251,5 +368,85 @@ internal class HostURL
 			path = baseURL;
 		
 		return (path.charAt(path.length - 1) == '/');
+	}
+}
+
+
+import flash.events.NetStatusEvent;
+import flash.net.SharedObject;
+
+internal class FlashCookie
+{
+	private var _soCookie:SharedObject;
+	
+	public function FlashCookie() {}
+	
+	public function getCookie(name:String):SharedObject {
+		_soCookie = SharedObject.getLocal(name, "/");
+		_soCookie.addEventListener(NetStatusEvent.NET_STATUS, onFlashCookieStatus, false, 0, true);
+		
+		function onFlashCookieStatus(e:NetStatusEvent):void {
+			switch (e.info.code) {
+				case "SharedObject.Flush.Success":
+					
+					trace("User granted permission -- value saved.");
+					break;
+				
+				case "SharedObject.Flush.Failed":
+					
+					trace("User denied permission -- value not saved.");
+					break;
+			}
+		}
+		
+		return _soCookie;
+	}
+	
+	/**
+	 * Read Flash Cookie
+	 */
+	public function read(value:String):String {
+		return _soCookie && _soCookie.data ? _soCookie.data[value] : "";
+	}
+	
+	/**
+	 * Write to Flash Cookie
+	 */
+	public function write(name:String, value:String):Boolean {
+		if(_soCookie) {
+			_soCookie.data[name] = value;
+			
+			try {
+				_soCookie.flush();
+			} catch(e:Error) {
+				trace("Error: Unable to flush Flash Cookie");
+				trace(e.message);
+			}
+			
+			if(_soCookie.data[name] != value) {
+				trace("Flash Cookie was not successfully updated.");
+				
+				_soCookie.data[value] = null;
+				
+				return false;
+			}
+			
+			return true;
+		} else {
+			trace("Flash cookie not inited! First you need to 'getCookie'!");
+			
+			return false;
+		}
+	}
+	
+	/**
+	 * Exists Flash Cookie variable
+	 */
+	public function exists(value:String):Boolean {
+		return read(value) && read(value).length > 0 ? true : false;
+	}
+	
+	public function get canWrite():Boolean{
+		return true;
 	}
 }
