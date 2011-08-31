@@ -17,6 +17,8 @@ package framework.config
 		public static const SOURCE_FLASH_COOKIE:String = "flashCookieSource";
 		
 		public var filename:String = "default.xml";
+		public var flashcookie:String = "cookies";
+		
 		protected var xml:XML;
 		
 		private static var _instance:Config;
@@ -47,6 +49,7 @@ package framework.config
 				_globalURL = hu.baseURL;
 				
 				fc = new FlashCookie();
+				fc.getCookie(flashcookie);
 				
 				url = loaderInfo.url.split("/", loaderInfo.url.split("/").length - 1).join("/") + "/";
 				

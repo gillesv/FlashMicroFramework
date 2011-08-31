@@ -45,6 +45,11 @@ package views
 				log(Config.instance.getAssetURLForId("site").url);
 				log(Config.instance.languages.toXMLString());
 				log(Config.instance.languageIds.join(" & "));
+				log(Config.instance.existsVar("cookie"));
+				log(Config.instance.readVar("cookie"));
+				Config.instance.writeFlashCookie("cookie", "testing");
+				log(Config.instance.readFlashCookie("cookie"));
+				Config.instance.writeFlashCookie("cookie", null);
 			});
 						
 			var test:MultiLangTester = new MultiLangTester();
