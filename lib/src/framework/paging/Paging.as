@@ -29,6 +29,7 @@ package framework.paging
 		public static const TRANSITION_IN:String = "in";				// old page is instantly removed/killed, new page animates in
 		public static const TRANSITION_CROSSFADE:String = "crossFade";	// old page and new page simultaneously transition out and in, respectively
 		
+		private var _valid_transitions:Array = [TRANSITION_IN_OUT, TRANSITION_IN, TRANSITION_CROSSFADE];
 		
 		/**
 		 * If true, the Paging instance will dispatch its events using the GlobalEventDispatcher. 
@@ -76,7 +77,7 @@ package framework.paging
 			}
 			
 			// vars
-			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer;
+			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer, prevPage:*, prevPageDisplay:DisplayObject;
 			var i:int = 0;
 			
 			// interpret page
@@ -133,6 +134,7 @@ package framework.paging
 				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: validate this never happens
 			
 			// check for a previous page
+			prevPageDisplay = getPageAtLayer(layer);
 			
 			// transition scenarios
 			
@@ -220,6 +222,62 @@ package framework.paging
 			}
 			
 			return _layers[layer] as DisplayObjectContainer;
+		}
+		
+		public function getTransitionForLayer(layer:uint = LAYER_DEFAULT):String{
+			if(layer > LAYER_POPUPS)
+				return null;
+			
+			return _transitions[layer];
+		}
+		
+		public function setTranstitionForLayer(transitionType:String, layer:uint = LAYER_DEFAULT):void{
+			if(layer > LAYER_POPUPS)
+				return;
+			
+			if(_valid_transitions.indexOf(transitionType) < 0){
+				log('Invalid transition type, please use the constants provided');
+				return;
+			}
+			
+			_transitions[layer] = transitionType;			
+		}
+		
+		/**
+		 * Get the current page at the default layer.
+		 *  
+		 * @return 
+		 */		
+		public function get currentPage():DisplayObject{
+			return getPageAtLayer(LAYER_DEFAULT);
+		}
+		
+		/**
+		 * Get the current page at a specified layer
+		 *  
+		 * @param layer
+		 * @return 
+		 */		
+		public function getPageAtLayer(layer:uint = LAYER_DEFAULT):DisplayObject{
+			if(!_container)
+				throw new Error('Paging has no container: please set container property to a non-null value');				
+			
+			if(layer > LAYER_POPUPS)
+				return null;
+			
+			// vars
+			var layerContainer:DisplayObjectContainer, page:DisplayObject;
+			
+			layerContainer = getLayer(layer);
+			
+			if(layerContainer.numChildren == 0){
+				return null;
+			}
+			
+			// page at index 0 is *the* page to return (pages at higher indices are probably transitioning at this point)
+			page = layerContainer.getChildAt(0);
+			
+			return page;
 		}
 		
 		// *************** OVERRIDES ***************** //
