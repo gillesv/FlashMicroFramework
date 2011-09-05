@@ -9,6 +9,7 @@ package framework.paging
 	
 	import framework.events.GlobalEvent;
 	import framework.events.GlobalEventDispatcher;
+	import framework.events.PagingEvent;
 	
 	public class Paging extends EventDispatcher
 	{
@@ -77,8 +78,8 @@ package framework.paging
 			}
 			
 			// vars
-			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer, prevPage:*, prevPageDisplay:DisplayObject;
-			var i:int = 0;
+			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer, prevPage:IPage, prevPageDisplay:DisplayObject;
+			var i:int = 0, transitionType:String;
 			
 			// interpret page
 			
@@ -131,13 +132,29 @@ package framework.paging
 			// check layers
 			layerContainer = getLayer(layer);
 			if(layerContainer == null)
-				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: validate this never happens
+				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: confirm this never happens
 			
 			// check for a previous page
 			prevPageDisplay = getPageAtLayer(layer);
+			prevPage = IPage(prevPageDisplay);
+			
+			// IPage extras
+			if(pageObject){
+				pageObject.setup(params);
+			}
+			
+			// add to layer
+			layerContainer.addChild(pageDisplay);
+			
+			if(pageObject){
+				pageObject.init();
+			}
 			
 			// transition scenarios
+			transitionType = getTransitionForLayer(layer);
 			
+			// dispatch event
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING));
 		}
 		
 		/**
@@ -328,5 +345,105 @@ package framework.paging
 		}
 		
 
+	}
+}
+import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
+
+import framework.events.PagingEvent;
+import framework.paging.IPage;
+import framework.paging.Paging;
+
+internal class PageTransitionTransaction {
+	
+	public var nextPage:IPage;
+	public var prevPage:IPage;
+	public var transition:String;
+	
+	public var paging:Paging;
+	public var layer:DisplayObjectContainer;
+	
+	function PageTransitionTransaction(paging:Paging, nextPage:IPage, layer:DisplayObjectContainer, prevPage:IPage = null, transition:String = Paging.TRANSITION_IN_OUT){
+		this.paging = paging;
+		this.nextPage = nextPage;
+		this.layer = layer;
+		this.prevPage = prevPage;
+		this.transition = transition;
+		
+		switch(transition){
+			
+			case Paging.TRANSITION_IN_OUT:
+				
+				if(prevPage){
+					if(prevPage.canAnimateOut && nextPage.canAnimateIn){
+						animateIn_Out();
+					}else if(nextPage.canAnimateIn){
+						layer.removeChild(prevPage as DisplayObject);
+						animateIn();
+					}else{
+						layer.removeChild(prevPage as DisplayObject);
+						complete(nextPage);
+					}
+				}
+				
+				break;
+			
+			case Paging.TRANSITION_CROSSFADE:
+				
+				if(prevPage && prevPage.canAnimateOut){
+					animateOut();
+				}else{
+					layer.removeChild(prevPage as DisplayObject);
+				}
+				
+				if(nextPage.canAnimateIn){
+					animateIn();
+				}else{
+					complete(nextPage);
+				}
+				
+				break;
+			
+			case Paging.TRANSITION_IN:
+				
+				if(prevPage){
+					layer.removeChild(prevPage as DisplayObject);
+				}
+				
+				if(nextPage.canAnimateIn){
+					animateIn();
+				}else{
+					complete(nextPage);
+				}
+				
+				break;
+		}
+		
+	}
+	
+	public function complete(page:*):void{
+		paging.dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page));
+	}
+	
+	public function animateIn_Out():void{
+		prevPage.animateOut(function(page:IPage, oldpage:IPage):void{
+			layer.removeChild(oldpage as DisplayObject);
+			
+			if(page.canAnimateIn){
+				page.animateIn(complete, page);
+			}else{
+				complete(page);
+			}
+		}, [nextPage, prevPage]);
+	}
+	
+	public function animateIn():void{
+		nextPage.animateIn(complete, nextPage);
+	}
+	
+	public function animateOut():void{
+		prevPage.animateOut(function(oldpage:IPage):void{
+			layer.removeChild(oldpage as DisplayObject);
+		}, prevPage);
 	}
 }

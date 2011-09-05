@@ -4,10 +4,10 @@ package framework.paging
 	{
 		function get id():String;
 		
-		function setup(params:* = null):void;
+		function setup(params:* = null):void;	// called before added to displaytree, to pass optional parameters along to the page
 		
-		function init():void;
-		function kill():void;
+		function init():void;	// called when added to layer
+		function kill():void;	// called before removal from layer
 		
 		function animateIn(callback:Function, callbackParams:*):void;
 		function animateOut(callback:Function, callbackParams:*):void;
