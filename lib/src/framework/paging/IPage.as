@@ -2,6 +2,8 @@ package framework.paging
 {
 	public interface IPage
 	{
+		function get id():String;
+		
 		function setup(params:* = null):void;
 		
 		function init():void;
@@ -10,6 +12,7 @@ package framework.paging
 		function animateIn(callback:Function, callbackParams:*):void;
 		function animateOut(callback:Function, callbackParams:*):void;
 		
-		function get canAnimate():Boolean;
+		function get canAnimateIn():Boolean;
+		function get canAnimateOut():Boolean;
 	}
 }

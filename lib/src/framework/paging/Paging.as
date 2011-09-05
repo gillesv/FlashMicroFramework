@@ -1,5 +1,6 @@
 package framework.paging
 {
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -17,9 +18,17 @@ package framework.paging
 		
 		private var _layers:Array;
 		
-		public static const LAYER_MAIN:uint = 0;
-		public static const LAYER_POPUPS:uint = 1;
-		public static const LAYER_UI:uint = 2;
+		public static const LAYER_POPUNDER:uint = 0;	// layer for adding changing content below the default (useful for animations/backgrounds/scenes/etc... upon which content can be layered)
+		public static const LAYER_DEFAULT:uint = 1;	// default content layer
+		public static const LAYER_UI:uint = 2;		// layer for adding global UI elements (header/footer/nav/etc...) on top of the content
+		public static const LAYER_POPUPS:uint = 3;	// top-most layer for popups
+		
+		private var _transitions:Array;
+		
+		public static const TRANSITION_IN_OUT:String = "in_out";		// old page is animated out, then the new page is animated in
+		public static const TRANSITION_IN:String = "in";				// old page is instantly removed/killed, new page animates in
+		public static const TRANSITION_CROSSFADE:String = "crossFade";	// old page and new page simultaneously transition out and in, respectively
+		
 		
 		/**
 		 * If true, the Paging instance will dispatch its events using the GlobalEventDispatcher. 
@@ -34,51 +43,130 @@ package framework.paging
 		{
 			super();
 			
-			_layers = [];
+			_layers = new Array(4);
+			_transitions = [TRANSITION_IN_OUT, TRANSITION_IN_OUT, TRANSITION_IN_OUT, TRANSITION_IN_OUT];
 		}
 		
 		/**
 		 * Navigate to a page.
 		 *  
 		 * @param page		can be multiple types: 
-		 * 					1) a string identifier that will be passed to a factory-class to return a proper IPage or DisplayObject
+		 * 					1) a string identifier that will be passed to a factory-class to return an object of the type DisplayObject implementing the IPage interface.
 		 * 					2) a Class which when instanced returns a DisplayObject or an IPage object
 		 * 					3) a DisplayObject which optionally implements the IPage interface for advanced functionality/increased control
 		 * @param params	@optional parameters to be passed to the page, if possible - leave null if not required
-		 * @param layer		@optional a numeric index indicating the layer on which a new page is added. (handy for popups/popunders)
+		 * @param layer		@optional a numeric index indicating the layer on which a new page is added. (handy for popups/popunders) @default LAYER_DEFAULT
 		 * 
 		 */		
-		public function gotoPage(page:*, params:* = null, layer:uint = 0):void{
-			if(!_container)
+		public function gotoPage(page:*, params:* = null, layer:uint = LAYER_DEFAULT):void{
+			// validate internals
+			if(!_container){
 				throw new Error('Paging has no container: please set container property to a non-null value');
-			
-			if(page == null)
+				return;
+			}
+				
+			if(page == null){
 				throw new Error("page shouldn't be null!");
+				return;
+			}
 			
-			if(page as String && factory == null)
-				log("No factory defined! Can't create page '" + page.toString() + "'");
+			// validate layer
+			if(layer > LAYER_POPUPS){
+				throw new Error("Invalid layer parameter: " + layer);
+			}
+			
+			// vars
+			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer;
+			var i:int = 0;
+			
+			// interpret page
+			
+			// case 1: page as string
+			if(page as String && factory == null){
+				throw new Error("No factory defined! Can't create page for id '" + page.toString() + "'.");
+				return;
+			}else if(page as String && factory != null){
+				// page as string, try to create an IPage object via the supplied Factory
+				pageObject = factory.createPage(page);
+				
+				if(pageObject == null){
+					throw new Error("Error: Can't create page for id '" + page.toString() + "'.");
+					return;
+				}
+				
+				pageDisplay = pageObject as DisplayObject;
+				
+				if(pageDisplay == null){
+					throw new Error("Error: generated page with id '" + page.toString() + "' is not a DisplayObject.");
+					return;
+				}
+			}
+			
+			// case 2: page as Class
+			if(page as Class){
+				pageDisplay = new page() as DisplayObject;
+				
+				if(pageDisplay == null){
+					throw new Error("Error: object instanced from page() is not a DisplayObject.");
+					return;
+				}
+				
+				pageObject = pageDisplay as IPage; // IPage implementation is optional
+			}
+			
+			// case 3: page as DisplayObject
+			if(page as DisplayObject){
+				pageDisplay = page as DisplayObject;
+				
+				pageObject = pageDisplay as IPage; // IPage implementation is optional
+			}
+			
+			// catch all:
+			if(pageDisplay == null){
+				throw new Error("Error: invalid page parameter: page must be either an id (type String) which can be instanced by the factory, a Class which can be instanced as a DisplayObject or a DisplayObject.");
+				return;
+			}
 			
 			// check layers
+			layerContainer = getLayer(layer);
+			if(layerContainer == null)
+				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: validate this never happens
+			
+			// check for a previous page
+			
+			// transition scenarios
+			
 		}
 		
 		/**
 		 * Close the page at the current layer
 		 *  
-		 * @param layer	@optional the numeric index of the layer which page should be closed
+		 * @param layer	@optional the numeric index of the layer which page should be closed @default: LAYER_DEFAULT
 		 */		
-		public function closePage(layer:uint = 0):void{
+		public function closePage(layer:uint = LAYER_DEFAULT):void{
 			if(!_container)
 				throw new Error('Paging has no container: please set container property to a non-null value');
+			
+			if(layer > LAYER_POPUPS)
+				return;
 		}
 		
 		/**
 		 * Disable all mouseevents/interactivity for the page in a certain layer. (to prevent clicks through a popover, for example)
 		 *  
-		 * @param layer	the numeric index of the layer you wish to disable @default: 0 @optional
+		 * @param layer	the numeric index of the layer you wish to disable @default: LAYER_DEFAULT @optional
 		 * 
 		 */		
-		public function disableLayer(layer:uint = 0):void{
+		public function disableLayer(layer:uint = LAYER_DEFAULT):void{
+			if(!_container)
+				throw new Error('Paging has no container: please set container property to a non-null value');
 			
+			if(layer > LAYER_POPUPS)
+				return;
+			
+			var layerDO:DisplayObjectContainer = getLayer(layer);
+			
+			layerDO.mouseChildren = layerDO.mouseEnabled = false;
 		}
 		
 		/**
@@ -87,8 +175,16 @@ package framework.paging
 		 * @param layer	the numeric index of the layer you wish to disable @default: 0 @optional
 		 * 
 		 */	
-		public function enableLayer(layer:uint = 0):void{
+		public function enableLayer(layer:uint = LAYER_DEFAULT):void{
+			if(!_container)
+				throw new Error('Paging has no container: please set container property to a non-null value');
 			
+			if(layer > LAYER_POPUPS)
+				return;
+			
+			var layerDO:DisplayObjectContainer = getLayer(layer);
+			
+			layerDO.mouseChildren = layerDO.mouseEnabled = true;
 		}
 		
 		/**
@@ -98,8 +194,32 @@ package framework.paging
 		 * @return 
 		 * 
 		 */		
-		public function getLayer(layer:uint = 0):DisplayObjectContainer{
-			return null;
+		public function getLayer(layer:uint = LAYER_DEFAULT):DisplayObjectContainer{
+			if(!_container)
+				throw new Error('Paging has no container: please set container property to a non-null value');				
+			
+			if(layer > LAYER_POPUPS)
+				return null;
+			
+			if(_layers[layer] == null){
+				var tempLayer:Sprite, layerContainer:Sprite, i:int;
+				
+				layerContainer = _layers[layer] = new Sprite();
+				layerContainer.name = "layer_" + layer.toString();
+				_container.addChild(layerContainer);
+				
+				// make sure all layers are correctly stacked
+				for(i = 0; i < _layers.length; i++){
+					tempLayer = _layers[i] as Sprite;
+					
+					if(tempLayer != null){
+						_container.setChildIndex(tempLayer, Math.min(i, _container.numChildren - 1));
+					}
+				}
+				tempLayer = null;
+			}
+			
+			return _layers[layer] as DisplayObjectContainer;
 		}
 		
 		// *************** OVERRIDES ***************** //
