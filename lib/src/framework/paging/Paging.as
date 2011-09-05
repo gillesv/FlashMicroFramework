@@ -159,6 +159,7 @@ package framework.paging
 			if(pageObject){
 				new PageTransitionTransaction(this, pageObject, layerContainer, layer, prevPage, transitionType);
 			}else{
+				// if the previous page is IPage but the new one isn't.. TODO
 				dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, pageDisplay, layer));
 			}
 		}

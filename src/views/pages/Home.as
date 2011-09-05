@@ -53,7 +53,7 @@ package views.pages
 		}
 		
 		private function fadeout(evt:Event):void{
-			alpha -= alpha/2;
+			alpha -= alpha/100;
 			
 			if(alpha < 0.01){
 				alpha = 0;
