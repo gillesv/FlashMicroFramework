@@ -59,8 +59,8 @@ package
 							id = p.name;
 						}
 					}catch(err:Error){
-						trace("couldn't get property id off of parent");
-						trace(err);
+						//trace("couldn't get property id off of parent");
+						//trace(err);
 					}
 				}
 			}

@@ -23,12 +23,19 @@ package views
 	import locale.cms.MultiLangEditor;
 	import locale.events.MultiLangEvent;
 	
+	import views.pages.About;
+	import views.pages.Contact;
 	import views.pages.Home;
 
 	public dynamic class Main extends MC
 	{
 		public var router:Router;
+		public var bridge:HistoryJSBridge;
 		public var paging:Paging;
+		
+		public var btnHome:SimpleButton;
+		public var btnAbout:SimpleButton;
+		public var btnContact:SimpleButton;
 		
 		public function Main()
 		{			
@@ -61,8 +68,10 @@ package views
 			
 			init_paging();
 			
-			var bridge:HistoryJSBridge = new HistoryJSBridge(router);
+			bridge = new HistoryJSBridge(router);
 			bridge.init();
+			
+			init_nav();
 		}
 		
 		private function init_paging():void{
@@ -88,24 +97,44 @@ package views
 			
 			router.addRoute("/about", function():void{
 				// Pass an instanced DisplayObject, not conforming to IPage
+				paging.gotoPage(new About());
 			});
 			
 			router.addRoute("/contact", function():void{
 				// Pass a class
+				paging.gotoPage(Contact);
 			});
 			
 			
+		}
+		
+		private function init_nav():void{
+			btnHome.addEventListener(MouseEvent.CLICK, function():void{
+				bridge.state = "";
+			});
+			
+			btnAbout.addEventListener(MouseEvent.CLICK, function():void{
+				bridge.state = "about";
+			});
+			
+			btnContact.addEventListener(MouseEvent.CLICK, function():void{
+				bridge.state = "contact";
+			});
 		}
 	}
 }
 import framework.paging.IPage;
 import framework.paging.IPageFactory;
 
+import views.pages.Home;
+
 internal class Factory implements IPageFactory{
 	
 	public function createPage(id:String):IPage{
 		switch(id){
 			case "home":
+				
+				return new Home();
 				
 				break;
 		}

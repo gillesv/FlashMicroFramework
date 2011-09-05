@@ -4,6 +4,8 @@
     <classEntry path="views.Main"/>
     <classEntry path="views.MainPreloader"/>
     <classEntry path="views.pages.Home"/>
+    <classEntry path="views.pages.Contact"/>
+    <classEntry path="views.pages.About"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
