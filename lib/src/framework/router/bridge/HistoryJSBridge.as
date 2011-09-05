@@ -58,6 +58,7 @@ package framework.router.bridge
 		 * 
 		 */		
 		protected function on_state_change(path:String, title:String = ''):void{
+			log(path);
 			if(_path != path){
 				_path = path;
 				dispatchEvent(new Event(Event.CHANGE));

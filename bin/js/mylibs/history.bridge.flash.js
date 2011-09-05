@@ -61,9 +61,11 @@ var flash, url;
 function initFlashHistoryBridge(){
 	flash = document.getElementById(FLASH_ID);
 	
-	if(url){
-		flash.changeState(url, document.title);
+	if(!url){
+		url = "";
 	}
+	
+	flash.changeState(url, document.title);
 }
 
 // Called from the SWF to change the document's current history state

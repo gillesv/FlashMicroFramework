@@ -10,6 +10,8 @@ package framework.router
 		
 		private var _url:String;
 		
+		public var defaultRoute:String = "";
+		
 		public function Router(){
 			
 		}
@@ -41,6 +43,9 @@ package framework.router
 		 * @param url
 		 */		
 		public function route(url:String):void{
+			if(url == "")
+				url = defaultRoute;
+			
 			if(url.charAt(0) != '/')
 				url = '/' + url;
 			

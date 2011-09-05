@@ -3,6 +3,7 @@ package views
 	import core.*;
 	
 	import flash.display.SimpleButton;
+	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -12,6 +13,7 @@ package views
 	
 	import framework.config.Config;
 	import framework.events.ConfigEvent;
+	import framework.paging.Paging;
 	import framework.router.Router;
 	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
@@ -20,10 +22,13 @@ package views
 	import locale.MultiLang;
 	import locale.cms.MultiLangEditor;
 	import locale.events.MultiLangEvent;
+	
+	import views.pages.Home;
 
 	public dynamic class Main extends MC
 	{
 		public var router:Router;
+		public var paging:Paging;
 		
 		public function Main()
 		{			
@@ -52,8 +57,60 @@ package views
 			removeGlobalEventListener(MultiLangEvent.LANG_LOADED, locale_ready);
 			
 			router = new Router();
+			router.defaultRoute = "home";
+			
+			init_paging();
+			
 			var bridge:HistoryJSBridge = new HistoryJSBridge(router);
 			bridge.init();
 		}
+		
+		private function init_paging():void{
+			paging = new Paging();
+			var container:Sprite = new Sprite();
+			container.name = "pagingContainer";
+			addChild(container);
+			paging.container = container;
+			
+			paging.factory = new Factory();
+			
+			paging.dispatchGlobalEvents = true;
+			
+			router.addRoute("/page/:id", function(id:String):void{
+				// pass a string
+				paging.gotoPage(id);
+			});
+			
+			router.addRoute("/home", function():void{
+				// pass an instanced DisplayObject conforming to IPage
+				paging.gotoPage(new Home());
+			});
+			
+			router.addRoute("/about", function():void{
+				// Pass an instanced DisplayObject, not conforming to IPage
+			});
+			
+			router.addRoute("/contact", function():void{
+				// Pass a class
+			});
+			
+			
+		}
 	}
+}
+import framework.paging.IPage;
+import framework.paging.IPageFactory;
+
+internal class Factory implements IPageFactory{
+	
+	public function createPage(id:String):IPage{
+		switch(id){
+			case "home":
+				
+				break;
+		}
+		
+		return null;
+	}
+	
 }

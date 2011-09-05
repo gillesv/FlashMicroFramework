@@ -3,6 +3,7 @@
   <includeClasses>
     <classEntry path="views.Main"/>
     <classEntry path="views.MainPreloader"/>
+    <classEntry path="views.pages.Home"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

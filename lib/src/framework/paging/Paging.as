@@ -99,7 +99,7 @@ package framework.paging
 				pageDisplay = pageObject as DisplayObject;
 				
 				if(pageDisplay == null){
-					throw new Error("Error: generated page with id '" + page.toString() + "' is not a DisplayObject.");
+					throw new Error("Error: generated IPage with id '" + page.toString() + "' is not a DisplayObject.");
 					return;
 				}
 			}
@@ -155,6 +155,12 @@ package framework.paging
 			
 			// dispatch event
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING));
+			
+			if(pageObject){
+				new PageTransitionTransaction(this, pageObject, layerContainer, layer, prevPage, transitionType);
+			}else{
+				dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, pageDisplay, layer));
+			}
 		}
 		
 		/**
@@ -362,14 +368,16 @@ internal class PageTransitionTransaction {
 	
 	public var paging:Paging;
 	public var layer:DisplayObjectContainer;
+	public var layerIndex:uint;
 	
-	function PageTransitionTransaction(paging:Paging, nextPage:IPage, layer:DisplayObjectContainer, prevPage:IPage = null, transition:String = Paging.TRANSITION_IN_OUT){
+	function PageTransitionTransaction(paging:Paging, nextPage:IPage, layer:DisplayObjectContainer, layerIndex:uint = 1, prevPage:IPage = null, transition:String = Paging.TRANSITION_IN_OUT){
 		this.paging = paging;
 		this.nextPage = nextPage;
 		this.layer = layer;
+		this.layerIndex = layerIndex;
 		this.prevPage = prevPage;
 		this.transition = transition;
-		
+				
 		switch(transition){
 			
 			case Paging.TRANSITION_IN_OUT:
@@ -378,10 +386,18 @@ internal class PageTransitionTransaction {
 					if(prevPage.canAnimateOut && nextPage.canAnimateIn){
 						animateIn_Out();
 					}else if(nextPage.canAnimateIn){
+						prevPage.kill();
 						layer.removeChild(prevPage as DisplayObject);
 						animateIn();
 					}else{
+						prevPage.kill();
 						layer.removeChild(prevPage as DisplayObject);
+						complete(nextPage);
+					}
+				}else{
+					if(nextPage.canAnimateIn){
+						animateIn();
+					}else{
 						complete(nextPage);
 					}
 				}
@@ -422,15 +438,16 @@ internal class PageTransitionTransaction {
 	}
 	
 	public function complete(page:*):void{
-		paging.dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page));
+		paging.dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, layerIndex));
 	}
 	
 	public function animateIn_Out():void{
 		prevPage.animateOut(function(page:IPage, oldpage:IPage):void{
+			oldpage.kill();
 			layer.removeChild(oldpage as DisplayObject);
 			
 			if(page.canAnimateIn){
-				page.animateIn(complete, page);
+				page.animateIn(complete, [page]);
 			}else{
 				complete(page);
 			}
@@ -438,12 +455,13 @@ internal class PageTransitionTransaction {
 	}
 	
 	public function animateIn():void{
-		nextPage.animateIn(complete, nextPage);
+		nextPage.animateIn(complete, [nextPage]);
 	}
 	
 	public function animateOut():void{
 		prevPage.animateOut(function(oldpage:IPage):void{
+			oldpage.kill();
 			layer.removeChild(oldpage as DisplayObject);
-		}, prevPage);
+		}, [prevPage]);
 	}
 }
