@@ -80,7 +80,7 @@ package views
 			container.name = "pagingContainer";
 			addChild(container);
 			paging.container = container;
-			paging.setTranstitionForLayer(Paging.TRANSITION_IN_OUT);
+			paging.setTranstitionForLayer(Paging.TRANSITION_CROSSFADE);
 			
 			paging.factory = new Factory();
 			

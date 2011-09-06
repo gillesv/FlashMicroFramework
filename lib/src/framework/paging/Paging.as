@@ -393,14 +393,7 @@ internal class PageTransitionTransaction {
 				
 		switch(transition){
 			
-			case Paging.TRANSITION_IN_OUT:
-				
-				trace(nextPage + " " + nextPageDisplay);
-				trace(prevPage + " " + prevPageDisplay);
-				/*
-				
-				*/
-				
+			case Paging.TRANSITION_IN_OUT:				
 				if(nextPage && prevPage){
 					
 					if(nextPage.canAnimateIn && prevPage.canAnimateOut){
@@ -458,21 +451,14 @@ internal class PageTransitionTransaction {
 					complete(nextPageDisplay);
 				}
 				
-				/*
-				if(prevPage && nextPage){
-					if(prevPage.canAnimateOut && nextPage.canAnimateIn){
-						animateIn_Out();
-					}else if(nextPage.canAnimateIn){
-						prevPage.kill();
-						layer.removeChild(prevPageDisplay);
-						animateIn();
-					}else{
-						prevPage.kill();
-						layer.removeChild(prevPageDisplay);
-						complete(nextPage);
-					}
-					
-					return;
+				break;
+			
+			case Paging.TRANSITION_CROSSFADE:
+				
+				if(prevPage && prevPage.canAnimateOut){
+					animateOut();
+				}else if(prevPageDisplay){
+					layer.removeChild(prevPageDisplay);
 				}
 				
 				if(nextPage){
@@ -481,45 +467,26 @@ internal class PageTransitionTransaction {
 					}else{
 						complete(nextPage);
 					}
-					
-					return;
-				}
-				
-				if(prevPageDisplay){
-					layer.removeChild(prevPageDisplay);
+				}else{
 					complete(nextPageDisplay);
-					return;
-				}
-				*/
-				
-				break;
-			
-			case Paging.TRANSITION_CROSSFADE:
-				
-				if(prevPage && prevPage.canAnimateOut){
-					animateOut();
-				}else{
-					layer.removeChild(prevPage as DisplayObject);
-				}
-				
-				if(nextPage.canAnimateIn){
-					animateIn();
-				}else{
-					complete(nextPage);
 				}
 				
 				break;
 			
 			case Paging.TRANSITION_IN:
 				
-				if(prevPage){
-					layer.removeChild(prevPage as DisplayObject);
+				if(prevPageDisplay){
+					layer.removeChild(prevPageDisplay);
 				}
 				
-				if(nextPage.canAnimateIn){
-					animateIn();
+				if(nextPage){
+					if(nextPage.canAnimateIn){
+						animateIn();
+					}else{
+						complete(nextPage);
+					}
 				}else{
-					complete(nextPage);
+					complete(nextPageDisplay);
 				}
 				
 				break;

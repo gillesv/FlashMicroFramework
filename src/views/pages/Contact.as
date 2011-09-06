@@ -36,7 +36,7 @@ package views.pages
 		}
 		
 		private function fadein(evt:Event):void{
-			alpha += (1 - alpha)/2;
+			alpha += (1 - alpha)/5;
 			
 			if(alpha > 0.99){
 				alpha = 1;
@@ -56,9 +56,9 @@ package views.pages
 		}
 		
 		private function fadeout(evt:Event):void{
-			alpha -= alpha/2;
+			alpha -= Math.max(.1, (alpha/2));
 			
-			if(alpha < 0.01){
+			if(alpha <= 0.1640625){
 				alpha = 0;
 				
 				removeEventListener(Event.ENTER_FRAME, fadeout);

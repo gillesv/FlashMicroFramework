@@ -51,7 +51,7 @@ package framework.router
 			
 			this._url = url;
 			
-			log("route: " + url);
+			//log("route: " + url);
 			
 			var pc:PatternCallback, match:PatternMatch, tempurl:String;
 						
