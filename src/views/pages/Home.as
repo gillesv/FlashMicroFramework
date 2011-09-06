@@ -27,7 +27,8 @@ package views.pages
 		private var callback:Function;
 		private var callbackParams:*;
 		
-		public function animateIn(callback:Function, callbackParams:*):void{			
+		public function animateIn(callback:Function, callbackParams:*):void{	
+			log("home animateIn");
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			
@@ -47,13 +48,15 @@ package views.pages
 		}
 		
 		public function animateOut(callback:Function, callbackParams:*):void{
+			log("home animateOut");
+			
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			addEventListener(Event.ENTER_FRAME, fadeout);
 		}
 		
 		private function fadeout(evt:Event):void{
-			alpha -= alpha/100;
+			alpha -= alpha/2;
 			
 			if(alpha < 0.01){
 				alpha = 0;

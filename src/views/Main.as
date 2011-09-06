@@ -64,7 +64,7 @@ package views
 			removeGlobalEventListener(MultiLangEvent.LANG_LOADED, locale_ready);
 			
 			router = new Router();
-			router.defaultRoute = "home";
+			//router.defaultRoute = "home";
 			
 			init_paging();
 			
@@ -80,6 +80,7 @@ package views
 			container.name = "pagingContainer";
 			addChild(container);
 			paging.container = container;
+			paging.setTranstitionForLayer(Paging.TRANSITION_IN_OUT);
 			
 			paging.factory = new Factory();
 			
@@ -110,7 +111,7 @@ package views
 		
 		private function init_nav():void{
 			btnHome.addEventListener(MouseEvent.CLICK, function():void{
-				bridge.state = "";
+				bridge.state = "home";
 			});
 			
 			btnAbout.addEventListener(MouseEvent.CLICK, function():void{

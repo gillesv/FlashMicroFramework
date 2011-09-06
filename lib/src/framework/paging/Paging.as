@@ -81,6 +81,13 @@ package framework.paging
 			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer, prevPage:IPage, prevPageDisplay:DisplayObject;
 			var i:int = 0, transitionType:String;
 			
+			// check for a previous page
+			prevPageDisplay = getPageAtLayer(layer);
+			
+			if(prevPageDisplay as IPage)
+				prevPage = IPage(prevPageDisplay);
+			
+			
 			// interpret page
 			
 			// case 1: page as string
@@ -134,10 +141,6 @@ package framework.paging
 			if(layerContainer == null)
 				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: confirm this never happens
 			
-			// check for a previous page
-			prevPageDisplay = getPageAtLayer(layer);
-			prevPage = IPage(prevPageDisplay);
-			
 			// IPage extras
 			if(pageObject){
 				pageObject.setup(params);
@@ -156,12 +159,17 @@ package framework.paging
 			// dispatch event
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING));
 			
+			// handle the different scenarios
+			new PageTransitionTransaction(this, pageDisplay, layerContainer, layer, prevPageDisplay, transitionType);
+			
+			/*
 			if(pageObject){
 				new PageTransitionTransaction(this, pageObject, layerContainer, layer, prevPage, transitionType);
 			}else{
 				// if the previous page is IPage but the new one isn't.. TODO
 				dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, pageDisplay, layer));
 			}
+			*/
 		}
 		
 		/**
@@ -364,44 +372,125 @@ import framework.paging.Paging;
 internal class PageTransitionTransaction {
 	
 	public var nextPage:IPage;
+	public var nextPageDisplay:DisplayObject;
 	public var prevPage:IPage;
+	public var prevPageDisplay:DisplayObject;
 	public var transition:String;
 	
 	public var paging:Paging;
 	public var layer:DisplayObjectContainer;
 	public var layerIndex:uint;
 	
-	function PageTransitionTransaction(paging:Paging, nextPage:IPage, layer:DisplayObjectContainer, layerIndex:uint = 1, prevPage:IPage = null, transition:String = Paging.TRANSITION_IN_OUT){
+	function PageTransitionTransaction(paging:Paging, nextPageDisplay:DisplayObject, layer:DisplayObjectContainer, layerIndex:uint = 1, prevPageDisplay:DisplayObject = null, transition:String = Paging.TRANSITION_IN_OUT){
 		this.paging = paging;
-		this.nextPage = nextPage;
+		this.nextPageDisplay = nextPageDisplay;
+		this.nextPage = nextPageDisplay as IPage;
 		this.layer = layer;
 		this.layerIndex = layerIndex;
-		this.prevPage = prevPage;
+		this.prevPageDisplay = prevPageDisplay;
+		this.prevPage = prevPageDisplay as IPage;
 		this.transition = transition;
 				
 		switch(transition){
 			
 			case Paging.TRANSITION_IN_OUT:
 				
+				trace(nextPage + " " + nextPageDisplay);
+				trace(prevPage + " " + prevPageDisplay);
+				/*
+				
+				*/
+				
+				if(nextPage && prevPage){
+					
+					if(nextPage.canAnimateIn && prevPage.canAnimateOut){
+						animateIn_Out();
+						
+						return;
+					}
+					
+					if(nextPage.canAnimateIn){
+						layer.removeChild(prevPageDisplay);
+						animateIn();
+						
+						return;
+					}
+					
+					if(prevPage.canAnimateOut){
+						animateOut();
+						complete(nextPage);
+						
+						return;
+					}
+				}
+				
+				if(nextPage){	// prevPage is null
+					if(nextPage.canAnimateIn){
+						if(prevPageDisplay)
+							layer.removeChild(prevPageDisplay);
+						
+						animateIn();
+					}else{
+						if(prevPageDisplay)
+							layer.removeChild(prevPageDisplay);
+						
+						complete(nextPage);
+					}
+				}
+				
 				if(prevPage){
+					if(prevPage.canAnimateOut){
+						animateOut();
+					}else{
+						layer.removeChild(prevPageDisplay);
+					}
+
+					return;
+				}
+				
+				// catch-all
+				if(!prevPage && prevPageDisplay != null){
+					if(prevPageDisplay.parent == layer)
+						layer.removeChild(prevPageDisplay);
+				}
+				
+				if(!nextPage && nextPageDisplay != null){
+					complete(nextPageDisplay);
+				}
+				
+				/*
+				if(prevPage && nextPage){
 					if(prevPage.canAnimateOut && nextPage.canAnimateIn){
 						animateIn_Out();
 					}else if(nextPage.canAnimateIn){
 						prevPage.kill();
-						layer.removeChild(prevPage as DisplayObject);
+						layer.removeChild(prevPageDisplay);
 						animateIn();
 					}else{
 						prevPage.kill();
-						layer.removeChild(prevPage as DisplayObject);
+						layer.removeChild(prevPageDisplay);
 						complete(nextPage);
 					}
-				}else{
+					
+					return;
+				}
+				
+				if(nextPage){
 					if(nextPage.canAnimateIn){
 						animateIn();
 					}else{
 						complete(nextPage);
 					}
+					
+					return;
 				}
+				
+				if(prevPageDisplay){
+					layer.removeChild(prevPageDisplay);
+					complete(nextPageDisplay);
+					return;
+				}
+				*/
 				
 				break;
 			
