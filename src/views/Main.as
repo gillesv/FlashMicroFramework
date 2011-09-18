@@ -64,7 +64,7 @@ package views
 			removeGlobalEventListener(MultiLangEvent.LANG_LOADED, locale_ready);
 			
 			router = new Router();
-			//router.defaultRoute = "home";
+			router.defaultRoute = "home";
 			
 			init_paging();
 			
@@ -80,7 +80,7 @@ package views
 			container.name = "pagingContainer";
 			addChild(container);
 			paging.container = container;
-			paging.setTranstitionForLayer(Paging.TRANSITION_CROSSFADE);
+			paging.setTranstitionForLayer(Paging.TRANSITION_IN);
 			
 			paging.factory = new Factory();
 			

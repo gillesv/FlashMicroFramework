@@ -137,8 +137,6 @@ package framework.config
 		public function getLanguageURLForId(id:String):URLRequest{
 			var url:String = languages.language.(@id == id).@url.toString();
 			
-			trace(url);
-			
 			if(url.indexOf("http://") < 0 && url.indexOf("https://") < 0)
 				url = globalURL + url;
 			

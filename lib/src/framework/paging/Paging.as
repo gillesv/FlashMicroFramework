@@ -10,6 +10,7 @@ package framework.paging
 	import framework.events.GlobalEvent;
 	import framework.events.GlobalEventDispatcher;
 	import framework.events.PagingEvent;
+	import framework.paging.transactions.AbstractPageTransitionTransaction;
 	
 	public class Paging extends EventDispatcher
 	{
@@ -18,6 +19,7 @@ package framework.paging
 		private var _factory:IPageFactory;
 		
 		private var _layers:Array;
+		private var _queues:Array;
 		
 		public static const LAYER_POPUNDER:uint = 0;	// layer for adding changing content below the default (useful for animations/backgrounds/scenes/etc... upon which content can be layered)
 		public static const LAYER_DEFAULT:uint = 1;	// default content layer
@@ -30,7 +32,7 @@ package framework.paging
 		public static const TRANSITION_IN:String = "in";				// old page is instantly removed/killed, new page animates in
 		public static const TRANSITION_CROSSFADE:String = "crossFade";	// old page and new page simultaneously transition out and in, respectively
 		
-		private var _valid_transitions:Array = [TRANSITION_IN_OUT, TRANSITION_IN, TRANSITION_CROSSFADE];
+		public static const TRANSITIONS:Array = [TRANSITION_IN_OUT, TRANSITION_IN, TRANSITION_CROSSFADE];
 		
 		/**
 		 * If true, the Paging instance will dispatch its events using the GlobalEventDispatcher. 
@@ -46,6 +48,7 @@ package framework.paging
 			super();
 			
 			_layers = new Array(4);
+			_queues = [[], [], [], []];
 			_transitions = [TRANSITION_IN_OUT, TRANSITION_IN_OUT, TRANSITION_IN_OUT, TRANSITION_IN_OUT];
 		}
 		
@@ -78,17 +81,66 @@ package framework.paging
 			}
 			
 			// vars
-			var pageObject:IPage, pageDisplay:DisplayObject, layerContainer:DisplayObjectContainer, prevPage:IPage, prevPageDisplay:DisplayObject;
+			var pageObject:IPage, pageDisplay:DisplayObject, prevPageDisplay:DisplayObject, layerContainer:DisplayObjectContainer;
 			var i:int = 0, transitionType:String;
 			
 			// check for a previous page
 			prevPageDisplay = getPageAtLayer(layer);
 			
-			if(prevPageDisplay as IPage)
-				prevPage = IPage(prevPageDisplay);
-			
-			
 			// interpret page
+			pageDisplay = interpret_page(page);
+			pageObject = pageDisplay as IPage;
+			
+			// check layers
+			layerContainer = getLayer(layer);
+			if(layerContainer == null)
+				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: confirm this never happens
+			
+			// IPage extras
+			// pre-displaylist setup
+			if(pageObject){
+				pageObject.setup(params);
+			}
+			
+			// add to layer
+			layerContainer.addChild(pageDisplay);
+			
+			// displaylist init
+			if(pageObject){
+				pageObject.init();
+			}
+			
+			// transition scenarios
+			transitionType = getTransitionForLayer(layer);
+			
+			// dispatch event
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING));
+			
+			// create a transitionTransaction
+			var transaction:AbstractPageTransitionTransaction = new AbstractPageTransitionTransaction(pageDisplay, prevPageDisplay, this);
+			
+			queueTransition(transaction, layer);
+		}
+		
+		protected function queueTransition(transaction:AbstractPageTransitionTransaction, layer:uint = LAYER_DEFAULT):void{
+			// validate layer
+			if(layer > LAYER_POPUPS){
+				throw new Error("Invalid layer parameter: " + layer);
+			}
+			
+			var queue:Array = _queues[layer];
+			queue.push(transaction);
+			
+			if(queue.length == 1){
+				
+			}else{
+				// still a previous transaction in progress
+			}
+		}
+		
+		// subroutine to transform the untyped page parameter to a displayobject we can manipulate
+		protected function interpret_page(page:*):DisplayObject{
+			var pageObject:IPage, pageDisplay:DisplayObject;
 			
 			// case 1: page as string
 			if(page as String && factory == null){
@@ -136,40 +188,7 @@ package framework.paging
 				return;
 			}
 			
-			// check layers
-			layerContainer = getLayer(layer);
-			if(layerContainer == null)
-				throw new Error("Invalid layer! - This shouldn't happen!");	// TODO: confirm this never happens
-			
-			// IPage extras
-			if(pageObject){
-				pageObject.setup(params);
-			}
-			
-			// add to layer
-			layerContainer.addChild(pageDisplay);
-			
-			if(pageObject){
-				pageObject.init();
-			}
-			
-			// transition scenarios
-			transitionType = getTransitionForLayer(layer);
-			
-			// dispatch event
-			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING));
-			
-			// handle the different scenarios
-			new PageTransitionTransaction(this, pageDisplay, layerContainer, layer, prevPageDisplay, transitionType);
-			
-			/*
-			if(pageObject){
-				new PageTransitionTransaction(this, pageObject, layerContainer, layer, prevPage, transitionType);
-			}else{
-				// if the previous page is IPage but the new one isn't.. TODO
-				dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, pageDisplay, layer));
-			}
-			*/
+			return pageDisplay;
 		}
 		
 		/**
@@ -267,7 +286,7 @@ package framework.paging
 			if(layer > LAYER_POPUPS)
 				return;
 			
-			if(_valid_transitions.indexOf(transitionType) < 0){
+			if(TRANSITIONS.indexOf(transitionType) < 0){
 				log('Invalid transition type, please use the constants provided');
 				return;
 			}
@@ -360,165 +379,5 @@ package framework.paging
 		}
 		
 
-	}
-}
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-
-import framework.events.PagingEvent;
-import framework.paging.IPage;
-import framework.paging.Paging;
-
-internal class PageTransitionTransaction {
-	
-	public var nextPage:IPage;
-	public var nextPageDisplay:DisplayObject;
-	public var prevPage:IPage;
-	public var prevPageDisplay:DisplayObject;
-	public var transition:String;
-	
-	public var paging:Paging;
-	public var layer:DisplayObjectContainer;
-	public var layerIndex:uint;
-	
-	function PageTransitionTransaction(paging:Paging, nextPageDisplay:DisplayObject, layer:DisplayObjectContainer, layerIndex:uint = 1, prevPageDisplay:DisplayObject = null, transition:String = Paging.TRANSITION_IN_OUT){
-		this.paging = paging;
-		this.nextPageDisplay = nextPageDisplay;
-		this.nextPage = nextPageDisplay as IPage;
-		this.layer = layer;
-		this.layerIndex = layerIndex;
-		this.prevPageDisplay = prevPageDisplay;
-		this.prevPage = prevPageDisplay as IPage;
-		this.transition = transition;
-				
-		switch(transition){
-			
-			case Paging.TRANSITION_IN_OUT:				
-				if(nextPage && prevPage){
-					
-					if(nextPage.canAnimateIn && prevPage.canAnimateOut){
-						animateIn_Out();
-						
-						return;
-					}
-					
-					if(nextPage.canAnimateIn){
-						layer.removeChild(prevPageDisplay);
-						animateIn();
-						
-						return;
-					}
-					
-					if(prevPage.canAnimateOut){
-						animateOut();
-						complete(nextPage);
-						
-						return;
-					}
-				}
-				
-				if(nextPage){	// prevPage is null
-					if(nextPage.canAnimateIn){
-						if(prevPageDisplay)
-							layer.removeChild(prevPageDisplay);
-						
-						animateIn();
-					}else{
-						if(prevPageDisplay)
-							layer.removeChild(prevPageDisplay);
-						
-						complete(nextPage);
-					}
-				}
-				
-				if(prevPage){
-					if(prevPage.canAnimateOut){
-						animateOut();
-					}else{
-						layer.removeChild(prevPageDisplay);
-					}
-
-					return;
-				}
-				
-				// catch-all
-				if(!prevPage && prevPageDisplay != null){
-					if(prevPageDisplay.parent == layer)
-						layer.removeChild(prevPageDisplay);
-				}
-				
-				if(!nextPage && nextPageDisplay != null){
-					complete(nextPageDisplay);
-				}
-				
-				break;
-			
-			case Paging.TRANSITION_CROSSFADE:
-				
-				if(prevPage && prevPage.canAnimateOut){
-					animateOut();
-				}else if(prevPageDisplay){
-					layer.removeChild(prevPageDisplay);
-				}
-				
-				if(nextPage){
-					if(nextPage.canAnimateIn){
-						animateIn();
-					}else{
-						complete(nextPage);
-					}
-				}else{
-					complete(nextPageDisplay);
-				}
-				
-				break;
-			
-			case Paging.TRANSITION_IN:
-				
-				if(prevPageDisplay){
-					layer.removeChild(prevPageDisplay);
-				}
-				
-				if(nextPage){
-					if(nextPage.canAnimateIn){
-						animateIn();
-					}else{
-						complete(nextPage);
-					}
-				}else{
-					complete(nextPageDisplay);
-				}
-				
-				break;
-		}
-		
-	}
-	
-	public function complete(page:*):void{
-		paging.dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, layerIndex));
-	}
-	
-	public function animateIn_Out():void{
-		prevPage.animateOut(function(page:IPage, oldpage:IPage):void{
-			oldpage.kill();
-			layer.removeChild(oldpage as DisplayObject);
-			
-			if(page.canAnimateIn){
-				page.animateIn(complete, [page]);
-			}else{
-				complete(page);
-			}
-		}, [nextPage, prevPage]);
-	}
-	
-	public function animateIn():void{
-		nextPage.animateIn(complete, [nextPage]);
-	}
-	
-	public function animateOut():void{
-		prevPage.animateOut(function(oldpage:IPage):void{
-			oldpage.kill();
-			layer.removeChild(oldpage as DisplayObject);
-		}, [prevPage]);
 	}
 }

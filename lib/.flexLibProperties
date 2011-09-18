@@ -28,8 +28,10 @@
     <classEntry path="framework.paging.Paging"/>
     <classEntry path="framework.paging.IPageFactory"/>
     <classEntry path="framework.paging.IPage"/>
-    <classEntry path="framework.paging.IPausable"/>
     <classEntry path="framework.events.PagingEvent"/>
+    <classEntry path="framework.paging.ITransitionController"/>
+    <classEntry path="framework.paging.transactions.AbstractPageTransitionTransaction"/>
+    <classEntry path="framework.paging.PagingLayer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
