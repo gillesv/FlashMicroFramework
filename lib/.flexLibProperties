@@ -26,7 +26,13 @@
     <classEntry path="localize"/>
     <classEntry path="log"/>
     <classEntry path="removeGlobalEventListener"/>
-    <classEntry path="framework.paging.page.IPage"/>
+    <classEntry path="framework.paging.IPage"/>
+    <classEntry path="framework.paging.IPageFactory"/>
+    <classEntry path="framework.paging.ITransitionController"/>
+    <classEntry path="framework.paging.IPaging"/>
+    <classEntry path="framework.paging.IPagingLayer"/>
+    <classEntry path="framework.paging.PagingTransitionTypes"/>
+    <classEntry path="framework.paging.PagingLayers"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
