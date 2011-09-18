@@ -33,6 +33,7 @@
     <classEntry path="framework.paging.IPagingLayer"/>
     <classEntry path="framework.paging.PagingTransitionTypes"/>
     <classEntry path="framework.paging.PagingLayers"/>
+    <classEntry path="framework.paging.PagingLayer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

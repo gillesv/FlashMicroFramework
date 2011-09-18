@@ -2,8 +2,9 @@ package framework.paging
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.events.IEventDispatcher;
 
-	public interface IPagingLayer
+	public interface IPagingLayer extends IEventDispatcher
 	{
 		
 		function addPage(page:DisplayObject):void;
@@ -23,9 +24,11 @@ package framework.paging
 		function get transitionType():String;
 		function set transitionType(value:String):void;
 		
-		/* required components */
+		/**
+		 * A controller to handle generic animations for pages that don't have custom animations. 
+		 */		
+		function get transitionController():ITransitionController;
+		function set transitionController(value:ITransitionController):void;
 		
-		function get container():DisplayObjectContainer;
-		function set container(value:DisplayObjectContainer):void;
 	}
 }
