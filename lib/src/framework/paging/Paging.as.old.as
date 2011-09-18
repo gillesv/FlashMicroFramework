@@ -11,6 +11,7 @@ package framework.paging
 	import framework.events.GlobalEventDispatcher;
 	import framework.events.PagingEvent;
 	import framework.paging.transactions.AbstractPageTransitionTransaction;
+	import framework.paging.page.IPage;
 	
 	public class Paging extends EventDispatcher
 	{

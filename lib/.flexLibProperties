@@ -1,37 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<flexLibProperties includeAllClasses="true" version="3">
+<flexLibProperties includeAllClasses="false" version="3">
   <includeClasses>
     <classEntry path="core.MC"/>
     <classEntry path="core.MCController"/>
     <classEntry path="core.S"/>
-    <classEntry path="addGlobalEventListener"/>
-    <classEntry path="removeGlobalEventListener"/>
-    <classEntry path="framework.events.GlobalEventDispatcher"/>
-    <classEntry path="framework.events.GlobalEvent"/>
-    <classEntry path="framework.views.Main"/>
-    <classEntry path="locale.MultiLang"/>
-    <classEntry path="locale.Language"/>
-    <classEntry path="localize"/>
-    <classEntry path="globalURL"/>
-    <classEntry path="locale.events.MultiLangEvent"/>
-    <classEntry path="locale.Key"/>
-    <classEntry path="LocalizedContent"/>
-    <classEntry path="locale.components.LocaleLabel"/>
-    <classEntry path="locale.components.LocaleLabelCollector"/>
-    <classEntry path="locale.cms.MultiLangEditor"/>
-    <classEntry path="log"/>
-    <classEntry path="framework.router.Router"/>
-    <classEntry path="framework.router.utils.PatternMatch"/>
-    <classEntry path="framework.router.bridge.HistoryJSBridge"/>
     <classEntry path="framework.config.Config"/>
     <classEntry path="framework.events.ConfigEvent"/>
-    <classEntry path="framework.paging.Paging"/>
-    <classEntry path="framework.paging.IPageFactory"/>
-    <classEntry path="framework.paging.IPage"/>
+    <classEntry path="framework.events.GlobalEvent"/>
+    <classEntry path="framework.events.GlobalEventDispatcher"/>
     <classEntry path="framework.events.PagingEvent"/>
-    <classEntry path="framework.paging.ITransitionController"/>
-    <classEntry path="framework.paging.transactions.AbstractPageTransitionTransaction"/>
-    <classEntry path="framework.paging.PagingLayer"/>
+    <classEntry path="framework.router.Router"/>
+    <classEntry path="framework.router.bridge.HistoryJSBridge"/>
+    <classEntry path="framework.router.utils.PatternMatch"/>
+    <classEntry path="framework.views.Main"/>
+    <classEntry path="locale.Key"/>
+    <classEntry path="locale.Language"/>
+    <classEntry path="locale.MultiLang"/>
+    <classEntry path="locale.cms.MultiLangEditor"/>
+    <classEntry path="locale.components.LocaleLabel"/>
+    <classEntry path="locale.components.LocaleLabelCollector"/>
+    <classEntry path="locale.events.MultiLangEvent"/>
+    <classEntry path="LocalizedContent"/>
+    <classEntry path="addGlobalEventListener"/>
+    <classEntry path="globalURL"/>
+    <classEntry path="localize"/>
+    <classEntry path="log"/>
+    <classEntry path="removeGlobalEventListener"/>
+    <classEntry path="framework.paging.page.IPage"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
