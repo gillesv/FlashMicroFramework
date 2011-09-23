@@ -77,6 +77,8 @@ package views
 			container.name = "pagingContainer";
 			addChild(container);
 			
+			
+			
 			router.addRoute("/page/:id", function(id:String):void{
 				// pass a string
 			});

@@ -218,6 +218,10 @@ package framework.paging
 		public function get index():uint{
 			return _index;
 		}
+		
+		public function get container():DisplayObjectContainer{
+			return this;
+		}
 
 	}
 }

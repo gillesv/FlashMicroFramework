@@ -12,6 +12,7 @@ package framework.paging
 		function addPage(page:DisplayObject):void;
 		function removePage():void;
 		
+		
 		function enable():void;
 		function disable():void;
 		
@@ -31,6 +32,8 @@ package framework.paging
 		 */		
 		function get transitionController():ITransitionController;
 		function set transitionController(value:ITransitionController):void;
+		
+		function get container():DisplayObjectContainer;
 		
 	}
 }

@@ -7,7 +7,6 @@ package framework.paging
 	{
 		
 		function gotoPage(page:*, pageParameters:* = null, layer:uint = 1):void;
-		
 		function closePage(layer:uint = 1):void;
 		
 		function enableLayer(layer:uint):void;
@@ -26,6 +25,9 @@ package framework.paging
 		function setTransitionControllerForLayer(controller:ITransitionController, layer:uint):void;
 		function getTransitionControllerForLayer(layer:uint):ITransitionController;
 		
+		function getTransitionTypeForLayer(layer:uint):String;
+		function setTransitionTypeForLayer(value:String, layer:uint):void;
+		
 		function get dispatchGlobalEvents():Boolean;
 		function set dispatchGlobalEvents(value:Boolean):void;
 		
@@ -33,8 +35,5 @@ package framework.paging
 		
 		function get factory():IPageFactory;
 		function set factory(value:IPageFactory):void;
-		
-		function get container():DisplayObjectContainer;
-		function set container(value:DisplayObjectContainer):void;
 	}
 }
