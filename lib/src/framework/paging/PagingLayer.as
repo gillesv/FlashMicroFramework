@@ -5,6 +5,8 @@ package framework.paging
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
+	import framework.events.PagingEvent;
+	
 	public class PagingLayer extends DisplayObjectContainer implements IPagingLayer
 	{
 		private var _previous_page:DisplayObject;
@@ -12,13 +14,14 @@ package framework.paging
 		private var _isTransitioning:Boolean = false;
 		private var transitionQueue:Array = [];
 		
-		
-		protected var _transition_type:String = PagingTransitionTypes.TRANSITION_IN_OUT;
+		protected var _transition_type:String = PagingTransitionTypes.TRANSITION_IN;
 		protected var _transition_controller:ITransitionController = new DefaultTransitionController();
 		
+		protected var _index:uint = 0;
 		protected var _target:IEventDispatcher;
 		
-		public function PagingLayer(target:IEventDispatcher = null){
+		public function PagingLayer(index:uint, target:IEventDispatcher = null){
+			this._index = index;
 			this._target = target;
 		}
 		
@@ -59,11 +62,11 @@ package framework.paging
 					// init & animate the new page
 					if(init_page(page) as IPage && IPage(page).canAnimateIn){
 						transitionIn = IPage(page).animateIn;
-						transitionInParams = [on_page_added, null];
+						transitionInParams = [on_page_added, [page]];
 					}else{
 						// no special powers, send it to the controller
 						transitionIn = transitionController.animatePageIn;
-						transitionInParams = [page, on_page_added, null];
+						transitionInParams = [page, on_page_added, [page]];
 					}
 					
 					// apply the transition
@@ -83,8 +86,16 @@ package framework.paging
 			_previous_page = page;
 		}
 		
-		protected function on_page_added():void{
+		protected function on_page_added(page:DisplayObject):void{
 			// dispatch events?
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, index));
+			
+			// stop transitioning
+			isTransitioning = false;
+			
+			if(transitionQueue.length > 0){
+				addPage(transitionQueue.shift() as DisplayObject);
+			}
 		}
 		
 		/**
@@ -202,6 +213,10 @@ package framework.paging
 		public function set isTransitioning(value:Boolean):void
 		{
 			_isTransitioning = value;
+		}
+		
+		public function get index():uint{
+			return _index;
 		}
 
 	}

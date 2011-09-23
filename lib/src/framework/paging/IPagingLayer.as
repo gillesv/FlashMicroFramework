@@ -7,6 +7,8 @@ package framework.paging
 	public interface IPagingLayer extends IEventDispatcher
 	{
 		
+		function get index():uint;
+		
 		function addPage(page:DisplayObject):void;
 		function removePage():void;
 		
