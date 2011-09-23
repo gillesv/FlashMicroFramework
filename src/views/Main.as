@@ -13,7 +13,6 @@ package views
 	
 	import framework.config.Config;
 	import framework.events.ConfigEvent;
-	import framework.paging.Paging;
 	import framework.router.Router;
 	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
@@ -31,7 +30,6 @@ package views
 	{
 		public var router:Router;
 		public var bridge:HistoryJSBridge;
-		public var paging:Paging;
 		
 		public var btnHome:SimpleButton;
 		public var btnAbout:SimpleButton;
@@ -75,35 +73,24 @@ package views
 		}
 		
 		private function init_paging():void{
-			paging = new Paging();
 			var container:Sprite = new Sprite();
 			container.name = "pagingContainer";
 			addChild(container);
-			paging.container = container;
-			paging.setTranstitionForLayer(Paging.TRANSITION_IN);
-			
-			paging.factory = new Factory();
-			
-			paging.dispatchGlobalEvents = true;
 			
 			router.addRoute("/page/:id", function(id:String):void{
 				// pass a string
-				paging.gotoPage(id);
 			});
 			
 			router.addRoute("/home", function():void{
 				// pass an instanced DisplayObject conforming to IPage
-				paging.gotoPage(new Home());
 			});
 			
 			router.addRoute("/about", function():void{
 				// Pass an instanced DisplayObject, not conforming to IPage
-				paging.gotoPage(new About());
 			});
 			
 			router.addRoute("/contact", function():void{
 				// Pass a class
-				paging.gotoPage(Contact);
 			});
 			
 			
@@ -123,24 +110,4 @@ package views
 			});
 		}
 	}
-}
-import framework.paging.IPage;
-import framework.paging.IPageFactory;
-
-import views.pages.Home;
-
-internal class Factory implements IPageFactory{
-	
-	public function createPage(id:String):IPage{
-		switch(id){
-			case "home":
-				
-				return new Home();
-				
-				break;
-		}
-		
-		return null;
-	}
-	
 }
