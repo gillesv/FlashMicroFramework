@@ -17,6 +17,7 @@ package framework.paging
 		 * 
 		 */		
 		public function animatePageIn(page:DisplayObject, callback:Function, callbackParams:*):void{
+			page.visible = true;
 			page.alpha = 0;
 			
 			var startingblend:String = page.blendMode; // store the original blendmode

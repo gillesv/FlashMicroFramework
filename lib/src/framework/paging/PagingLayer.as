@@ -56,19 +56,19 @@ package framework.paging
 			
 			switch(_transition_type){
 				case PagingTransitionTypes.TRANSITION_IN_OUT:
-					trace(" transition start : page: " + page + " prev: " + _previous_page);
 					// init & animate the new page
 					if(init_page(page) as IPage && IPage(page).canAnimateIn){
 						transitionIn = IPage(page).animateIn;
 						transitionInParams = [on_page_added, [page]];
 					}else{
 						// no special powers, send it to the controller
+						page.visible = false;
 						transitionIn = transitionController.animatePageIn;
 						transitionInParams = [page, on_page_added, [page]];
 					}
-					
+										
 					if(_previous_page){
-						if(IPage(_previous_page) && IPage(_previous_page).canAnimateOut){
+						if(_previous_page as IPage && IPage(_previous_page).canAnimateOut){
 							transitionOut = IPage(_previous_page).animateOut; // callback, params
 							transitionOutParams = [ on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}else{
@@ -94,6 +94,7 @@ package framework.paging
 						transitionInParams = [on_page_added, [page]];
 					}else{
 						// no special powers, send it to the controller
+						page.visible = false;
 						transitionIn = transitionController.animatePageIn;
 						transitionInParams = [page, on_page_added, [page]];
 					}
@@ -114,7 +115,6 @@ package framework.paging
 		}
 				
 		protected function on_page_added(page:DisplayObject):void{
-			trace("on_page_added " + page);
 			// dispatch events?
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, index));
 			
@@ -127,7 +127,6 @@ package framework.paging
 		}
 		
 		protected function on_page_removed(page:DisplayObject, callback:Function = null, callbackParams:Array = null):void{
-			trace("on_page_removed " + page);
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, kill_page(page), index));
 			
 			if(callback != null){
