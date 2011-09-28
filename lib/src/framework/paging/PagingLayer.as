@@ -55,7 +55,42 @@ package framework.paging
 			var transitionInParams:Array, transitionOutParams:Array;
 			
 			switch(_transition_type){
-				
+				case PagingTransitionTypes.TRANSITION_IN_OUT:
+					// init & animate the new page
+					if(init_page(page) as IPage && IPage(page).canAnimateIn){
+						transitionIn = IPage(page).animateIn;
+						transitionInParams = [on_page_added, [page]];
+					}else{
+						// no special powers, send it to the controller
+						transitionIn = transitionController.animatePageIn;
+						transitionInParams = [page, on_page_added, [page]];
+					}
+					
+					if(_previous_page){
+						if(IPage(_previous_page) && IPage(_previous_page).canAnimateOut){
+							transitionOut = IPage(_previous_page).animateOut; // callback, params
+							transitionOutParams = [function(prevPage:DisplayObject, callback:Function, params:Array):void{
+								kill_page(prevPage);
+								
+								callback.apply(null, params);
+							}, [_previous_page, transitionIn, transitionInParams]];
+						}else{
+							transitionOut = transitionController.animatePageOut; // page, callback, params
+							transitionOutParams = [function(prevPage:DisplayObject, callback:Function, params:Array):void{
+								kill_page(prevPage);
+								
+								callback.apply(null, params);
+							}, [_previous_page, transitionIn, transitionInParams]];
+						}
+					}
+					
+					if(transitionOut != null){
+						transitionOut.apply(null, transitionOutParams);
+					}else{
+						transitionIn.apply(null, transitionInParams);
+					}
+					
+					break;
 				case PagingTransitionTypes.TRANSITION_IN:
 					// remove the previous page
 					kill_page(_previous_page);
@@ -75,9 +110,7 @@ package framework.paging
 					
 					break;
 				
-				case PagingTransitionTypes.TRANSITION_IN_OUT:
-					
-					break;
+				
 				
 				case PagingTransitionTypes.TRANSITION_CROSSFADE:
 					
@@ -86,7 +119,7 @@ package framework.paging
 			
 			_previous_page = page;
 		}
-		
+				
 		protected function on_page_added(page:DisplayObject):void{
 			// dispatch events?
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, index));
@@ -96,6 +129,14 @@ package framework.paging
 			
 			if(transitionQueue.length > 0){
 				addPage(transitionQueue.shift() as DisplayObject);
+			}
+		}
+		
+		protected function on_page_removed(page:DisplayObject, callback:Function = null, callbackParams:Array = null):void{
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, kill_page(page), index));
+			
+			if(callback != null){
+				callback.apply(null, callbackParams);
 			}
 		}
 		
