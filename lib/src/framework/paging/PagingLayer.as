@@ -69,18 +69,10 @@ package framework.paging
 					if(_previous_page){
 						if(IPage(_previous_page) && IPage(_previous_page).canAnimateOut){
 							transitionOut = IPage(_previous_page).animateOut; // callback, params
-							transitionOutParams = [function(prevPage:DisplayObject, callback:Function, params:Array):void{
-								kill_page(prevPage);
-								
-								callback.apply(null, params);
-							}, [_previous_page, transitionIn, transitionInParams]];
+							transitionOutParams = [ on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}else{
 							transitionOut = transitionController.animatePageOut; // page, callback, params
-							transitionOutParams = [function(prevPage:DisplayObject, callback:Function, params:Array):void{
-								kill_page(prevPage);
-								
-								callback.apply(null, params);
-							}, [_previous_page, transitionIn, transitionInParams]];
+							transitionOutParams = [ _previous_page, on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}
 					}
 					
