@@ -128,8 +128,11 @@ package framework.paging
 			if(layer > MAX_LAYERS - 1)
 				return null;
 			
-			if(layers[layer] == null){
-				layers[layer] = new PagingLayer(layer, this);
+			if(layers[layer] == undefined || layers[layer] == null){
+				var pl:PagingLayer = new PagingLayer(layer, this);
+								
+				layers[layer] = pl;
+				
 				container.addChild(layers[layer]);
 			}
 			

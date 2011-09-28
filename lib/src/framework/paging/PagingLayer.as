@@ -2,12 +2,13 @@ package framework.paging
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	import framework.events.PagingEvent;
 	
-	public class PagingLayer extends DisplayObjectContainer implements IPagingLayer
+	public class PagingLayer extends Sprite implements IPagingLayer
 	{
 		private var _previous_page:DisplayObject;
 		
@@ -116,17 +117,31 @@ package framework.paging
 		}
 		
 		public function removePage():void{
+			var child:DisplayObject;
+			
 			switch(_transition_type){
-				
 				case PagingTransitionTypes.TRANSITION_IN:
+					while(numChildren > 0){
+						child = kill_page(getChildAt(0));
+					}
+					
+					dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, child, index));
+					return;
 					
 					break;
 				
 				case PagingTransitionTypes.TRANSITION_IN_OUT:
-					
-					break;
-				
 				case PagingTransitionTypes.TRANSITION_CROSSFADE:
+					// show outro
+					for(var i:int = 0; i < numChildren; i++){
+						child = getChildAt(i);
+												
+						if(IPage(child) && IPage(child).canAnimateOut){
+							IPage(child).animateOut(kill_page, [child]);
+						}else{
+							_transition_controller.animatePageOut(child, kill_page, [child]);
+						}
+					}
 					
 					break;
 			}
@@ -143,6 +158,8 @@ package framework.paging
 			if(page as IPage){
 				IPage(page).kill();
 			}
+			
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, page, index));
 			
 			return page;
 		}

@@ -20,7 +20,6 @@ package views.pages
 		
 		public function setup(params:*=null):void
 		{
-			trace("params received: " + params);
 			this.alpha = 0;
 		}
 		
@@ -28,7 +27,6 @@ package views.pages
 		private var callbackParams:*;
 		
 		public function animateIn(callback:Function, callbackParams:*):void{	
-			log("contact animateIn");
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			
@@ -37,28 +35,26 @@ package views.pages
 		
 		private function fadein(evt:Event):void{
 			alpha += (1 - alpha)/5;
-			
-			if(alpha > 0.99){
+						
+			if(alpha > 0.9){
 				alpha = 1;
 				
 				removeEventListener(Event.ENTER_FRAME, fadein);
-				
+								
 				callback.apply(null, callbackParams);
 			}
 		}
 		
 		public function animateOut(callback:Function, callbackParams:*):void{
-			log("contact animateOut");
-			
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			addEventListener(Event.ENTER_FRAME, fadeout);
 		}
 		
 		private function fadeout(evt:Event):void{
-			alpha -= Math.max(.1, (alpha/2));
+			alpha += (0 - alpha)/10;
 			
-			if(alpha <= 0.1640625){
+			if(alpha <= 0.1){
 				alpha = 0;
 				
 				removeEventListener(Event.ENTER_FRAME, fadeout);

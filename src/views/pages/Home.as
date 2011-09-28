@@ -20,7 +20,6 @@ package views.pages
 		
 		public function setup(params:*=null):void
 		{
-			trace("params received: " + params);
 			this.alpha = 0;
 		}
 		
@@ -28,7 +27,6 @@ package views.pages
 		private var callbackParams:*;
 		
 		public function animateIn(callback:Function, callbackParams:*):void{	
-			log("home animateIn");
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			
@@ -48,8 +46,6 @@ package views.pages
 		}
 		
 		public function animateOut(callback:Function, callbackParams:*):void{
-			log("home animateOut");
-			
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			addEventListener(Event.ENTER_FRAME, fadeout);
@@ -69,12 +65,12 @@ package views.pages
 		
 		public function get canAnimateIn():Boolean
 		{
-			return true;
+			return false;
 		}
 		
 		public function get canAnimateOut():Boolean
 		{
-			return true;
+			return false;
 		}
 	}
 }
