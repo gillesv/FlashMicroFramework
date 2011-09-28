@@ -56,6 +56,7 @@ package framework.paging
 			
 			switch(_transition_type){
 				case PagingTransitionTypes.TRANSITION_IN_OUT:
+					trace(" transition start : page: " + page + " prev: " + _previous_page);
 					// init & animate the new page
 					if(init_page(page) as IPage && IPage(page).canAnimateIn){
 						transitionIn = IPage(page).animateIn;
@@ -113,6 +114,7 @@ package framework.paging
 		}
 				
 		protected function on_page_added(page:DisplayObject):void{
+			trace("on_page_added " + page);
 			// dispatch events?
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGED, page, index));
 			
@@ -125,6 +127,7 @@ package framework.paging
 		}
 		
 		protected function on_page_removed(page:DisplayObject, callback:Function = null, callbackParams:Array = null):void{
+			trace("on_page_removed " + page);
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, kill_page(page), index));
 			
 			if(callback != null){
