@@ -207,12 +207,13 @@ package framework.paging
 			var child:DisplayObject;
 			
 			switch(_transition_type){
+				case PagingTransitionTypes.TRANSITION_NONE:
 				case PagingTransitionTypes.TRANSITION_IN:
+					// just kill'em all
 					while(numChildren > 0){
 						child = kill_page(getChildAt(0));
 					}
 					
-					dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, child, index));
 					return;
 					
 					break;
@@ -224,8 +225,10 @@ package framework.paging
 						child = getChildAt(i);
 												
 						if(IPage(child) && IPage(child).canAnimateOut){
+							IPage(child).setupOutro();
 							IPage(child).animateOut(kill_page, [child]);
 						}else{
+							_transition_controller.setupOutro(child);
 							_transition_controller.animatePageOut(child, kill_page, [child]);
 						}
 					}
