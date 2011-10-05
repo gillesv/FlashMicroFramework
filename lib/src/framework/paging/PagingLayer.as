@@ -50,7 +50,7 @@ package framework.paging
 			}
 			
 			isTransitioning = true;
-			
+						
 			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, page, index));
 			
 			// method references used for transitioning

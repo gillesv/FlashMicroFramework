@@ -134,6 +134,15 @@ package framework.paging
 				layers[layer] = pl;
 				
 				container.addChild(layers[layer]);
+				
+				var depth:int = 0;
+				
+				for(var i:int = 0; i < layers.length; i ++){
+					if(layers[i]){
+						container.setChildIndex(layers[i], depth);
+						depth ++;
+					}
+				}
 			}
 			
 			return layers[layer];
