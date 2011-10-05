@@ -34,9 +34,10 @@
     <classEntry path="framework.paging.PagingTransitionTypes"/>
     <classEntry path="framework.paging.PagingLayers"/>
     <classEntry path="framework.paging.PagingLayer"/>
-    <classEntry path="framework.paging.DefaultTransitionController"/>
+    <classEntry path="framework.paging.controllers.DefaultTransitionController"/>
     <classEntry path="framework.paging.Paging"/>
     <classEntry path="framework.paging.pages.AbstractPage"/>
+    <classEntry path="framework.paging.controllers.AbstractTransitionController"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

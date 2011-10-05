@@ -13,6 +13,7 @@ package views
 	
 	import framework.config.Config;
 	import framework.events.ConfigEvent;
+	import framework.events.PagingEvent;
 	import framework.paging.Paging;
 	import framework.paging.PagingTransitionTypes;
 	import framework.router.Router;
@@ -82,7 +83,19 @@ package views
 			var paging:Paging = new Paging(container);
 			paging.factory = new PageFactory();
 			
+			paging.dispatchGlobalEvents = true;
+			
 			paging.transitionType = PagingTransitionTypes.TRANSITION_IN_OUT;
+			
+			paging.addEventListener(PagingEvent.PAGE_CHANGED, trace_event);
+			paging.addEventListener(PagingEvent.PAGE_CHANGING, trace_event);
+			paging.addEventListener(PagingEvent.PAGE_CLOSING, trace_event);
+			paging.addEventListener(PagingEvent.PAGE_CLOSED, trace_event);
+			
+			addGlobalEventListener(PagingEvent.PAGE_CHANGED, trace_global_event);
+			addGlobalEventListener(PagingEvent.PAGE_CHANGING, trace_global_event);
+			addGlobalEventListener(PagingEvent.PAGE_CLOSING, trace_global_event);
+			addGlobalEventListener(PagingEvent.PAGE_CLOSED, trace_global_event);
 			
 			router.addRoute("/page/:id", function(id:String):void{
 				// pass a string
@@ -105,6 +118,19 @@ package views
 			});
 			
 			
+		}
+		
+		private function trace_global_event(evt:PagingEvent):void{
+			trace("------");
+			trace("Global:");
+			trace(evt.type);
+			trace(evt.page);
+		}
+		
+		private function trace_event(evt:PagingEvent):void{
+			trace("------");
+			trace(evt.type);
+			trace(evt.page);
 		}
 		
 		private function init_nav():void{

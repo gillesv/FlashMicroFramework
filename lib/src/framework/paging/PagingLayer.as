@@ -7,6 +7,7 @@ package framework.paging
 	import flash.events.IEventDispatcher;
 	
 	import framework.events.PagingEvent;
+	import framework.paging.controllers.DefaultTransitionController;
 	
 	public class PagingLayer extends Sprite implements IPagingLayer
 	{
@@ -50,6 +51,8 @@ package framework.paging
 			
 			isTransitioning = true;
 			
+			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CHANGING, page, index));
+			
 			// method references used for transitioning
 			var transitionIn:Function, transitionOut:Function;
 			var transitionInParams:Array, transitionOutParams:Array;
@@ -81,6 +84,8 @@ package framework.paging
 					}
 					
 					if(transitionOut != null){
+						dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSING, _previous_page, index));
+						
 						transitionOut.apply(null, transitionOutParams);
 					}else{
 						transitionIn.apply(null, transitionInParams);
@@ -139,6 +144,7 @@ package framework.paging
 					transitionIn.apply(null, transitionInParams);
 					
 					if(transitionOut != null){
+						dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSING, _previous_page, index));
 						transitionOut.apply(null, transitionOutParams);
 					}
 					
@@ -173,7 +179,7 @@ package framework.paging
 		}
 		
 		protected function on_page_removed(page:DisplayObject, callback:Function = null, callbackParams:Array = null):void{
-			dispatchEvent(new PagingEvent(PagingEvent.PAGE_CLOSED, kill_page(page), index));
+			kill_page(page)
 			
 			if(callback != null){
 				callback.apply(null, callbackParams);

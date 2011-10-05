@@ -1,19 +1,20 @@
-package framework.paging
+package framework.paging.controllers
 {
 	import flash.display.BlendMode;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	public class DefaultTransitionController implements ITransitionController
+	
+	public class DefaultTransitionController extends AbstractTransitionController
 	{
 		public function DefaultTransitionController(){}
 		
-		public function setupIntro(page:DisplayObject):void{
+		override public function setupIntro(page:DisplayObject):void{
 			page.alpha = 0;
 			page.visible = false;
 		}
 		
-		public function setupOutro(page:DisplayObject):void{
+		override public function setupOutro(page:DisplayObject):void{
 			
 		}
 		
@@ -25,7 +26,7 @@ package framework.paging
 		 * @param callbackParams
 		 * 
 		 */		
-		public function animatePageIn(page:DisplayObject, callback:Function, callbackParams:*):void{
+		override public function animatePageIn(page:DisplayObject, callback:Function, callbackParams:*):void{
 			page.visible = true;
 			
 			var startingblend:String = page.blendMode; // store the original blendmode
@@ -57,7 +58,7 @@ package framework.paging
 		 * @param callbackParams
 		 * 
 		 */		
-		public function animatePageOut(page:DisplayObject, callback:Function, callbackParams:*):void{
+		override public function animatePageOut(page:DisplayObject, callback:Function, callbackParams:*):void{
 			if(page.blendMode == BlendMode.NORMAL){	// if there isn't a special blendmode, set it to layer for neater transition
 				page.blendMode = BlendMode.LAYER;
 			}
