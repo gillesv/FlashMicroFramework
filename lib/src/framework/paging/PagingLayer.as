@@ -224,7 +224,7 @@ package framework.paging
 					for(var i:int = 0; i < numChildren; i++){
 						child = getChildAt(i);
 												
-						if(IPage(child) && IPage(child).canAnimateOut){
+						if(child as IPage && IPage(child).canAnimateOut){
 							IPage(child).setupOutro();
 							IPage(child).animateOut(kill_page, [child]);
 						}else{
