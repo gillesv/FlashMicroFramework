@@ -109,6 +109,38 @@ package framework.paging
 					break;
 				
 				case PagingTransitionTypes.TRANSITION_CROSSFADE:
+					// just do it simultaneously
+					
+					// init & animate the new page
+					if(init_page(page) as IPage && IPage(page).canAnimateIn){
+						IPage(page).setupIntro();
+						transitionIn = IPage(page).animateIn;
+						transitionInParams = [on_page_added, [page]];
+					}else{
+						// no special powers, send it to the controller
+						transitionController.setupIntro(page);
+						transitionIn = transitionController.animatePageIn;
+						transitionInParams = [page, on_page_added, [page]];
+					}
+					
+					// kill and animate the old page, if any
+					if(_previous_page){
+						if(_previous_page as IPage && IPage(_previous_page).canAnimateOut){
+							IPage(_previous_page).setupOutro();
+							transitionOut = IPage(_previous_page).animateOut; // callback, params
+							transitionOutParams = [ on_page_removed, [ _previous_page ] ];
+						}else{
+							transitionController.setupOutro(_previous_page);
+							transitionOut = transitionController.animatePageOut; // page, callback, params
+							transitionOutParams = [ _previous_page, on_page_removed, [ _previous_page ] ];
+						}
+					}
+					
+					transitionIn.apply(null, transitionInParams);
+					
+					if(transitionOut != null){
+						transitionOut.apply(null, transitionOutParams);
+					}
 					
 					break;
 				

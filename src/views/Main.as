@@ -82,7 +82,7 @@ package views
 			var paging:Paging = new Paging(container);
 			paging.factory = new PageFactory();
 			
-			paging.transitionType = PagingTransitionTypes.TRANSITION_IN_OUT;
+			paging.transitionType = PagingTransitionTypes.TRANSITION_CROSSFADE;
 			
 			router.addRoute("/page/:id", function(id:String):void{
 				// pass a string
