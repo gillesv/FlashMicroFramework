@@ -62,7 +62,7 @@ package framework.paging
 						transitionInParams = [on_page_added, [page]];
 					}else{
 						// no special powers, send it to the controller
-						page.visible = false;
+						transitionController.setupIntro(page);
 						transitionIn = transitionController.animatePageIn;
 						transitionInParams = [page, on_page_added, [page]];
 					}
@@ -72,6 +72,7 @@ package framework.paging
 							transitionOut = IPage(_previous_page).animateOut; // callback, params
 							transitionOutParams = [ on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}else{
+							transitionController.setupOutro(_previous_page);
 							transitionOut = transitionController.animatePageOut; // page, callback, params
 							transitionOutParams = [ _previous_page, on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}
@@ -94,7 +95,7 @@ package framework.paging
 						transitionInParams = [on_page_added, [page]];
 					}else{
 						// no special powers, send it to the controller
-						page.visible = false;
+						transitionController.setupIntro(page);
 						transitionIn = transitionController.animatePageIn;
 						transitionInParams = [page, on_page_added, [page]];
 					}
@@ -104,9 +105,19 @@ package framework.paging
 					
 					break;
 				
-				
-				
 				case PagingTransitionTypes.TRANSITION_CROSSFADE:
+					
+					break;
+				
+				case PagingTransitionTypes.TRANSITION_NONE:
+					// remove previous page
+					kill_page(_previous_page);
+					
+					// init next page
+					init_page(page);
+					
+					// done & dispatch
+					on_page_added(page);
 					
 					break;
 			}	

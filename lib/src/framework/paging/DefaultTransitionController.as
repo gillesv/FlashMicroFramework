@@ -8,6 +8,15 @@ package framework.paging
 	{
 		public function DefaultTransitionController(){}
 		
+		public function setupIntro(page:DisplayObject):void{
+			page.alpha = 0;
+			page.visible = false;
+		}
+		
+		public function setupOutro(page:DisplayObject):void{
+			
+		}
+		
 		/**
 		 * Fades the page in from 0
 		 *  
@@ -18,7 +27,6 @@ package framework.paging
 		 */		
 		public function animatePageIn(page:DisplayObject, callback:Function, callbackParams:*):void{
 			page.visible = true;
-			page.alpha = 0;
 			
 			var startingblend:String = page.blendMode; // store the original blendmode
 			
