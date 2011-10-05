@@ -9,6 +9,10 @@ package framework.paging
 		function init():void;	// called when added to layer
 		function kill():void;	// called before removal from layer
 		
+		// setup the intro or outro animations before they occur
+		function setupIntro():void;
+		function setupOutro():void;
+		
 		function animateIn(callback:Function, callbackParams:*):void;
 		function animateOut(callback:Function, callbackParams:*):void;
 		

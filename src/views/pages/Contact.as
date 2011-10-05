@@ -20,7 +20,15 @@ package views.pages
 		
 		public function setup(params:*=null):void
 		{
+			
+		}
+		
+		public function setupIntro():void{
 			this.alpha = 0;
+		}
+		
+		public function setupOutro():void{
+			
 		}
 		
 		private var callback:Function;

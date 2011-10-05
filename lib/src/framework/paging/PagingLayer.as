@@ -58,6 +58,7 @@ package framework.paging
 				case PagingTransitionTypes.TRANSITION_IN_OUT:
 					// init & animate the new page
 					if(init_page(page) as IPage && IPage(page).canAnimateIn){
+						IPage(page).setupIntro();
 						transitionIn = IPage(page).animateIn;
 						transitionInParams = [on_page_added, [page]];
 					}else{
@@ -69,6 +70,7 @@ package framework.paging
 										
 					if(_previous_page){
 						if(_previous_page as IPage && IPage(_previous_page).canAnimateOut){
+							IPage(_previous_page).setupOutro();
 							transitionOut = IPage(_previous_page).animateOut; // callback, params
 							transitionOutParams = [ on_page_removed, [ _previous_page, transitionIn, transitionInParams ] ];
 						}else{
@@ -91,6 +93,7 @@ package framework.paging
 					
 					// init & animate the new page
 					if(init_page(page) as IPage && IPage(page).canAnimateIn){
+						IPage(page).setupIntro();
 						transitionIn = IPage(page).animateIn;
 						transitionInParams = [on_page_added, [page]];
 					}else{

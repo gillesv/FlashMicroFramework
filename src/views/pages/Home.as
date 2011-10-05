@@ -23,6 +23,14 @@ package views.pages
 			
 		}
 		
+		public function setupIntro():void{
+			
+		}
+		
+		public function setupOutro():void{
+			
+		}
+		
 		private var callback:Function;
 		private var callbackParams:*;
 		
