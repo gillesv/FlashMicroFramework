@@ -5,36 +5,28 @@ package views.pages
 	import flash.events.Event;
 	
 	import framework.paging.IPage;
+	import framework.paging.pages.AbstractPage;
 	
-	public class Contact extends S implements IPage
+	public class Contact extends AbstractPage
 	{
 		public function Contact()
 		{
-			super();
+			super("contact", true, true);
 		}
 		
-		public function get id():String
-		{
-			return "contact";
-		}
 		
-		public function setup(params:*=null):void
-		{
-			
-		}
-		
-		public function setupIntro():void{
+		override public function setupIntro():void{
 			this.alpha = 0;
 		}
 		
-		public function setupOutro():void{
+		override public function setupOutro():void{
 			
 		}
 		
 		private var callback:Function;
 		private var callbackParams:*;
 		
-		public function animateIn(callback:Function, callbackParams:*):void{	
+		override public function animateIn(callback:Function, callbackParams:*):void{	
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			
@@ -53,7 +45,7 @@ package views.pages
 			}
 		}
 		
-		public function animateOut(callback:Function, callbackParams:*):void{
+		override public function animateOut(callback:Function, callbackParams:*):void{
 			this.callback = callback;
 			this.callbackParams = callbackParams;
 			addEventListener(Event.ENTER_FRAME, fadeout);
@@ -69,16 +61,6 @@ package views.pages
 				
 				callback.apply(null, callbackParams);
 			}
-		}
-		
-		public function get canAnimateIn():Boolean
-		{
-			return true;
-		}
-		
-		public function get canAnimateOut():Boolean
-		{
-			return true;
 		}
 	}
 }
