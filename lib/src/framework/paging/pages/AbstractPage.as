@@ -26,7 +26,7 @@ package framework.paging.pages
 		 */		
 		public function AbstractPage(id:String, canAnimateIn:Boolean = false, canAnimateOut:Boolean = false)
 		{
-			super();
+			super(false);
 			
 			this._id = id;
 			this._canAnimateIn = canAnimateIn;

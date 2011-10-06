@@ -26,11 +26,13 @@ package core
 		protected var _width:Number = -1;
 		protected var _height:Number = -1;
 		
-		public function S()
+		public function S(init_on_stage:Boolean = true)
 		{
 			super();
 			
-			addEventListener(Event.ADDED_TO_STAGE, on_added);
+			if(init_on_stage){
+				addEventListener(Event.ADDED_TO_STAGE, on_added);
+			}
 		}
 		
 		/**

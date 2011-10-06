@@ -31,12 +31,17 @@ package core
 		 */		
 		public var controller:MCController;
 		
-		public function MC()
+		public function MC(init_on_stage:Boolean = true)
 		{
 			super();
 			
 			controller = new MCController(this, true);
-			addEventListener(Event.ADDED_TO_STAGE, on_added);
+			
+			if(init_on_stage){
+				addEventListener(Event.ADDED_TO_STAGE, on_added);
+			}else{
+				controller.init();
+			}
 		}
 		
 		/**

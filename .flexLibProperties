@@ -6,6 +6,7 @@
     <classEntry path="views.pages.Home"/>
     <classEntry path="views.pages.Contact"/>
     <classEntry path="views.pages.About"/>
+    <classEntry path="views.pages.External"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
