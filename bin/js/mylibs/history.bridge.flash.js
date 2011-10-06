@@ -5,6 +5,7 @@
 /************************************/
 
 var flash, url;
+var body, rootUrl, subDir;
 
 /********/
 /* INIT */
@@ -13,9 +14,9 @@ var flash, url;
 (function(window, undefined){	
 	
 	// variables
-	var body = $(document.body),
-	    rootUrl = document.location.protocol+'//'+(document.location.hostname||document.location.host);
-		subDir = "/Experience/Microframework/bin/"; // if your app lives inside a subdirectory on your webserver, put that here
+	body = $(document.body);
+	rootUrl = document.location.protocol+'//'+(document.location.hostname||document.location.host);
+	subDir = "/Experience/Microframework/bin/"; // if your app lives inside a subdirectory on your webserver, put that here
 	
 	rootUrl += subDir;	
 	
@@ -74,7 +75,7 @@ function flashPushHistoryState(state, title){
 		window.location.hash = "!/" + state;
 		flash.changeState(state, document.title);
 	}else{
-		History.pushState(null, title, state);
+		History.pushState(null, title, rootUrl + state);
 	}
 }
 

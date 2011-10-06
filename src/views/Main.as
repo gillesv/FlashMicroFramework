@@ -15,6 +15,7 @@ package views
 	import framework.events.ConfigEvent;
 	import framework.events.PagingEvent;
 	import framework.paging.Paging;
+	import framework.paging.PagingLayers;
 	import framework.paging.PagingTransitionTypes;
 	import framework.paging.pages.ExternalPage;
 	import framework.router.Router;
@@ -111,12 +112,12 @@ package views
 				// pass a string
 				paging.gotoPage(id, null);
 			});
-			
+						
 			router.addRoute("/home", function():void{
 				// pass an instanced DisplayObject conforming to IPage
 				paging.gotoPage(new Home(), null);
 			});
-			
+						
 			router.addRoute("/about", function():void{
 				// Pass an instanced DisplayObject, not conforming to IPage
 				paging.gotoPage(new About(), null);
@@ -126,7 +127,7 @@ package views
 				// Pass a class
 				paging.gotoPage(Contact, null);
 			});
-			
+					
 			
 		}
 		
