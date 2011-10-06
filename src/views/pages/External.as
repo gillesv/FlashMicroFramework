@@ -6,7 +6,7 @@ package views.pages
 	{
 		public function External()
 		{
-			super("external", false, false);
+			super("external", true, true);
 		}
 		
 		override public function init():void{
@@ -22,19 +22,21 @@ package views.pages
 		}
 		
 		override public function setupIntro():void{
-			
+			trace("custom intro setup!");
 		}
 		
 		override public function animateIn(callback:Function, callbackParams:*):void{
-			
+			trace("custom intro animation!! ");
+			callback.apply(null, callbackParams);
 		}
 		
 		override public function setupOutro():void{
-			
+			trace("custom outro setup!");
 		}
 		
 		override public function animateOut(callback:Function, callbackParams:*):void{
-			
+			trace("custom outro animation!! ");
+			callback.apply(null, callbackParams);
 		}
 	}
 }

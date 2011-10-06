@@ -39,6 +39,7 @@ package views
 		public var btnAbout:SimpleButton;
 		public var btnContact:SimpleButton;
 		public var btnLoad:SimpleButton;
+		public var btnLoadIPage:SimpleButton;
 		
 		public function Main()
 		{			
@@ -156,6 +157,10 @@ package views
 			});
 			
 			btnLoad.addEventListener(MouseEvent.CLICK, function():void{
+				bridge.state = "load/StaticPage";
+			});
+			
+			btnLoadIPage.addEventListener(MouseEvent.CLICK, function():void{
 				bridge.state = "load/Page";
 			});
 		}

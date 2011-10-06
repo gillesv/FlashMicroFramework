@@ -77,6 +77,8 @@ package framework.paging.pages
 			
 			this._page = contentLoaderInfo.content as DisplayObject;
 			
+			_loaded = true;
+			
 			if(this._page as IPage){
 				_iPage = IPage(this._page);
 				
@@ -85,12 +87,10 @@ package framework.paging.pages
 				}
 				
 				_iPage.init();
-				
-				_loaded = true;
-				
-				if(_intro_callback != null){
-					animateIn(_intro_callback, _intro_callbackParams);
-				}
+			}
+
+			if(_intro_callback != null){
+				animateIn(_intro_callback, _intro_callbackParams);
 			}
 		}	
 		
