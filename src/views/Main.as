@@ -16,6 +16,7 @@ package views
 	import framework.events.PagingEvent;
 	import framework.paging.Paging;
 	import framework.paging.PagingTransitionTypes;
+	import framework.paging.pages.ExternalPage;
 	import framework.router.Router;
 	import framework.router.bridge.HistoryJSBridge;
 	import framework.router.utils.PatternMatch;
@@ -37,6 +38,7 @@ package views
 		public var btnHome:SimpleButton;
 		public var btnAbout:SimpleButton;
 		public var btnContact:SimpleButton;
+		public var btnLoad:SimpleButton;
 		
 		public function Main()
 		{			
@@ -87,6 +89,8 @@ package views
 			
 			paging.transitionType = PagingTransitionTypes.TRANSITION_IN_OUT;
 			
+			// debug events
+			/*
 			paging.addEventListener(PagingEvent.PAGE_CHANGED, trace_event);
 			paging.addEventListener(PagingEvent.PAGE_CHANGING, trace_event);
 			paging.addEventListener(PagingEvent.PAGE_CLOSING, trace_event);
@@ -96,6 +100,11 @@ package views
 			addGlobalEventListener(PagingEvent.PAGE_CHANGING, trace_global_event);
 			addGlobalEventListener(PagingEvent.PAGE_CLOSING, trace_global_event);
 			addGlobalEventListener(PagingEvent.PAGE_CLOSED, trace_global_event);
+			*/
+			
+			router.addRoute("/load/:file", function(filename:String):void{
+				paging.gotoPage(new ExternalPage(globalURL + "swf/" + filename + ".swf", filename), "lol");
+			});
 			
 			router.addRoute("/page/:id", function(id:String):void{
 				// pass a string
@@ -144,6 +153,10 @@ package views
 			
 			btnContact.addEventListener(MouseEvent.CLICK, function():void{
 				bridge.state = "contact";
+			});
+			
+			btnLoad.addEventListener(MouseEvent.CLICK, function():void{
+				bridge.state = "load/Page";
 			});
 		}
 	}

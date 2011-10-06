@@ -10,15 +10,15 @@ package views.pages
 		}
 		
 		override public function init():void{
-			trace("lol");
+			trace("external init");
 		}
 		
 		override public function kill():void{
-			
+			trace("external kill");
 		}
 		
 		override public function setup(params:*=null):void{
-			
+			trace("external setup " + params); 
 		}
 		
 		override public function setupIntro():void{

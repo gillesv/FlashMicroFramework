@@ -57,6 +57,11 @@ package framework.paging
 			var transitionIn:Function, transitionOut:Function;
 			var transitionInParams:Array, transitionOutParams:Array;
 			
+			// pass a reference of the controller, if need be
+			if(page as IPageExternal){
+				IPageExternal(page).defaultController = transitionController;
+			}
+			
 			switch(_transition_type){
 				case PagingTransitionTypes.TRANSITION_IN_OUT:
 					// init & animate the new page
