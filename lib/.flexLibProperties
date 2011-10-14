@@ -40,6 +40,8 @@
     <classEntry path="framework.paging.controllers.AbstractTransitionController"/>
     <classEntry path="framework.paging.pages.ExternalPage"/>
     <classEntry path="framework.paging.IPageExternal"/>
+    <classEntry path="framework.loading.Loading"/>
+    <classEntry path="framework.loading.views.AbstractLoadingView"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
