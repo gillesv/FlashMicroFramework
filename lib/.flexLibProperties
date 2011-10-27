@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
 <flexLibProperties includeAllClasses="true" version="3">
+=======
+<flexLibProperties includeAllClasses="false" version="3">
+>>>>>>> Proximinade
   <includeClasses>
     <classEntry path="core.MC"/>
     <classEntry path="core.MCController"/>
     <classEntry path="core.S"/>
+<<<<<<< HEAD
     <classEntry path="addGlobalEventListener"/>
     <classEntry path="removeGlobalEventListener"/>
     <classEntry path="framework.events.GlobalEventDispatcher"/>
     <classEntry path="framework.events.GlobalEvent"/>
+=======
+    <classEntry path="framework.config.Config"/>
+    <classEntry path="framework.events.ConfigEvent"/>
+    <classEntry path="framework.events.GlobalEvent"/>
+    <classEntry path="framework.events.GlobalEventDispatcher"/>
+    <classEntry path="framework.events.PagingEvent"/>
+    <classEntry path="framework.router.Router"/>
+    <classEntry path="framework.router.bridge.HistoryJSBridge"/>
+    <classEntry path="framework.router.utils.PatternMatch"/>
+    <classEntry path="framework.views.Main"/>
+    <classEntry path="locale.Key"/>
+    <classEntry path="locale.Language"/>
+    <classEntry path="locale.MultiLang"/>
+    <classEntry path="locale.cms.MultiLangEditor"/>
+    <classEntry path="locale.components.LocaleLabel"/>
+    <classEntry path="locale.components.LocaleLabelCollector"/>
+    <classEntry path="locale.events.MultiLangEvent"/>
+    <classEntry path="LocalizedContent"/>
+    <classEntry path="addGlobalEventListener"/>
+    <classEntry path="globalURL"/>
+    <classEntry path="localize"/>
+    <classEntry path="log"/>
+    <classEntry path="removeGlobalEventListener"/>
+    <classEntry path="framework.paging.IPage"/>
+    <classEntry path="framework.paging.IPageFactory"/>
+    <classEntry path="framework.paging.ITransitionController"/>
+    <classEntry path="framework.paging.IPaging"/>
+    <classEntry path="framework.paging.IPagingLayer"/>
+    <classEntry path="framework.paging.PagingTransitionTypes"/>
+    <classEntry path="framework.paging.PagingLayers"/>
+    <classEntry path="framework.paging.PagingLayer"/>
+    <classEntry path="framework.paging.controllers.DefaultTransitionController"/>
+    <classEntry path="framework.paging.Paging"/>
+    <classEntry path="framework.paging.pages.AbstractPage"/>
+    <classEntry path="framework.paging.controllers.AbstractTransitionController"/>
+    <classEntry path="framework.paging.pages.ExternalPage"/>
+    <classEntry path="framework.paging.IPageExternal"/>
+    <classEntry path="framework.loading.Loading"/>
+    <classEntry path="framework.loading.views.AbstractLoadingView"/>
+>>>>>>> Proximinade
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

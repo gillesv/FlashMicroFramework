@@ -10,5 +10,9 @@
 
 ### Flash microframework featuring following capabilities:
 - Command pattern implemented for maximum flexibility via a Global EventDispatcher/Global Events system.
+<<<<<<< HEAD
 - Router/Paging framework for handling different URLs.
+=======
+- Router/Paging framework for handling different URL's.
+>>>>>>> Proximinade
 - Localization framework/library for easily making multiple localized versions of the same site.

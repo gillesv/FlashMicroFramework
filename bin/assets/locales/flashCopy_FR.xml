@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang name="Français">
+	<key id="the">
+		<content><![CDATA[le]]></content>
+		<comment><![CDATA[]]></comment>
+	</key>
+	
+	<section id="home" url="/">
+		<key id="title" tag="h1#header">
+			<content><![CDATA[Ceçi est une title]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+		<key id="body" tag="p">
+			<content><![CDATA[Merde alors! Zut!]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+	</section>
+	
+	<section id="about" url="/about">
+		<key id="title" tag="h2">
+			<content><![CDATA[Putain]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+		<key id="body" tag="p">
+			<content><![CDATA[Ta geule, mon chêr copain avec beaucoup des cheveux rustatiques.]]></content>
+			<comment><![CDATA[]]></comment>
+		</key>
+	</section>
+</lang>

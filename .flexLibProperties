@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" version="3">
+  <includeClasses>
+    <classEntry path="views.Main"/>
+    <classEntry path="views.MainPreloader"/>
+    <classEntry path="views.pages.Home"/>
+    <classEntry path="views.pages.Contact"/>
+    <classEntry path="views.pages.About"/>
+    <classEntry path="views.pages.External"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

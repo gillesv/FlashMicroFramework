@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<default>
+	<settings>
+		<!-- global url prefix -->
+		<globalURL></globalURL>
+		
+		<!-- MultiLang languages -->
+		<languages>
+			<language id="nl-BE" url="assets/locales/flashCopy_NL.xml" />			
+			<language id="fr-BE" url="assets/locales/flashCopy_FR.xml" />
+		</languages>
+		
+		<!-- variables -->
+		<variables>
+			<var id="version" value="1.0" />
+			<var id="GAtracking" value="UA-XXXXXX" />
+		</variables>
+	</settings>
+	
+	<assets>
+		<asset id="site" url="assets/swf/Site.swf" weight="100" preload="true" />
+		<asset id="mediaplayer" url="assets/swf/Mediaplayer.swf" weight="100" />
+	</assets>
+		
+	<customSettings>
+		<yourXMLHere />
+	</customSettings>
+</default>

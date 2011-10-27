@@ -1,16 +1,29 @@
 <?php
 
+/**
+ * Standard routes. Change to what you really need.
+ */
 dispatch('/', 'index');
 
-// Define your routes here
-// dispatch_post('/login/do', 'do_login');
+dispatch('/home', 'index'); // example
 
-
-dispatch('/**', 'index_catchall');
+dispatch(':page', 'pages'); // dispatch all other pages to pages controller. Easy for templating.
 
 /**
- * Function is called before every route.
+ * This should be the last route definition
  */
-function before($route) {
-  before_defaults();  
+dispatch('/**', 'index_catchall'); 
+
+/**
+ * Function is called before every route is sent to his handler.
+ */
+function before_route($route) {
+   
+}
+
+/**
+ * Function is called before output is sent to browser.
+ */
+function after_route($output) {
+  return $output;
 }

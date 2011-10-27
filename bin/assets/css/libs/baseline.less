@@ -1,0 +1,112 @@
+/* Baseline styles: reset what needs to be reset, choose sensible defaults/baselines for everything else */
+
+/* misc resets */
+
+img, blockquote, fieldset, label, input,
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, audio, video {
+	display: block;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+input, select { vertical-align: middle; }
+
+/* Type: generic settings */
+html{
+	font-size: 120%;
+}
+
+body { 
+	font-size:0.9em; 
+	line-height:1.3em;
+	font-family: Georgia, serif;
+}
+
+h1, h2, h3, h4, h5, h6{
+	font-family: Helvetica;
+}
+
+h1 { 
+	font-size:1.5em; 
+	line-height:1.2em; 
+	padding:0.5em 10px; 
+}
+
+h2 { 
+	font-size:1.25em; 
+	padding:0 10px; 
+}
+
+p { 
+	padding:0.5em 10px 1.5em 10px; 
+}
+
+a { 
+	text-decoration:none;
+	border-bottom:1px solid; 
+
+	&:hover { 
+		border-bottom:2px solid; 
+	}
+
+}
+
+/* Type: colors */
+
+@base:  #444444;
+@back:  #ffffff;
+@links: #5bb7ea;
+
+html{
+	background: @back;
+}
+
+body{
+	color: @base;
+}
+
+a{
+	color: @links;
+	
+	&:hover{
+		color: darken(@links, 20%);	
+	}
+}
+
+/* Full-Flash */
+
+.flash{
+	height: 100%;
+	min-height: 600px;
+	min-width: 960px;
+	padding: 0;
+	margin: 0;
+
+	body{
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		min-height: 600px;
+		min-width: 960px;
+	}
+	
+	#main{
+		visibility: hidden;
+	}
+}
+
+#FlashMain{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}

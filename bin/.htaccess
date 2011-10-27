@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
   Options +FollowSymlinks
   Options +Indexes
+
   RewriteEngine on
+<<<<<<< HEAD
   RewriteBase /
+=======
+>>>>>>> Proximinade
 
   # test string is a valid files
   RewriteCond %{SCRIPT_FILENAME} !-f
