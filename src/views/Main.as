@@ -105,7 +105,7 @@ package views
 			*/
 			
 			router.addRoute("/load/:file", function(filename:String):void{
-				paging.gotoPage(new ExternalPage(globalURL + "swf/" + filename + ".swf", filename), "lol");
+				paging.gotoPage(new ExternalPage(globalURL + "assets/swf/" + filename + ".swf", filename), "lol");
 			});
 			
 			router.addRoute("/page/:id", function(id:String):void{

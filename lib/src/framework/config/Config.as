@@ -274,8 +274,8 @@ import flash.system.Capabilities;
 
 internal class HostURL
 {
-	private var _sBaseURL:String = "../";
-	private var _sBaseURLMAC:String = "..\\";
+	private var _sBaseURL:String = "../../";
+	private var _sBaseURLMAC:String = "..\\..\\";
 	
 	private var _sBrowserURL:String = "";
 	

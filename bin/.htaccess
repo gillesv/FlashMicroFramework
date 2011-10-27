@@ -1,9 +1,8 @@
 <IfModule mod_rewrite.c>
   Options +FollowSymlinks
   Options +Indexes
+
   RewriteEngine on
-  RewriteBase /Experience/Microframework/bin/
-  #RewriteBase //front/jobs/ 
 
   # test string is a valid files
   RewriteCond %{SCRIPT_FILENAME} !-f
