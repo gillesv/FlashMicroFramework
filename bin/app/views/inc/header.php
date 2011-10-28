@@ -61,11 +61,6 @@
 			Modernizr.load([
 				'//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js',
 				
-				{
-					test: Modernizr.history,
-					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js']
-				},
-								
 				// add swfobject from CDN, onComplete: attach appropriate swf
 				{
 					test: Modernizr.flash && useFlash,
@@ -83,7 +78,12 @@
 					}
 				},
 				
-				baseURL + 'assets/js/lib/history.bridge.flash.js',
+				{
+					test: Modernizr.history,
+					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js', baseURL + 'assets/js/lib/history.bridge.flash.js',]
+				},
+				
+				
 				
 				// finally, your custom scripting
 				baseURL + 'assets/js/Main.js'
