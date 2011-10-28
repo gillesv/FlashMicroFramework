@@ -1,0 +1,13 @@
+/* Layout framework: Put your layout styles and reusable classes/mix-ins here */
+
+/* >> The Magnificent CLEARFIX << */
+.clear, .clearfix {
+	clear: both;
+	display: inline-block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+.clear:after, .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }

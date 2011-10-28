@@ -1,12 +1,11 @@
 @import "libs/baseline.less";
-@import "libs/grids.less";
-@import "libs/css3.less";
+@import "libs/layout.less";
+@import "libs/elements.less";
 
 @import "mqs/mobile.less";
 @import "mqs/tablet.less";
 @import "mqs/desktop.less";
 @import "mqs/huge.less";
-@import "mqs/print.less";
 
 /* Mobile is the baseline style - all others build on top of it */
 /* No media-query necesary */
@@ -26,8 +25,4 @@
 
 @media only screen and (min-width: 1200px){
 	.huge;
-}
-
-@media print{
-	.print;
 }

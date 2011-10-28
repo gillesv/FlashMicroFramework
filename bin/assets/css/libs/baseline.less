@@ -1,112 +1,331 @@
-/* Baseline styles: reset what needs to be reset, choose sensible defaults/baselines for everything else */
+@import "reset.less";
 
-/* misc resets */
+/*_________________________________________________*/
 
-img, blockquote, fieldset, label, input,
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section, audio, video {
-	display: block;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	vertical-align: baseline;
-}
+/* Baseline CSS */
 
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+/******************/
+/* LESS Variables */
+/******************/
 
-input, select { vertical-align: middle; }
+/* colors */
+@color: #333;
+@color_alt: #fff;
+@background: #fff;
+@background_alt: #333;
+@links: #0000cc;
+@headers: #0000cc;
 
-/* Type: generic settings */
+/* sizes */
+@fontsize: 16px;	/* browser default - and great for readability and divisible by 8, 4, 2 and 1 */
+@baseline: 24px;	/* perfect baseline: divisible by 12, 8, 6, 4, 3, 2 and 1. */
+
+/* fonts */
+@serif: Georgia, Times New Roman, serif;
+@sans: "Helvetica Neue", Arial, Helvetica, sans-serif;
+@mono: "Andale Mono", "Courier New", Courier, mono, sans-serif;
+@ui: @sans;
+
+/**************/
+/* Typography */
+/**************/
+
 html{
-	font-size: 120%;
-}
-
-body { 
-	font-size:0.9em; 
-	line-height:1.3em;
-	font-family: Georgia, serif;
-}
-
-h1, h2, h3, h4, h5, h6{
-	font-family: Helvetica;
-}
-
-h1 { 
-	font-size:1.5em; 
-	line-height:1.2em; 
-	padding:0.5em 10px; 
-}
-
-h2 { 
-	font-size:1.25em; 
-	padding:0 10px; 
-}
-
-p { 
-	padding:0.5em 10px 1.5em 10px; 
-}
-
-a { 
-	text-decoration:none;
-	border-bottom:1px solid; 
-
-	&:hover { 
-		border-bottom:2px solid; 
+	background: @background;
+	color: @color;
+	font-family: @serif;
+	font-size: @fontsize;
+	line-height: @baseline;
+	
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;	/* always show scrollbar */
+	
+	&.flash{
+		overflow-x: auto;	/* when we're in flash mode, we should behave as though we are fixed-width, so there's a min-size */
 	}
-
 }
 
-/* Type: colors */
+/* headings */
 
-@base:  #444444;
-@back:  #ffffff;
-@links: #5bb7ea;
-
-html{
-	background: @back;
+.header(@size:@fontsize, @lineheight:@baseline, @headercolor:@headers){
+	font-size: @size;
+	line-height: @lineheight;
+	color: @headercolor;
+	
+	a{
+		color: @headercolor;
+	}
 }
 
-body{
-	color: @base;
+.h1, .h2, .h3, .h4, .h5, .h6{
+	font-family: @sans;
+	font-weight: bold;
+	margin: @baseline 0 @baseline/2;
 }
+
+h1, .header1{ 
+	.header; 
+}
+
+h2, .header2{ 
+	.header; 
+}
+
+h3, .header3{ 
+	.header; 
+}
+
+h4, .header4{ 
+	.header; 
+}
+
+h5, .header5{ 
+	.header; 
+}
+
+h6, .header6{ 
+	.header; 
+}
+
+/* paragraphs & block-levels */
+
+p, pre, ul, ol, dl, table, figure{
+	margin: @baseline/2 0;
+}
+
+sup, sub{
+	font-size: @fontsize/2;
+	letter-spacing: 2px;
+}
+
+sup{
+	vertical-align: super;
+}
+sub{
+	vertical-align: sub;
+}
+
+code, pre, kbd, samp{
+	font-family: @mono;
+}
+
+blockquote{
+	padding: 0 @baseline/2;
+	border-left: @fontsize/4 solid;
+}
+
+cite, q{
+	font-style: italic;
+}
+
+q{
+	quotes:"\201C" "\201D" "\2018" "\2019";
+	
+	&:before{
+		content: open-quote;
+	}
+	&:after{
+		content: close-quote;
+	}
+}
+
+/* moods & voices */
+
+em, i{
+	font-style: italic;
+}
+strong, b{
+	font-weight: bold;
+}
+
+/* small */
+
+small, .small{
+	font-size: 3*@fontsize/4;
+	font-family: @sans;
+}
+
+/* aside */
+
+aside, .aside{
+	margin: @baseline/2 0;
+}
+
+/* code */
+
+code{
+	font-family: @mono;
+	margin: @baseline/2 0;
+}
+
+/* links */
 
 a{
 	color: @links;
 	
-	&:hover{
-		color: darken(@links, 20%);	
+	&:link{
+	
 	}
+	
+	&:hover{
+	
+	}
+	
+	&:active{
+	
+	}
+	
+	&:visited{
+	
+	}
+}
+
+/*******************/
+/* Common elements */
+/*******************/
+
+/* lists */
+
+ul, ol{
+	li{
+	
+	}
+}
+
+ul li{
+
+}
+
+ol li{
+
+}
+
+dl{
+	dt{
+	
+	}
+	
+	dd{
+	
+	}
+}
+
+/* figure */
+figure{
+	p{
+
+	}
+	
+	img{
+	
+	}
+
+	figcaption{
+		h4{
+		}
+		
+		p{
+		}
+	}
+}
+
+/* generic buttons */
+
+a.button, input[type='button'], button{
+	
+}
+
+/* tables */
+
+table{
+	
+	caption{
+	
+	}
+	
+	thead{
+		tr{
+		
+		}
+		
+		th{
+		
+		}	
+	}
+	
+	tr{
+	
+	}
+	
+	td{
+	
+	}
+	
+}
+
+/*****************************/
+/* LESS Mix-ins  */
+/*****************************/
+
+/* image replacement */
+.image(@width, @height, @url){
+	text-indent: -5000em;
+	overflow: hidden;
+	display: block;
+	
+	width: @width;
+	height: @height;
+	
+	background: transparent url(@url) no-repeat 0 0;
+}
+
+/*********/
+/* Forms */
+/*********/
+
+form{
+
+}
+
+/* form labels */
+
+label, span.label{
+
+}
+
+/* error message */
+span.error{
+
+}
+
+/* fieldsets */
+
+/* input types: divs to wrap around input & label-pairs to style them */
+
+
+/*****************************/
+/* Reusable site components  */
+/*****************************/
+
+/* example box for the styleguide page */
+.example{
+	margin: @baseline/2 0 @baseline -@baseline/2;
+	padding: 0 @baseline/2;
+	border: 1px solid lighten(@color, 80%);
 }
 
 /* Full-Flash */
 
-.flash{
-	height: 100%;
-	min-height: 600px;
-	min-width: 960px;
-	padding: 0;
-	margin: 0;
-
-	body{
-		padding: 0;
-		margin: 0;
+.flash{	/* class added by Modernizr to html tag */
+	#Experience{
+		width: 100%;
 		height: 100%;
-		min-height: 600px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		
 		min-width: 960px;
+		min-height: 660px;
 	}
-	
-	#main{
-		visibility: hidden;
-	}
-}
-
-#FlashMain{
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
 }

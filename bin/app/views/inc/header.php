@@ -50,7 +50,7 @@
 			
 			var baseURL = "<?php echo($base_path); ?>";
 			var useFlash = <?php if($noFlash): ?>false<?php else: ?>true <?php endif; ?>;
-			var FLASH_ID = "FlashMain";
+			var FLASH_ID = "Experience";
 			var version = "10.1"; // why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
 			
 			// Flash detection
