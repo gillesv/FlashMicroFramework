@@ -7,7 +7,9 @@ dispatch('/', 'index');
 
 dispatch('/home', 'index'); // example
 
-dispatch(':page', 'pages'); // dispatch all other pages to pages controller. Easy for templating.
+dispatch('/**', 'renderContent');	// renders a page based on content extracted from the copy
+
+//dispatch(':page', 'pages'); // dispatch all other pages to pages controller. Easy for templating.
 
 /**
  * This should be the last route definition

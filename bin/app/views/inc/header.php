@@ -66,7 +66,7 @@
 					test: Modernizr.flash && useFlash,
 					yep: ['//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'],
 					complete: function(){
-						if(swfobject){
+						if(Modernizr.flash && useFlash && swfobject){
 							var flashvars = { 
 									globalURL: "<?php echo($base_path); ?>"
 								},
