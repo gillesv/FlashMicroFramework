@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<<<<<<< HEAD
-<flexLibProperties includeAllClasses="true" version="3">
-=======
 <flexLibProperties includeAllClasses="false" version="3">
->>>>>>> Proximinade
   <includeClasses>
     <classEntry path="core.MC"/>
     <classEntry path="core.MCController"/>
     <classEntry path="core.S"/>
-<<<<<<< HEAD
     <classEntry path="addGlobalEventListener"/>
     <classEntry path="removeGlobalEventListener"/>
     <classEntry path="framework.events.GlobalEventDispatcher"/>
     <classEntry path="framework.events.GlobalEvent"/>
-=======
     <classEntry path="framework.config.Config"/>
     <classEntry path="framework.events.ConfigEvent"/>
     <classEntry path="framework.events.GlobalEvent"/>
@@ -52,7 +46,6 @@
     <classEntry path="framework.paging.IPageExternal"/>
     <classEntry path="framework.loading.Loading"/>
     <classEntry path="framework.loading.views.AbstractLoadingView"/>
->>>>>>> Proximinade
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

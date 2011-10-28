@@ -31,25 +31,17 @@ package core
 		 */		
 		public var controller:MCController;
 		
-<<<<<<< HEAD
-		public function MC()
-=======
 		public function MC(init_on_stage:Boolean = true)
->>>>>>> Proximinade
 		{
 			super();
 			
 			controller = new MCController(this, true);
-<<<<<<< HEAD
-			addEventListener(Event.ADDED_TO_STAGE, on_added);
-=======
 			
 			if(init_on_stage){
 				addEventListener(Event.ADDED_TO_STAGE, on_added);
 			}else{
 				controller.init();
 			}
->>>>>>> Proximinade
 		}
 		
 		/**
@@ -135,15 +127,6 @@ package core
 		}
 		
 		override public function gotoAndStop(frame:Object, scene:String = null):void {
-<<<<<<< HEAD
-			super.gotoAndStop(frame, scene);
-			controller.isReversing = false;
-		}
-		
-		override public function gotoAndPlay(frame:Object, scene:String = null):void {
-			super.gotoAndPlay(frame, scene);
-			controller.isReversing = false;
-=======
 			try{
 				super.gotoAndStop(frame, scene);
 				controller.isReversing = false;
@@ -159,7 +142,6 @@ package core
 			}catch(err:Error){
 				trace("Framelabel: '" + frame + "' not found.");
 			}
->>>>>>> Proximinade
 		}		
 		
 		public function set currentFrame(value:int):void{
@@ -213,10 +195,10 @@ package core
 				if(!controller){
 					controller = new MCController(this, false);
 				}
-
+				
 				controller.init();
 				init();
-								
+				
 				addEventListener(Event.REMOVED_FROM_STAGE, on_removed);
 				removeEventListener(Event.ADDED_TO_STAGE, on_added);
 				is_inited = true;
