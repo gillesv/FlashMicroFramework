@@ -45,11 +45,12 @@
 		// <![CDATA[
 			
 			<?php 			
-				$noFlash = isset($_GET['noflash']);
+				// set in routes
+				//$useFlash = isset($_SESSION['useFlash']) && $_SESSION['useFlash'];
 			?>
 			
 			var baseURL = "<?php echo($base_path); ?>";
-			var useFlash = <?php if($noFlash): ?>false<?php else: ?>true <?php endif; ?>;
+			var useFlash = <?php if($useFlash): ?>true<?php else: ?>false <?php endif; ?>;
 			var FLASH_ID = "Experience";
 			var version = "10.1"; // why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
 			
