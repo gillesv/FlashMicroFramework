@@ -1,3 +1,5 @@
+
+
 <form action="<?php echo(url_for('/preferences/save')); ?>" id="splash" method="post">
 	<h1>This website is designed to be an immersive experience</h1>
 	

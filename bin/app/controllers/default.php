@@ -25,5 +25,9 @@ function savePrefs(){
 		$_SESSION['useFlash'] = false;
 	}
 	
-	redirect('/');
+	if(isset($_SESSION['route'])){
+		redirect($_SESSION['route']);
+	}else{		
+		redirect('/');
+	}
 }

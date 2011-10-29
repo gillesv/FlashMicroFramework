@@ -31,7 +31,12 @@ function before_route($route) {
 	else
 		$page = "";
 	
+	set('page', implode('/', $parts));
+	
 	if(!isset($_SESSION['useFlash']) && $page != 'splash' && $page != 'preferences'){
+		// store requested route in session to redirect to after splash screen
+		$_SESSION['route'] = implode('/', $parts);
+		
 		redirect('/splash');
 	}
 }

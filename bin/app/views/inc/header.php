@@ -94,4 +94,7 @@
 </head>
 <body>
 
+<?php _log($page); ?>
+<?php _log($_SESSION['route']); ?>
+
 <?php flush(); ?>
