@@ -24,10 +24,15 @@ var body, rootUrl, subDir;
 		// History.js is disabled for this browser.
 		// This is because we can optionally choose to support HTML4 browsers or not.
 		//return false;
+		// First: check if we're on the index page, if not, redirect to the subdirectory
+		alert(document.location + " / " + rootUrl);
+		
+		// Add hashchange listener
+		
+	}else{
+		// Bind Statechange event
+		History.Adapter.bind(window, 'statechange', stateChange);
 	}
-	
-	// Bind Statechange event
-	History.Adapter.bind(window, 'statechange', stateChange);
 	
 	// Statechange function
 	function stateChange(){

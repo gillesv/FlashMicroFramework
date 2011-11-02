@@ -80,12 +80,16 @@
 				'//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js',
 				
 				{
-					test: Modernizr.history,
-					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js', baseURL + 'assets/js/lib/history.bridge.flash.js',]
+					test: Modernizr.history && Modernizr.flash && useFlash,
+					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js'],
+					nope: [baseURL + 'assets/js/polyfill/jquery.ba-hashchange.min.js']
 				},
-								
-				// finally, your custom scripting
-				baseURL + 'assets/js/Main.js'
+				
+				{
+					test: Modernizr.flash && useFlash,
+					yep: baseURL + 'assets/js/lib/history.bridge.flash.js',
+					nope: baseURL + 'assets/js/Main.js'
+				}				
 			]);
 		// ]]>
 	</script>
