@@ -12,12 +12,12 @@ function index_catchall() {
   return html('index.html.php', 'layout.html.php');
 }
 
-function splash(){
+function preferences(){
 	set('useFlash', false);
-	return html('splash.html.php', 'layout.html.php');
+	return html('preferences.html.php', 'layout.html.php');
 }
 
-function savePrefs(){
+function savePreferences(){
 	$choice = $_POST['choice'];
 	
 	if($choice == 'yes'){
