@@ -1,8 +1,6 @@
 <?php
 // require whatever is located in app/lib (lib folder is in include_dir)
 
-require_once('phpmarkdown/markdown.php');
-require_once('phpmarkdown/markdown.php');
 require_once('mobiledetect/Mobile_Detect.php');
 
 /**

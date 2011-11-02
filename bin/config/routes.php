@@ -21,10 +21,6 @@ dispatch('/**', 'index_catchall');
 function before_route($route) {
   	$detect = new Mobile_Detect();
 	
-	if($detect->isMobile()){
-		return;
-	}
-	
 	$parts = explode("/", request_uri());
 
 	if(count($parts) > 0)
@@ -32,8 +28,16 @@ function before_route($route) {
 	else
 		$page = "";
 	
+	
+	if($detect->isMobile()){
+		if($page == 'preferences'){
+			redirect('/');
+		}
+		return;
+	}
+		
 	// if we haven't saved a user preference for flash and we're not on mobile (TODO), go to a preferences splash page
-	if(!isset($_SESSION['useFlash']) && $page != 'splash' && $page != 'preferences'){
+	if(!isset($_SESSION['useFlash']) && $page != 'preferences'){
 		$_SESSION['route'] = implode('/', $parts);
 		redirect('/preferences');
 	}
