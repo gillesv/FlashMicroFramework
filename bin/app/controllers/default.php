@@ -13,6 +13,7 @@ function index_catchall() {
 }
 
 function splash(){
+	set('useFlash', false);
 	return html('splash.html.php', 'layout.html.php');
 }
 

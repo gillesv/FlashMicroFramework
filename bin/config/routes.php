@@ -5,9 +5,8 @@
  */
 dispatch('/', 'index');
 
-dispatch('/home', 'index'); // example
-
 dispatch('/splash', 'splash');
+dispatch('/preferences', 'splash');
 dispatch_post('/preferences/save', 'savePrefs');
 
 dispatch(':page', 'pages'); // dispatch all other pages to pages controller. Easy for templating.
@@ -21,9 +20,6 @@ dispatch('/**', 'index_catchall');
  * Function is called before every route is sent to his handler.
  */
 function before_route($route) {
-	$useFlash = isset($_SESSION['useFlash']) && $_SESSION['useFlash'];
-	set('useFlash', $useFlash);
-	
 	$parts = explode("/", request_uri());
 
 	if(count($parts) > 0)
@@ -31,14 +27,14 @@ function before_route($route) {
 	else
 		$page = "";
 	
-	set('page', implode('/', $parts));
-	
+	// if we haven't saved a user preference for flash and we're not on mobile (TODO), go to a preferences splash page
 	if(!isset($_SESSION['useFlash']) && $page != 'splash' && $page != 'preferences'){
-		// store requested route in session to redirect to after splash screen
 		$_SESSION['route'] = implode('/', $parts);
-		
 		redirect('/splash');
 	}
+	
+	$useFlash = isset($_SESSION['useFlash']) && $_SESSION['useFlash'];
+	set('useFlash', $useFlash);
 }
 
 /**
