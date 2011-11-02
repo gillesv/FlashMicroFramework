@@ -84,7 +84,7 @@ function initFlashHistoryBridge(){
 function flashPushHistoryState(state, title){
 	if(!Modernizr.history){
 		window.location.hash = "!/" + state;
-		//flash.changeState(state, document.title);
+		document.title = title;
 	}else{
 		History.pushState(null, title, rootUrl + state);
 	}

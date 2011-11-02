@@ -50,13 +50,14 @@
 			?>
 			
 			var baseURL = "<?php echo($base_path); ?>";
+			var isPreferences = <?php if(isset($isPreferences)){ echo('true'); }else{ echo('false'); } ?>;
 			var useFlash = <?php if($useFlash): ?>true<?php else: ?>false <?php endif; ?>;
 			var FLASH_ID = "Experience";
 			var version = "10.1"; // why bother with anything less than the latest, greatest version? It's not as if we don't have a proper fallback
 			
 			// Flash detection
 			Modernizr.addTest('flash', function(){
-				return FlashDetect.installed && FlashDetect.major >= parseInt(version.split('.')[0]) && useFlash;
+				return FlashDetect.installed && FlashDetect.major >= parseInt(version.split('.')[0]) && useFlash && !isPreferences;
 			});
 			
 			Modernizr.load([
@@ -80,19 +81,20 @@
 				'//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js',
 				
 				{
-					test: Modernizr.history && Modernizr.flash && useFlash,
-					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js'],
-					nope: [baseURL + 'assets/js/polyfill/jquery.ba-hashchange.min.js']
+					test: Modernizr.flash && Modernizr.history,
+					yep: [baseURL + 'assets/js/lib/history.js', baseURL + 'assets/js/lib/history.adapter.jquery.js']
 				},
 				
 				{
-					test: Modernizr.flash && useFlash,
-					yep: baseURL + 'assets/js/lib/history.bridge.flash.js',
-					nope: baseURL + 'assets/js/Main.js',
-					complete: function(){
-						//alert(baseURL);
-					}
-				}				
+					test: Modernizr.flash && !Modernizr.history,
+					yep: [baseURL + 'assets/js/polyfill/jquery.ba-hashchange.min.js']
+				},
+				
+				{
+					test: Modernizr.flash,
+					yep: [baseURL + 'assets/js/lib/history.bridge.flash.js'],
+					nope: [baseURL + 'assets/js/Main.js']
+				}
 			]);
 		// ]]>
 	</script>

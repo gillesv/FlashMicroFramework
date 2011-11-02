@@ -13,6 +13,7 @@ function index_catchall() {
 }
 
 function preferences(){
+	set('isPreferences', true);
 	set('useFlash', false);
 	return html('preferences.html.php', 'layout.html.php');
 }
