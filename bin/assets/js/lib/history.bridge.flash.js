@@ -32,19 +32,21 @@ $(document).ready(function(){
 		}
 		
 		// Add hashchange listener
-		
+		$(window).hashchange(stateChange);
 	}else{
 		// Bind Statechange event
 		History.Adapter.bind(window, 'statechange', stateChange);
 	}
 	
 	// Statechange function
-	function stateChange(){
-		if(History.enabled){
-			var state = History.getState();
+	function stateChange(evt){
+		var state;
+	
+		if(Modernizr.history){
+			state = History.getState();
 			url = state.url.split(rootUrl).join('');
 		}else{
-			var state = document.location.hash;
+			state = document.location.hash;
 			url = state.split('#!/').join('').toString();
 		}
 		
@@ -80,9 +82,9 @@ function initFlashHistoryBridge(){
 
 // Called from the SWF to change the document's current history state
 function flashPushHistoryState(state, title){
-	if(!History.enabled){
+	if(!Modernizr.history){
 		window.location.hash = "!/" + state;
-		flash.changeState(state, document.title);
+		//flash.changeState(state, document.title);
 	}else{
 		History.pushState(null, title, rootUrl + state);
 	}
