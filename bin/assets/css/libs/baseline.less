@@ -46,6 +46,12 @@ html{
 	}
 }
 
+.js.flash{
+	#main{	/* hide content so we don't get that nasty flash of un-flashed content */
+		visibility: hidden;
+	}
+}
+
 /* headings */
 
 .header(@size:@fontsize, @lineheight:@baseline, @headercolor:@headers){
