@@ -11,7 +11,7 @@ var body, rootUrl, subDir;
 /* INIT */
 /********/
 
-(function(window, undefined){	
+$(document).ready(function(){
 	
 	// variables
 	body = $(document.body);
@@ -20,12 +20,16 @@ var body, rootUrl, subDir;
 	
 	rootUrl += subDir;	
 	
-	if(!History.enabled){
+	if(!Modernizr.history){
 		// History.js is disabled for this browser.
 		// This is because we can optionally choose to support HTML4 browsers or not.
 		//return false;
-		// First: check if we're on the index page, if not, redirect to the subdirectory
-		alert(document.location + " / " + rootUrl);
+		// First: check if we're on the index page, if not, redirect to the subdirectory		
+		if(document.location.toString().split('#')[0].toString() !== rootUrl){
+			var hash = '#!/' + document.location.toString().split(rootUrl).join('');
+			document.location = rootUrl + hash;
+			return;
+		}
 		
 		// Add hashchange listener
 		
@@ -57,7 +61,7 @@ var body, rootUrl, subDir;
 	}
 	
 	stateChange();	
-})(window);
+});
 
 /*******************************/
 /* Flash JS bridge: public API */

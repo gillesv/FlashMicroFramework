@@ -88,7 +88,10 @@
 				{
 					test: Modernizr.flash && useFlash,
 					yep: baseURL + 'assets/js/lib/history.bridge.flash.js',
-					nope: baseURL + 'assets/js/Main.js'
+					nope: baseURL + 'assets/js/Main.js',
+					complete: function(){
+						//alert(baseURL);
+					}
 				}				
 			]);
 		// ]]>
