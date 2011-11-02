@@ -20,6 +20,13 @@ dispatch('/**', 'index_catchall');
  * Function is called before every route is sent to his handler.
  */
 function before_route($route) {
+	
+  	$detect = new Mobile_Detect();
+	
+	if($detect->isMobile()){
+		return;
+	}
+	
 	$parts = explode("/", request_uri());
 
 	if(count($parts) > 0)
