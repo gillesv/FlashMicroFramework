@@ -1,3 +1,5 @@
 .DS_store
 .svn
 bin/config/config.yaml
+
+design/site.psd
