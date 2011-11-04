@@ -33,6 +33,11 @@
 	<link rel="stylesheet" href="<?php echo($base_path); ?>assets/css/ie.css">
 	<![endif]-->
 	
+	<!-- DELETE ME: framework demo -->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="<?php echo($base_path); ?>assets/css/demo/demo.css" />
+	
 	<?php /* Favicon */ ?>
 	<link rel="shortcut icon" href="<?php echo($base_path); ?>favicon.png">
 	

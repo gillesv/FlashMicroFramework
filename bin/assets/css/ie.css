@@ -6,7 +6,8 @@ blockquote,q{quotes:none;}
 blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
 table{border-collapse:collapse;border-spacing:0;}
 html{overflow-y:scroll;-webkit-text-size-adjust:none;}
-html{background:#ffffff;color:#333333;font-family:Georgia,Times New Roman,serif;font-size:16px;line-height:24px;height:100%;overflow-x:hidden;overflow-y:scroll;}html.flash{overflow-x:auto;}
+html{background:#ffffff;height:100%;overflow-x:hidden;overflow-y:scroll;}html.flash{overflow-x:auto;}
+body{color:#333333;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:16px;line-height:24px;}
 .js.flash #main{visibility:hidden;}
 .h1,.h2,.h3,.h4,.h5,.h6{font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-weight:bold;margin:24px 0 12px;}
 h1,.header1{font-size:16px;line-height:24px;color:#0000cc;}h1 a,.header1 a{color:#0000cc;}

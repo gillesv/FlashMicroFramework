@@ -32,11 +32,6 @@
 
 html{
 	background: @background;
-	color: @color;
-	font-family: @serif;
-	font-size: @fontsize;
-	line-height: @baseline;
-	
 	height: 100%;
 	overflow-x: hidden;
 	overflow-y: scroll;	/* always show scrollbar */
@@ -44,6 +39,13 @@ html{
 	&.flash{
 		overflow-x: auto;	/* when we're in flash mode, we should behave as though we are fixed-width, so there's a min-size */
 	}
+}
+
+body{
+	color: @color;
+	font-family: @sans;
+	font-size: @fontsize;
+	line-height: @baseline;
 }
 
 .js.flash{
