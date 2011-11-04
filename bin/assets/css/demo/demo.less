@@ -11,11 +11,16 @@ html{
 	font-family: 'Open Sans', sans-serif;
 }
 
-#main{
+body{
 	margin: 10px;
+}
+
+#main{
+	margin: 0 auto;
 	padding: 20px 20px 40px;
 	background: #fff;
 	.drop-shadow(0, 5, 20, 1);
+	max-width: @baseline*@baseline;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -42,14 +47,45 @@ button, .button, input[type='submit']{
 	.rounded(5px);
 }
 
+/* preferences page */
+#preferences{
+	h1{
+		text-align: center;
+	}
+	
+	h3{
+		color: @color;
+		margin-bottom: @fontsize;
+	}
+	
+	p{
+		margin-bottom: 2*@baseline;
+	}
+	
+	fieldset{
+		padding: @fontsize @baseline 2*@fontsize;
+		background: fadeout(@color, 95%);
+	}
+}
+
 /* extra styles for mobile-landscape */
 .mobileLandscape(@lol:'param'){
-
+	h1, h2, h3, h4, h5, h6{
+		font-size: @fontsize*2;
+	}
+	
+	#preferences{
+		h1{
+			text-align: left;
+		}
+	}
 }
 
 /* extra styles for tablet */
 .tablet(@lol:'param'){
-	
+	#main{
+		margin-top: 5%;
+	}
 }
 
 /* extra styles for desktop */
